@@ -37,6 +37,9 @@
             --cor-fundo-aviso: #fffbe6;
             --cor-borda-aviso: #facc15;
             --cor-texto-aviso: #713f12;
+            --cor-fundo-aviso-geral: #fff3e0;
+            --cor-borda-aviso-geral: #ff9800;
+            --cor-texto-aviso-geral: #e65100;
             --cor-sombra: rgba(0, 0, 0, 0.1);
         }
 
@@ -44,14 +47,17 @@
         body.dark-mode {
             --cor-texto-principal: #e2e8f0;
             --cor-texto-secundario: #a0aec0;
-            --cor-fundo-body: #1a202c;
-            --cor-fundo-container: rgba(26, 32, 44, 0.85);
-            --cor-fundo-elemento: #2d3748;
-            --cor-borda-padrao: #4a5568;
-            --cor-fundo-ia: #4a5568;
-            --cor-fundo-aviso: #4a5568;
+            --cor-fundo-body: #18181b; /* Cinza Zinco 900 */
+            --cor-fundo-container: rgba(39, 39, 42, 0.85); /* Cinza Zinco 800 translúcido */
+            --cor-fundo-elemento: #27272a; /* Cinza Zinco 800 */
+            --cor-borda-padrao: #3f3f46; /* Cinza Zinco 700 */
+            --cor-fundo-ia: #3f3f46; /* Cinza Zinco 700 */
+            --cor-fundo-aviso: #3f3f46;
             --cor-borda-aviso: #f6e05e;
             --cor-texto-aviso: #f7fafc;
+            --cor-fundo-aviso-geral: #422c00;
+            --cor-borda-aviso-geral: #ffb74d;
+            --cor-texto-aviso-geral: #ffe0b2;
             --cor-sombra: rgba(0, 0, 0, 0.4);
         }
 
@@ -79,7 +85,7 @@
         .container { width: 100%; max-width: 800px; z-index: 1; }
 
         .header {
-            position: relative; /* Necessário para posicionar o seletor de tema */
+            position: relative;
             text-align: center;
             margin-bottom: 30px;
             background: var(--cor-fundo-container);
@@ -96,7 +102,7 @@
         .logo-title { font-size: 2em; font-weight: 700; color: var(--cor-primaria-inicio); margin-bottom: 8px; }
         .logo-subtitle { font-size: 1.1em; color: var(--cor-texto-secundario); }
 
-        /* --- Seletor de Tema (Dark Mode) --- */
+        /* --- Seletor de Tema (Dark Mode) com Emojis --- */
         .theme-switcher {
             position: absolute;
             top: 25px;
@@ -105,27 +111,22 @@
         .theme-switcher input { display: none; }
         .theme-switcher label {
             cursor: pointer;
-            width: 50px;
-            height: 25px;
-            background-color: #ccc;
-            display: block;
-            border-radius: 25px;
-            position: relative;
-            transition: background-color 0.3s;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .theme-switcher label::after {
-            content: '';
-            position: absolute;
-            top: 2.5px;
-            left: 2.5px;
-            width: 20px;
-            height: 20px;
-            background-color: white;
-            border-radius: 50%;
-            transition: 0.3s;
+        .theme-switcher .sun, .theme-switcher .moon {
+            font-size: 24px;
+            transition: transform 0.3s ease-out;
         }
-        .theme-switcher input:checked + label { background-color: var(--cor-primaria-inicio); }
-        .theme-switcher input:checked + label::after { transform: translateX(25px); }
+        .theme-switcher label:hover span {
+            transform: scale(1.2) rotate(15deg);
+        }
+        .theme-switcher .sun { display: none; }
+        body.dark-mode .theme-switcher .sun { display: block; }
+        body.dark-mode .theme-switcher .moon { display: none; }
 
         /* --- Conteúdo de Ajuda (FAQ) --- */
         .help-container {
@@ -159,6 +160,7 @@
         details:nth-child(3) { animation-delay: 0.3s; }
         details:nth-child(4) { animation-delay: 0.4s; }
 
+
         details[open] { box-shadow: 0 4px 15px var(--cor-sombra); border-color: var(--cor-primaria-inicio); }
         summary { padding: 18px 20px; font-weight: 600; color: var(--cor-texto-principal); cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; font-size: 1.05em; }
         summary::-webkit-details-marker { display: none; }
@@ -166,66 +168,76 @@
         details[open] summary::after { transform: rotate(45deg); }
         
         .details-content { padding: 0 20px 20px 20px; color: var(--cor-texto-secundario); }
-        .details-content h4 { margin-top: 20px; margin-bottom: 10px; color: var(--cor-texto-principal); border-bottom: 1px solid var(--cor-borda-padrao); padding-bottom: 5px; }
+        .details-content h4 { 
+            margin-top: 20px; 
+            margin-bottom: 10px; 
+            color: var(--cor-texto-principal); 
+            border-bottom: 1px solid var(--cor-borda-padrao); 
+            padding-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .details-content h4 svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--cor-texto-secundario);
+        }
         .contextual-ai-button { margin-top: 20px; padding: 8px 15px; font-size: 0.9em; background: var(--cor-fundo-ia); border: 1px solid var(--cor-borda-padrao); color: var(--cor-texto-principal); border-radius: 8px; cursor: pointer; }
         .contextual-ai-button:hover:not(:disabled) { background: #e2e8f0; }
         .ti-notice { margin-top: 20px; padding: 12px; background-color: var(--cor-fundo-aviso); border-left: 4px solid var(--cor-borda-aviso); color: var(--cor-texto-aviso); font-size: 0.95em; border-radius: 0 8px 8px 0; }
+        
+        /* Estilo para o novo aviso geral */
+        .general-notice {
+            background-color: var(--cor-fundo-aviso-geral);
+            border-left: 5px solid var(--cor-borda-aviso-geral);
+            color: var(--cor-texto-aviso-geral);
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 1em;
+            line-height: 1.7;
+            animation: slideUp 0.5s ease-out forwards;
+            opacity: 0;
+            margin-bottom: 30px;
+        }
+        .general-notice p { margin: 0; }
+        .general-notice strong { color: var(--cor-primaria-inicio); }
 
         /* --- Estilos do Assistente de IA Flutuante (FAB) --- */
         .ai-fab-wrapper {
             position: fixed;
             bottom: 20px;
-            left: 0;
-            right: 0;
+            right: 20px;
             z-index: 1000;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-end;
             pointer-events: none;
         }
-
-        .ai-tooltip {
-            padding: 10px 15px;
-            background: linear-gradient(135deg, var(--cor-primaria-inicio), var(--cor-primaria-fim));
-            color: white;
-            border-radius: 15px;
-            margin-bottom: 15px;
-            white-space: nowrap;
-            box-shadow: 0 4px 15px var(--cor-sombra);
-            opacity: 0;
-            animation: tooltip-animation 10s ease-in-out forwards;
+        
+        .ai-fab-wrapper.chat-open {
+            pointer-events: none;
         }
-
-        @keyframes tooltip-animation {
-            0% { opacity: 0; transform: translateY(10px); }
-            10% { opacity: 1; transform: translateY(0); }
-            90% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(10px); }
-        }
-
-        .ai-fab-wrapper:hover .ai-tooltip {
-            animation: none;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .ai-fab-wrapper.chat-open .ai-tooltip {
-            display: none;
-        }
-
+        
         .ai-fab {
             width: auto;
             height: auto;
             background: none;
             box-shadow: none;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, opacity 0.3s;
             pointer-events: auto;
             cursor: pointer;
+            opacity: 1;
+        }
+
+        .ai-fab-wrapper.chat-open .ai-fab {
+            opacity: 0;
+            pointer-events: none;
         }
 
         .ai-fab img {
-            width: 80px;
-            height: 80px;
+            width: 60px;
+            height: 60px;
             filter: drop-shadow(0 4px 8px rgba(0,0,0,0.25));
             transition: transform 0.3s ease;
         }
@@ -237,11 +249,12 @@
         /* --- Estilos da Janela de Chat --- */
         .ai-chat-window {
             position: fixed;
-            bottom: 110px;
-            right: 50%;
-            width: 90%;
+            bottom: 20px;
+            right: 20px;
+            width: calc(100% - 40px);
             max-width: 400px;
-            height: 500px;
+            height: 85vh;
+            max-height: 600px;
             background-color: var(--cor-fundo-elemento);
             border-radius: 20px;
             box-shadow: 0 10px 40px var(--cor-sombra);
@@ -249,15 +262,27 @@
             flex-direction: column;
             overflow: hidden;
             z-index: 999;
-            transform-origin: bottom center;
-            transition: transform 0.3s ease, opacity 0.3s ease, bottom 0.3s ease, height 0.3s ease, background-color 0.3s;
-            transform: scale(0) translateX(50%);
+            transform-origin: bottom right;
+            transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s;
+            transform: translateY(20px) scale(0.95);
             opacity: 0;
+            pointer-events: none;
         }
         .ai-chat-window.show {
-            transform: scale(1) translateX(50%);
+            transform: translateY(0) scale(1);
             opacity: 1;
+            pointer-events: auto;
         }
+
+        body.keyboard-visible .ai-chat-window {
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            max-height: 100%;
+            border-radius: 0;
+        }
+
         .ai-chat-header {
             background: linear-gradient(135deg, var(--cor-primaria-inicio), var(--cor-primaria-fim));
             color: white;
@@ -304,29 +329,6 @@
             summary { padding: 15px; font-size: 1em; }
             
             .theme-switcher { top: 15px; right: 15px; }
-
-            .ai-fab-wrapper { bottom: 20px; right: 20px; left: auto; align-items: flex-end; }
-            .ai-fab img { width: 60px; height: 60px; }
-            .ai-tooltip { display: none; }
-            
-            .ai-chat-window {
-                bottom: 20px;
-                right: 20px;
-                left: 20px;
-                width: auto;
-                max-width: none;
-                height: 85vh;
-                max-height: 600px;
-                transform: none;
-                transform-origin: bottom right;
-                opacity: 0;
-                transform: translateY(20px) scale(0.95);
-            }
-
-            .ai-chat-window.show {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
         }
     </style>
 </head>
@@ -335,7 +337,10 @@
         <header class="header">
             <div class="theme-switcher">
                 <input type="checkbox" id="dark-mode-toggle">
-                <label for="dark-mode-toggle" title="Alternar tema"></label>
+                <label for="dark-mode-toggle" title="Alternar tema">
+                    <span class="sun">☀️</span>
+                    <span class="moon">🌙</span>
+                </label>
             </div>
             <div class="logo">
                 <img src="./images/logo.png" alt="Logo da Anhanguera" onerror="this.onerror=null;this.src='https://placehold.co/200x60/ffffff/000000?text=Anhanguera';">
@@ -343,6 +348,11 @@
             <h1 class="logo-title">Central de Ajuda Inteligente</h1>
             <p class="logo-subtitle">Soluções rápidas para seus problemas técnicos.</p>
         </header>
+
+        <div class="general-notice">
+            <p>🔌 <strong>Evite mexer nos cabos</strong> sem falar com o Responsável de TI antes.</p>
+            <p>🖥️ Ao final do uso, <strong>não esqueça de desligar o projetor e o computador.</strong></p>
+        </div>
 
         <main class="help-container" id="main-content">
             <details>
@@ -362,13 +372,13 @@
             <details>
                 <summary>Projetor sem imagem (ou "Sem Sinal")</summary>
                 <div class="details-content">
-                    <p>Se o projetor está ligado, mas não exibe a imagem, siga estes passos:</p>
+                    <p>Se o projetor está ligado mas não exibe a imagem, tente os seguintes passos na ordem:</p>
                     <ol>
-                        <li><strong>Acione o TI para Verificar os Cabos:</strong> Por segurança, não manuseie os cabos. Comunique o responsável de TI para que ele verifique se a conexão (HDMI ou VGA) está firme.</li>
-                        <li><strong>Selecione a Fonte Correta:</strong> No controle do projetor, pressione "Source" ou "Input" e selecione a entrada correta.</li>
-                        <li><strong>Reinicie o Computador:</strong> Reiniciar o computador com o projetor já ligado resolve o problema de detecção.</li>
+                        <li><strong>Selecione a Fonte Correta:</strong> No controle remoto do projetor, pressione o botão "Source" ou "Input" e selecione a entrada correta (geralmente HDMI ou VGA).</li>
+                        <li><strong>Verifique o Modo de Projeção:</strong> No teclado do computador, pressione as teclas <strong>Windows + P</strong> ao mesmo tempo. No menu que aparecer, selecione a opção <strong>"Duplicar"</strong>.</li>
+                        <li><strong>Reinicie o Computador:</strong> Se os passos acima não funcionarem, reiniciar o computador com o projetor já ligado pode resolver o problema.</li>
                     </ol>
-                    <p class="ti-notice">Se ainda assim não funcionar, por favor, acione o Responsável de TI.</p>
+                    <p class="ti-notice">Se nada disso resolver, o problema pode ser físico. Por segurança, não mexa nos cabos e acione o Responsável de TI para obter ajuda.</p>
                     <button class="ai-button contextual-ai-button">✨ E se os outros passos não funcionarem?</button>
                 </div>
             </details>
@@ -376,7 +386,10 @@
             <details>
                 <summary>Projetor não espelha a imagem</summary>
                 <div class="details-content">
-                    <h4>Windows</h4>
+                    <h4>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px"><path fill="#00a6f0" d="M23.5,45.5H3.5V3.5h41v20H23.5z"/><path fill="#7dbf00" d="M44.5,23.5H23.5v22h21V23.5z"/><path fill="#ffb700" d="M23.5,3.5h-20v20h20V3.5z"/><path fill="#f76300" d="M23.5,23.5v-20h21v20H23.5z"/></svg>
+                        Windows
+                    </h4>
                     <p>Para que o projetor mostre a mesma imagem que a tela do notebook, faça o seguinte:</p>
                     <ol>
                         <li><strong>Atalho do Windows:</strong> Pressione as teclas <strong>Windows + P</strong>.</li>
@@ -385,7 +398,10 @@
                     
                     <hr style="margin: 20px 0;">
 
-                    <h4>Linux Mint</h4>
+                    <h4>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px"><path fill="#8bc34a" d="M24,4C12.954,4,4,12.954,4,24s8.954,20,20,20s20-8.954,20-20S35.046,4,24,4z M24,38	c-2.211,0-4-1.789-4-4s1.789-4,4-4s4,1.789,4,4S26.211,38,24,38z M26,32h-4V12h4V32z"/></svg>
+                        Linux Mint
+                    </h4>
                     <p>Para espelhar a tela no Linux Mint:</p>
                     <ol>
                         <li>Abra o <strong>Menu</strong> e procure por <strong>"Monitores"</strong>.</li>
@@ -401,7 +417,10 @@
             <details>
                 <summary>Estou sem som na sala</summary>
                 <div class="details-content">
-                    <h4>Windows</h4>
+                    <h4>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px"><path fill="#00a6f0" d="M23.5,45.5H3.5V3.5h41v20H23.5z"/><path fill="#7dbf00" d="M44.5,23.5H23.5v22h21V23.5z"/><path fill="#ffb700" d="M23.5,3.5h-20v20h20V3.5z"/><path fill="#f76300" d="M23.5,23.5v-20h21v20H23.5z"/></svg>
+                        Windows
+                    </h4>
                     <p>Se o computador tem imagem mas não reproduz som, verifique os seguintes pontos:</p>
                     <ol>
                         <li><strong>Amplificador (se houver):</strong> Verifique se o amplificador da sala está ligado. Geralmente, há um LED indicador aceso.</li>
@@ -411,7 +430,10 @@
 
                     <hr style="margin: 20px 0;">
 
-                    <h4>Linux Mint</h4>
+                    <h4>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px"><path fill="#8bc34a" d="M24,4C12.954,4,4,12.954,4,24s8.954,20,20,20s20-8.954,20-20S35.046,4,24,4z M24,38	c-2.211,0-4-1.789-4-4s1.789-4,4-4s4,1.789,4,4S26.211,38,24,38z M26,32h-4V12h4V32z"/></svg>
+                        Linux Mint
+                    </h4>
                     <p>Para verificar o som no Linux Mint:</p>
                     <ol>
                         <li>Abra o <strong>Menu</strong> e procure por <strong>"Som"</strong>.</li>
@@ -427,7 +449,6 @@
     </div>
 
     <div id="ai-fab-wrapper" class="ai-fab-wrapper">
-        <div class="ai-tooltip">Como posso te ajudar?</div>
         <div id="ai-fab" class="ai-fab">
             <img src="logo.png" alt="Abrir chat do assistente">
         </div>
@@ -484,7 +505,6 @@
         // --- LÓGICA DO MODO ESCURO ---
         darkModeToggle.addEventListener('change', () => {
             document.body.classList.toggle('dark-mode');
-            // Salva a preferência do usuário no armazenamento local
             if (document.body.classList.contains('dark-mode')) {
                 localStorage.setItem('theme', 'dark');
             } else {
@@ -492,7 +512,6 @@
             }
         });
 
-        // Verifica o tema salvo ao carregar a página
         if (localStorage.getItem('theme') === 'dark') {
             document.body.classList.add('dark-mode');
             darkModeToggle.checked = true;
@@ -501,17 +520,14 @@
 
         // --- LÓGICA DO CHAT ---
         fab.addEventListener('click', () => {
-            const isOpen = !aiChatWindow.classList.contains('show');
-            aiChatWindow.classList.toggle('show', isOpen);
-            fabWrapper.classList.toggle('chat-open', isOpen);
-            document.body.classList.toggle('chat-open-body', isOpen);
+            aiChatWindow.classList.add('show');
+            fabWrapper.classList.add('chat-open');
         });
         
         closeAiChatButton.addEventListener('click', (event) => {
             event.stopPropagation();
             aiChatWindow.classList.remove('show');
             fabWrapper.classList.remove('chat-open');
-            document.body.classList.remove('chat-open-body');
         });
 
         sendAiChatButton.addEventListener('click', handleSendMessage);
@@ -520,6 +536,20 @@
                 handleSendMessage();
             }
         });
+
+        // --- LÓGICA DO TECLADO VIRTUAL ---
+        aiChatInput.addEventListener('focus', () => {
+            if (window.innerWidth < 480) { // Apenas em telas pequenas
+                document.body.classList.add('keyboard-visible');
+            }
+        });
+
+        aiChatInput.addEventListener('blur', () => {
+            if (window.innerWidth < 480) {
+                document.body.classList.remove('keyboard-visible');
+            }
+        });
+
 
         function handleSendMessage() {
             const question = aiChatInput.value.trim();
@@ -669,7 +699,6 @@
                 if (!aiChatWindow.classList.contains('show')) {
                     aiChatWindow.classList.add('show');
                     fabWrapper.classList.add('chat-open');
-                    document.body.classList.add('chat-open-body');
                 }
 
                 addMessage(question, 'user');
