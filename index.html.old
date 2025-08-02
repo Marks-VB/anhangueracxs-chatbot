@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- =========================================
+     * CABEÇALHO DO DOCUMENTO (METADADOS)
+     * ========================================= -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajuda e Suporte Técnico com IA</title>
+
+    <!-- Metadados para PWA (Progressive Web App) e tema do navegador -->
+    <meta name="theme-color" content="#f27500">
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Ícone da página (favicon) -->
+    <link rel="icon" href="logo.png" type="image/png">
+
+    <!-- Importa a fonte 'Inter' do Google Fonts para um visual moderno -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* =========================================
+         * FOLHA DE ESTILOS CSS
+         * ========================================= */
+
+        /* --- Variáveis de Cores (CSS Variables) --- */
+        :root {
+            --cor-primaria-inicio: #f27500;
+            --cor-primaria-fim: #ff9201;
+            --cor-texto-principal: #2d3748;
+            --cor-texto-secundario: #4a5568;
+            --cor-fundo-body: #f8fafc;
+            --cor-branco-translucido: rgba(255, 255, 255, 0.95);
+            --cor-borda-padrao: #e2e8f0;
+            --cor-fundo-ia: #f0f4f8;
+            --cor-fundo-aviso: #fffbe6;
+            --cor-borda-aviso: #facc15;
+            --cor-texto-aviso: #713f12;
+        }
+
+        /* --- Estilos Globais e Reset --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--cor-fundo-body);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            line-height: 1.6;
+            transition: background-color 0.3s;
+        }
+
+        body.chat-open-body {
+            overflow: hidden;
+        }
+
+        /* --- Layout Principal --- */
+        .container { width: 100%; max-width: 800px; z-index: 1; }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: var(--cor-branco-translucido);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .logo { width: 120px; height: auto; margin: 0 auto 15px auto; transition: transform 0.3s ease; }
+        .logo:hover { transform: translateY(-5px); }
+        .logo img { width: 100%; height: 100%; object-fit: contain; }
+        .logo-title { font-size: 2em; font-weight: 700; color: var(--cor-primaria-inicio); margin-bottom: 8px; }
+        .logo-subtitle { font-size: 1.1em; color: var(--cor-texto-secundario); }
+
+        /* --- Conteúdo de Ajuda (FAQ) --- */
+        .help-container {
+            background: var(--cor-branco-translucido);
+            backdrop-filter: blur(15px);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        details { 
+            background-color: #fff; 
+            border-radius: 12px; 
+            border: 1px solid var(--cor-borda-padrao); 
+            transition: all 0.3s ease;
+            animation: slideUp 0.5s ease-out forwards;
+            opacity: 0;
+        }
+        details:nth-child(1) { animation-delay: 0.1s; }
+        details:nth-child(2) { animation-delay: 0.2s; }
+        details:nth-child(3) { animation-delay: 0.3s; }
+        details:nth-child(4) { animation-delay: 0.4s; }
+
+        details[open] { box-shadow: 0 4px 15px rgba(0,0,0,0.07); border-color: var(--cor-primaria-inicio); }
+        summary { padding: 18px 20px; font-weight: 600; color: var(--cor-texto-principal); cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; font-size: 1.05em; }
+        summary::-webkit-details-marker { display: none; }
+        summary::after { content: '+'; font-size: 1.5em; font-weight: 400; color: var(--cor-primaria-inicio); transition: transform 0.3s ease; }
+        details[open] summary::after { transform: rotate(45deg); }
+        
+        .details-content { padding: 0 20px 20px 20px; color: var(--cor-texto-secundario); }
+        .contextual-ai-button { margin-top: 20px; padding: 8px 15px; font-size: 0.9em; background: var(--cor-fundo-ia); border: 1px solid var(--cor-borda-padrao); color: var(--cor-texto-principal); border-radius: 8px; cursor: pointer; }
+        .contextual-ai-button:hover:not(:disabled) { background: #e2e8f0; }
+        .ti-notice { margin-top: 20px; padding: 12px; background-color: var(--cor-fundo-aviso); border-left: 4px solid var(--cor-borda-aviso); color: var(--cor-texto-aviso); font-size: 0.95em; border-radius: 0 8px 8px 0; }
+
+        /* --- Estilos do Assistente de IA Flutuante (FAB) --- */
+        .ai-fab-wrapper {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .ai-tooltip {
+            padding: 10px 15px;
+            background: linear-gradient(135deg, var(--cor-primaria-inicio), var(--cor-primaria-fim));
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            white-space: nowrap;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            opacity: 0;
+            animation: tooltip-animation 10s ease-in-out forwards;
+        }
+
+        @keyframes tooltip-animation {
+            0% { opacity: 0; transform: translateY(10px); }
+            10% { opacity: 1; transform: translateY(0); }
+            90% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(10px); }
+        }
+
+        .ai-fab-wrapper:hover .ai-tooltip {
+            animation: none;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .ai-fab-wrapper.chat-open .ai-tooltip {
+            display: none;
+        }
+
+        .ai-fab {
+            width: auto;
+            height: auto;
+            background: none;
+            box-shadow: none;
+            transition: transform 0.3s ease;
+            pointer-events: auto;
+            cursor: pointer;
+        }
+
+        .ai-fab img {
+            width: 80px;
+            height: 80px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.25));
+            transition: transform 0.3s ease;
+        }
+
+        .ai-fab-wrapper:hover .ai-fab img {
+            transform: scale(1.1);
+        }
+
+        /* --- Estilos da Janela de Chat --- */
+        .ai-chat-window {
+            position: fixed;
+            bottom: 110px;
+            right: 50%;
+            width: 90%;
+            max-width: 400px;
+            height: 500px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 999;
+            transform-origin: bottom center;
+            transition: transform 0.3s ease, opacity 0.3s ease, bottom 0.3s ease, height 0.3s ease;
+            transform: scale(0) translateX(50%);
+            opacity: 0;
+        }
+        .ai-chat-window.show {
+            transform: scale(1) translateX(50%);
+            opacity: 1;
+        }
+        .ai-chat-header {
+            background: linear-gradient(135deg, var(--cor-primaria-inicio), var(--cor-primaria-fim));
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+        .ai-chat-header .close-button { background: none; border: none; color: white; font-size: 1.5em; cursor: pointer; }
+        .ai-chat-messages { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+        
+        .ai-message { padding: 10px 15px; border-radius: 18px; max-width: 80%; line-height: 1.4; word-wrap: break-word; }
+        .ai-message.user { background-color: var(--cor-primaria-inicio); color: white; border-bottom-right-radius: 4px; align-self: flex-end; }
+        .ai-message.ai { background-color: var(--cor-fundo-ia); color: var(--cor-texto-principal); border-bottom-left-radius: 4px; align-self: flex-start; }
+        
+        .blinking-cursor { display: inline-block; width: 2px; height: 1em; background-color: var(--cor-texto-secundario); animation: blink 1s step-end infinite; margin-left: 4px; vertical-align: bottom; }
+        @keyframes blink { from, to { background-color: transparent; } 50% { background-color: var(--cor-texto-secundario); } }
+
+        .ai-chat-input-area { display: flex; padding: 15px; border-top: 1px solid var(--cor-borda-padrao); gap: 10px; }
+        #ai-chat-input { flex-grow: 1; padding: 12px; border: 1px solid var(--cor-borda-padrao); border-radius: 10px; font-family: 'Inter', sans-serif; }
+        #ai-chat-input:focus { outline: none; border-color: var(--cor-primaria-inicio); }
+        #send-ai-chat { padding: 12px 18px; border: none; background: linear-gradient(135deg, var(--cor-primaria-inicio), var(--cor-primaria-fim)); color: white; border-radius: 10px; font-weight: 600; cursor: pointer; }
+        #send-ai-chat:disabled { background: #ccc; cursor: not-allowed; }
+
+        .footer { width: 100%; text-align: center; padding: 30px 0 10px 0; font-size: 0.9em; color: #666; }
+        .footer .highlight { color: var(--cor-primaria-inicio); font-weight: bold; }
+        
+        /* --- AJUSTES PARA DISPOSITIVOS MÓVEIS --- */
+        @media screen and (max-width: 480px) {
+            body { padding: 10px; }
+            .header, .help-container { padding: 15px; }
+            .logo { width: 100px; }
+            .logo-title { font-size: 1.6em; }
+            summary { padding: 15px; font-size: 1em; }
+            
+            .ai-fab-wrapper { bottom: 20px; right: 20px; left: auto; align-items: flex-end; }
+            .ai-fab img { width: 60px; height: 60px; }
+            .ai-tooltip { display: none; }
+            
+            .ai-chat-window {
+                bottom: 20px;
+                right: 20px;
+                left: 20px;
+                width: auto;
+                max-width: none;
+                height: 85vh;
+                max-height: 600px;
+                transform: none;
+                transform-origin: bottom right;
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+
+            .ai-chat-window.show {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <img src="./images/logo.png" alt="Logo da Anhanguera" onerror="this.onerror=null;this.src='https://placehold.co/200x60/ffffff/000000?text=Anhanguera';">
+            </div>
+            <h1 class="logo-title">Central de Ajuda Inteligente</h1>
+            <p class="logo-subtitle">Soluções rápidas para seus problemas técnicos.</p>
+        </header>
+
+        <main class="help-container" id="main-content">
+            <details>
+                <summary>Ordem correta para ligar os equipamentos</summary>
+                <div class="details-content">
+                    <p>Para evitar problemas de detecção, siga esta ordem:</p>
+                    <ol>
+                        <li><strong>Projetor:</strong> Ligue o projetor primeiro e aguarde ele iniciar.</li>
+                        <li><strong>Computador:</strong> Com o projetor pronto, ligue o computador.</li>
+                    </ol>
+                    <p><strong>Para desligar,</strong> faça o inverso: primeiro o computador, depois o projetor.</p>
+                    <p class="ti-notice">Se o problema persistir, por favor, acione o Responsável de TI.</p>
+                    <button class="ai-button contextual-ai-button">✨ Por que essa ordem é importante?</button>
+                </div>
+            </details>
+            
+            <details>
+                <summary>Projetor sem imagem (ou "Sem Sinal")</summary>
+                <div class="details-content">
+                    <p>Se o projetor está ligado, mas não exibe a imagem, siga estes passos:</p>
+                    <ol>
+                        <li><strong>Acione o TI para Verificar os Cabos:</strong> Por segurança, não manuseie os cabos. Comunique o responsável de TI para que ele verifique se a conexão (HDMI ou VGA) está firme.</li>
+                        <li><strong>Selecione a Fonte Correta:</strong> No controle do projetor, pressione "Source" ou "Input" e selecione a entrada correta.</li>
+                        <li><strong>Reinicie o Computador:</strong> Reiniciar o computador com o projetor já ligado resolve o problema de detecção.</li>
+                    </ol>
+                    <p class="ti-notice">Se ainda assim não funcionar, por favor, acione o Responsável de TI.</p>
+                    <button class="ai-button contextual-ai-button">✨ E se os outros passos não funcionarem?</button>
+                </div>
+            </details>
+
+            <details>
+                <summary>Projetor não espelha a imagem</summary>
+                <div class="details-content">
+                    <p>Para que o projetor mostre a mesma imagem que a tela do notebook, faça o seguinte:</p>
+                    <ol>
+                        <li><strong>Atalho do Windows:</strong> Pressione as teclas <strong>Windows + P</strong>.</li>
+                        <li><strong>Escolha "Duplicar":</strong> No menu que aparecer, clique na opção <strong>"Duplicar"</strong>.</li>
+                    </ol>
+                    <p class="ti-notice">Se o problema persistir, por favor, acione o Responsável de TI.</p>
+                    <button class="ai-button contextual-ai-button">✨ E se isso não funcionar?</button>
+                </div>
+            </details>
+
+            <details>
+                <summary>Estou sem som na sala</summary>
+                <div class="details-content">
+                    <p>Se o computador tem imagem mas não reproduz som, verifique os seguintes pontos:</p>
+                    <ol>
+                        <li><strong>Amplificador (se houver):</strong> Verifique se o amplificador da sala está ligado. Geralmente, há um LED indicador aceso.</li>
+                        <li><strong>Saída de Som do Windows:</strong> Clique no ícone de som na barra de tarefas e certifique-se de que a saída correta está selecionada (geralmente "HDMI").</li>
+                        <li><strong>Volume do Sistema e da Mídia:</strong> Verifique se o volume do Windows não está no mudo. Aumente também o volume no próprio vídeo ou mídia.</li>
+                    </ol>
+                    <p class="ti-notice">Se o problema persistir, por favor, acione o Responsável de TI.</p>
+                    <button class="ai-button contextual-ai-button">✨ E se isso não funcionar?</button>
+                </div>
+            </details>
+        </main>
+    </div>
+
+    <div id="ai-fab-wrapper" class="ai-fab-wrapper">
+        <div class="ai-tooltip">Como posso te ajudar?</div>
+        <div id="ai-fab" class="ai-fab">
+            <img src="logo.png" alt="Abrir chat do assistente">
+        </div>
+    </div>
+    
+    <div id="ai-chat-window" class="ai-chat-window">
+        <div class="ai-chat-header">
+            <span>Assistente de TI</span>
+            <button id="close-ai-chat" class="close-button">&times;</button>
+        </div>
+        <div id="ai-chat-messages" class="ai-chat-messages">
+            <div class="ai-message ai">Olá! Sou seu assistente de TI com tecnologia Gemini. Como posso ajudar você hoje?</div>
+        </div>
+        <div class="ai-chat-input-area">
+            <input type="text" id="ai-chat-input" placeholder="Digite sua pergunta...">
+            <button id="send-ai-chat">Enviar</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        Desenvolvido com <span class="highlight">♥</span> pela <span class="highlight">Anhanguera</span> Caxias do Sul.
+    </footer>
+
+    <script>
+    /* =========================================
+     * SCRIPT JAVASCRIPT
+     * ========================================= */
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(registration => {
+            console.log('Service Worker registrado com sucesso:', registration);
+          })
+          .catch(error => {
+            console.log('Falha ao registrar o Service Worker:', error);
+          });
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const LOGGING_WEBHOOK_URL = ""; 
+
+        const fabWrapper = document.getElementById('ai-fab-wrapper');
+        const fab = document.getElementById('ai-fab');
+        const aiChatWindow = document.getElementById('ai-chat-window');
+        const closeAiChatButton = document.getElementById('close-ai-chat');
+        const sendAiChatButton = document.getElementById('send-ai-chat');
+        const aiChatInput = document.getElementById('ai-chat-input');
+        const aiChatMessages = document.getElementById('ai-chat-messages');
+        const contextualAiButtons = document.querySelectorAll('.contextual-ai-button');
+        let chatHistory = []; // Mantém o histórico da conversa
+
+        fab.addEventListener('click', () => {
+            const isOpen = !aiChatWindow.classList.contains('show');
+            aiChatWindow.classList.toggle('show', isOpen);
+            fabWrapper.classList.toggle('chat-open', isOpen);
+            document.body.classList.toggle('chat-open-body', isOpen);
+        });
+        
+        closeAiChatButton.addEventListener('click', (event) => {
+            event.stopPropagation();
+            aiChatWindow.classList.remove('show');
+            fabWrapper.classList.remove('chat-open');
+            document.body.classList.remove('chat-open-body');
+        });
+
+        sendAiChatButton.addEventListener('click', handleSendMessage);
+        aiChatInput.addEventListener('keyup', (event) => {
+            if (event.key === 'Enter') {
+                handleSendMessage();
+            }
+        });
+
+        function handleSendMessage() {
+            const question = aiChatInput.value.trim();
+            if (!question) return;
+
+            addMessage(question, 'user');
+            aiChatInput.value = '';
+            
+            const userPrompt = `Você é um Assistente de TI da faculdade Anhanguera. Responda à pergunta do usuário de forma clara, objetiva e em português do Brasil, usando passos fáceis de seguir e formatação markdown (ex: **negrito** para ênfase e listas para passos). A pergunta é: "${question}"`;
+            getAiResponse(userPrompt);
+        }
+        
+        /**
+         * Adiciona uma nova mensagem à janela do chat.
+         * @param {string} text - O conteúdo da mensagem.
+         * @param {string} sender - 'user' ou 'ai'.
+         * @returns {HTMLElement} O elemento da mensagem criado.
+         */
+        function addMessage(text, sender) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('ai-message', sender);
+
+            if (sender === 'ai') {
+                messageElement.innerHTML = renderMarkdown(text);
+            } else {
+                messageElement.textContent = text;
+            }
+
+            aiChatMessages.appendChild(messageElement);
+            aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
+            return messageElement;
+        }
+
+        /**
+         * Converte uma string de Markdown simples para HTML.
+         * Suporta **negrito**, *itálico* e listas com -.
+         * @param {string} text - O texto em Markdown.
+         * @returns {string} O texto convertido para HTML.
+         */
+        function renderMarkdown(text) {
+            let html = text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Negrito
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')       // Itálico
+                .replace(/(\n|^)- (.*)/g, '$1<li>$2</li>') // Itens de lista
+                .replace(/(\<\/li\>)+/g, '</li>')          // Limpa múltiplos </li>
+                .replace(/<li>/g, '<ul><li>')              // Adiciona <ul>
+                .replace(/<\/li>(?!<\/ul>)/g, '</li></ul>') // Fecha <ul>
+                .replace(/\n/g, '<br>');                   // Novas linhas
+            return html;
+        }
+
+        /**
+         * Envia o prompt para a API Gemini e exibe a resposta.
+         * @param {string} userPrompt - A pergunta formatada para a IA.
+         */
+        async function getAiResponse(userPrompt) {
+            // Desabilita o input e o botão enquanto a IA processa
+            aiChatInput.disabled = true;
+            sendAiChatButton.disabled = true;
+
+            // Adiciona um indicador de "digitando..."
+            const typingMessageElement = addMessage('<span class="blinking-cursor"></span>', 'ai');
+
+            // Adiciona a pergunta do usuário ao histórico
+            chatHistory.push({ role: "user", parts: [{ text: userPrompt }] });
+
+            const apiKey = ""; // A chave da API será injetada pelo ambiente
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: chatHistory, // Envia o histórico completo
+                // Configurações de segurança para evitar respostas inadequadas
+                safetySettings: [
+                    { "category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE" },
+                    { "category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_MEDIUM_AND_ABOVE" },
+                    { "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_MEDIUM_AND_ABOVE" },
+                    { "category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE" }
+                ]
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status} ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                
+                let aiText = "Desculpe, não consegui processar a sua resposta. Tente novamente.";
+                if (result.candidates && result.candidates.length > 0 && result.candidates[0].content && result.candidates[0].content.parts) {
+                    aiText = result.candidates[0].content.parts[0].text;
+                }
+                
+                // Adiciona a resposta da IA ao histórico
+                chatHistory.push({ role: "model", parts: [{ text: aiText }] });
+                
+                // Atualiza a mensagem de "digitando" com a resposta real
+                typingMessageElement.innerHTML = renderMarkdown(aiText);
+
+            } catch (error) {
+                console.error("Erro ao contactar a API da IA:", error);
+                typingMessageElement.innerHTML = renderMarkdown("**Ocorreu um erro.** Por favor, verifique a sua ligação à Internet e tente novamente.");
+            } finally {
+                // Reabilita o input e o botão
+                aiChatInput.disabled = false;
+                sendAiChatButton.disabled = false;
+                aiChatInput.focus();
+                aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
+            }
+        }
+
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', () => {
+                if (!aiChatWindow.classList.contains('show')) return;
+                const visualViewportHeight = window.visualViewport.height;
+                aiChatWindow.style.height = `${visualViewportHeight - 40}px`;
+                aiChatWindow.style.bottom = '20px';
+            });
+        }
+
+        contextualAiButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const detailsContent = button.parentElement;
+                const summaryText = detailsContent.parentElement.querySelector('summary').textContent.trim();
+                const topicContent = Array.from(detailsContent.querySelectorAll('p, li')).map(el => el.textContent).join(' ');
+                
+                let question = button.textContent.replace('✨', '').trim();
+                let userPrompt = `Referente ao tópico de suporte "${summaryText}", o usuário clicou no botão "${question}". O contexto é: "${topicContent}". Elabore uma resposta útil e detalhada para o usuário, como um assistente de TI.`;
+
+                if (!aiChatWindow.classList.contains('show')) {
+                    aiChatWindow.classList.add('show');
+                    fabWrapper.classList.add('chat-open');
+                    document.body.classList.add('chat-open-body');
+                }
+
+                addMessage(question, 'user');
+                getAiResponse(userPrompt);
+            });
+        });
+    });
+    </script>
+</body>
+</html>
