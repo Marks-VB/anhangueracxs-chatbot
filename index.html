@@ -30,12 +30,29 @@
             --cor-texto-principal: #2d3748;
             --cor-texto-secundario: #4a5568;
             --cor-fundo-body: #f8fafc;
-            --cor-branco-translucido: rgba(255, 255, 255, 0.95);
+            --cor-fundo-container: rgba(255, 255, 255, 0.95);
+            --cor-fundo-elemento: #ffffff;
             --cor-borda-padrao: #e2e8f0;
             --cor-fundo-ia: #f0f4f8;
             --cor-fundo-aviso: #fffbe6;
             --cor-borda-aviso: #facc15;
             --cor-texto-aviso: #713f12;
+            --cor-sombra: rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- Variáveis para o Modo Escuro --- */
+        body.dark-mode {
+            --cor-texto-principal: #e2e8f0;
+            --cor-texto-secundario: #a0aec0;
+            --cor-fundo-body: #1a202c;
+            --cor-fundo-container: rgba(26, 32, 44, 0.85);
+            --cor-fundo-elemento: #2d3748;
+            --cor-borda-padrao: #4a5568;
+            --cor-fundo-ia: #4a5568;
+            --cor-fundo-aviso: #4a5568;
+            --cor-borda-aviso: #f6e05e;
+            --cor-texto-aviso: #f7fafc;
+            --cor-sombra: rgba(0, 0, 0, 0.4);
         }
 
         /* --- Estilos Globais e Reset --- */
@@ -44,13 +61,14 @@
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--cor-fundo-body);
+            color: var(--cor-texto-principal);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
             line-height: 1.6;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         body.chat-open-body {
@@ -61,14 +79,16 @@
         .container { width: 100%; max-width: 800px; z-index: 1; }
 
         .header {
+            position: relative; /* Necessário para posicionar o seletor de tema */
             text-align: center;
             margin-bottom: 30px;
-            background: var(--cor-branco-translucido);
+            background: var(--cor-fundo-container);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px var(--cor-sombra);
             border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: background-color 0.3s;
         }
         .logo { width: 120px; height: auto; margin: 0 auto 15px auto; transition: transform 0.3s ease; }
         .logo:hover { transform: translateY(-5px); }
@@ -76,17 +96,49 @@
         .logo-title { font-size: 2em; font-weight: 700; color: var(--cor-primaria-inicio); margin-bottom: 8px; }
         .logo-subtitle { font-size: 1.1em; color: var(--cor-texto-secundario); }
 
+        /* --- Seletor de Tema (Dark Mode) --- */
+        .theme-switcher {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+        }
+        .theme-switcher input { display: none; }
+        .theme-switcher label {
+            cursor: pointer;
+            width: 50px;
+            height: 25px;
+            background-color: #ccc;
+            display: block;
+            border-radius: 25px;
+            position: relative;
+            transition: background-color 0.3s;
+        }
+        .theme-switcher label::after {
+            content: '';
+            position: absolute;
+            top: 2.5px;
+            left: 2.5px;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+        .theme-switcher input:checked + label { background-color: var(--cor-primaria-inicio); }
+        .theme-switcher input:checked + label::after { transform: translateX(25px); }
+
         /* --- Conteúdo de Ajuda (FAQ) --- */
         .help-container {
-            background: var(--cor-branco-translucido);
+            background: var(--cor-fundo-container);
             backdrop-filter: blur(15px);
             padding: 20px;
             border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 40px var(--cor-sombra);
             border: 1px solid rgba(255, 255, 255, 0.3);
             display: flex;
             flex-direction: column;
             gap: 15px;
+            transition: background-color 0.3s;
         }
         
         @keyframes slideUp {
@@ -95,7 +147,7 @@
         }
 
         details { 
-            background-color: #fff; 
+            background-color: var(--cor-fundo-elemento); 
             border-radius: 12px; 
             border: 1px solid var(--cor-borda-padrao); 
             transition: all 0.3s ease;
@@ -107,13 +159,14 @@
         details:nth-child(3) { animation-delay: 0.3s; }
         details:nth-child(4) { animation-delay: 0.4s; }
 
-        details[open] { box-shadow: 0 4px 15px rgba(0,0,0,0.07); border-color: var(--cor-primaria-inicio); }
+        details[open] { box-shadow: 0 4px 15px var(--cor-sombra); border-color: var(--cor-primaria-inicio); }
         summary { padding: 18px 20px; font-weight: 600; color: var(--cor-texto-principal); cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; font-size: 1.05em; }
         summary::-webkit-details-marker { display: none; }
         summary::after { content: '+'; font-size: 1.5em; font-weight: 400; color: var(--cor-primaria-inicio); transition: transform 0.3s ease; }
         details[open] summary::after { transform: rotate(45deg); }
         
         .details-content { padding: 0 20px 20px 20px; color: var(--cor-texto-secundario); }
+        .details-content h4 { margin-top: 20px; margin-bottom: 10px; color: var(--cor-texto-principal); border-bottom: 1px solid var(--cor-borda-padrao); padding-bottom: 5px; }
         .contextual-ai-button { margin-top: 20px; padding: 8px 15px; font-size: 0.9em; background: var(--cor-fundo-ia); border: 1px solid var(--cor-borda-padrao); color: var(--cor-texto-principal); border-radius: 8px; cursor: pointer; }
         .contextual-ai-button:hover:not(:disabled) { background: #e2e8f0; }
         .ti-notice { margin-top: 20px; padding: 12px; background-color: var(--cor-fundo-aviso); border-left: 4px solid var(--cor-borda-aviso); color: var(--cor-texto-aviso); font-size: 0.95em; border-radius: 0 8px 8px 0; }
@@ -138,7 +191,7 @@
             border-radius: 15px;
             margin-bottom: 15px;
             white-space: nowrap;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px var(--cor-sombra);
             opacity: 0;
             animation: tooltip-animation 10s ease-in-out forwards;
         }
@@ -189,15 +242,15 @@
             width: 90%;
             max-width: 400px;
             height: 500px;
-            background: white;
+            background-color: var(--cor-fundo-elemento);
             border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 10px 40px var(--cor-sombra);
             display: flex;
             flex-direction: column;
             overflow: hidden;
             z-index: 999;
             transform-origin: bottom center;
-            transition: transform 0.3s ease, opacity 0.3s ease, bottom 0.3s ease, height 0.3s ease;
+            transition: transform 0.3s ease, opacity 0.3s ease, bottom 0.3s ease, height 0.3s ease, background-color 0.3s;
             transform: scale(0) translateX(50%);
             opacity: 0;
         }
@@ -224,13 +277,22 @@
         .blinking-cursor { display: inline-block; width: 2px; height: 1em; background-color: var(--cor-texto-secundario); animation: blink 1s step-end infinite; margin-left: 4px; vertical-align: bottom; }
         @keyframes blink { from, to { background-color: transparent; } 50% { background-color: var(--cor-texto-secundario); } }
 
-        .ai-chat-input-area { display: flex; padding: 15px; border-top: 1px solid var(--cor-borda-padrao); gap: 10px; }
-        #ai-chat-input { flex-grow: 1; padding: 12px; border: 1px solid var(--cor-borda-padrao); border-radius: 10px; font-family: 'Inter', sans-serif; }
+        .ai-chat-input-area { display: flex; padding: 15px; border-top: 1px solid var(--cor-borda-padrao); gap: 10px; transition: border-color 0.3s; }
+        #ai-chat-input { 
+            flex-grow: 1; 
+            padding: 12px; 
+            border: 1px solid var(--cor-borda-padrao); 
+            border-radius: 10px; 
+            font-family: 'Inter', sans-serif;
+            background-color: var(--cor-fundo-elemento);
+            color: var(--cor-texto-principal);
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
         #ai-chat-input:focus { outline: none; border-color: var(--cor-primaria-inicio); }
         #send-ai-chat { padding: 12px 18px; border: none; background: linear-gradient(135deg, var(--cor-primaria-inicio), var(--cor-primaria-fim)); color: white; border-radius: 10px; font-weight: 600; cursor: pointer; }
         #send-ai-chat:disabled { background: #ccc; cursor: not-allowed; }
 
-        .footer { width: 100%; text-align: center; padding: 30px 0 10px 0; font-size: 0.9em; color: #666; }
+        .footer { width: 100%; text-align: center; padding: 30px 0 10px 0; font-size: 0.9em; color: var(--cor-texto-secundario); }
         .footer .highlight { color: var(--cor-primaria-inicio); font-weight: bold; }
         
         /* --- AJUSTES PARA DISPOSITIVOS MÓVEIS --- */
@@ -241,6 +303,8 @@
             .logo-title { font-size: 1.6em; }
             summary { padding: 15px; font-size: 1em; }
             
+            .theme-switcher { top: 15px; right: 15px; }
+
             .ai-fab-wrapper { bottom: 20px; right: 20px; left: auto; align-items: flex-end; }
             .ai-fab img { width: 60px; height: 60px; }
             .ai-tooltip { display: none; }
@@ -269,6 +333,10 @@
 <body>
     <div class="container">
         <header class="header">
+            <div class="theme-switcher">
+                <input type="checkbox" id="dark-mode-toggle">
+                <label for="dark-mode-toggle" title="Alternar tema"></label>
+            </div>
             <div class="logo">
                 <img src="./images/logo.png" alt="Logo da Anhanguera" onerror="this.onerror=null;this.src='https://placehold.co/200x60/ffffff/000000?text=Anhanguera';">
             </div>
@@ -308,11 +376,23 @@
             <details>
                 <summary>Projetor não espelha a imagem</summary>
                 <div class="details-content">
+                    <h4>Windows</h4>
                     <p>Para que o projetor mostre a mesma imagem que a tela do notebook, faça o seguinte:</p>
                     <ol>
                         <li><strong>Atalho do Windows:</strong> Pressione as teclas <strong>Windows + P</strong>.</li>
                         <li><strong>Escolha "Duplicar":</strong> No menu que aparecer, clique na opção <strong>"Duplicar"</strong>.</li>
                     </ol>
+                    
+                    <hr style="margin: 20px 0;">
+
+                    <h4>Linux Mint</h4>
+                    <p>Para espelhar a tela no Linux Mint:</p>
+                    <ol>
+                        <li>Abra o <strong>Menu</strong> e procure por <strong>"Monitores"</strong>.</li>
+                        <li>Na janela de configuração de monitores, ative a opção <strong>"Espelhar monitores"</strong>.</li>
+                        <li>Clique em <strong>"Aplicar"</strong> para confirmar.</li>
+                    </ol>
+
                     <p class="ti-notice">Se o problema persistir, por favor, acione o Responsável de TI.</p>
                     <button class="ai-button contextual-ai-button">✨ E se isso não funcionar?</button>
                 </div>
@@ -321,12 +401,24 @@
             <details>
                 <summary>Estou sem som na sala</summary>
                 <div class="details-content">
+                    <h4>Windows</h4>
                     <p>Se o computador tem imagem mas não reproduz som, verifique os seguintes pontos:</p>
                     <ol>
                         <li><strong>Amplificador (se houver):</strong> Verifique se o amplificador da sala está ligado. Geralmente, há um LED indicador aceso.</li>
                         <li><strong>Saída de Som do Windows:</strong> Clique no ícone de som na barra de tarefas e certifique-se de que a saída correta está selecionada (geralmente "HDMI").</li>
                         <li><strong>Volume do Sistema e da Mídia:</strong> Verifique se o volume do Windows não está no mudo. Aumente também o volume no próprio vídeo ou mídia.</li>
                     </ol>
+
+                    <hr style="margin: 20px 0;">
+
+                    <h4>Linux Mint</h4>
+                    <p>Para verificar o som no Linux Mint:</p>
+                    <ol>
+                        <li>Abra o <strong>Menu</strong> e procure por <strong>"Som"</strong>.</li>
+                        <li>Na aba <strong>"Saída"</strong>, certifique-se de que o dispositivo correto está selecionado (geralmente algo como "HDMI / DisplayPort").</li>
+                        <li>Verifique se o volume de saída não está no mudo.</li>
+                    </ol>
+
                     <p class="ti-notice">Se o problema persistir, por favor, acione o Responsável de TI.</p>
                     <button class="ai-button contextual-ai-button">✨ E se isso não funcionar?</button>
                 </div>
@@ -386,8 +478,28 @@
         const aiChatInput = document.getElementById('ai-chat-input');
         const aiChatMessages = document.getElementById('ai-chat-messages');
         const contextualAiButtons = document.querySelectorAll('.contextual-ai-button');
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
         let chatHistory = []; 
 
+        // --- LÓGICA DO MODO ESCURO ---
+        darkModeToggle.addEventListener('change', () => {
+            document.body.classList.toggle('dark-mode');
+            // Salva a preferência do usuário no armazenamento local
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Verifica o tema salvo ao carregar a página
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            darkModeToggle.checked = true;
+        }
+
+
+        // --- LÓGICA DO CHAT ---
         fab.addEventListener('click', () => {
             const isOpen = !aiChatWindow.classList.contains('show');
             aiChatWindow.classList.toggle('show', isOpen);
@@ -465,6 +577,8 @@
                 2.  **Se a resposta existir na página:** Direcione o usuário para a solução existente de forma simples. Exemplo: "Claro! Para resolver isso, por favor, abra a seção 'TÍTULO DA SEÇÃO' e siga os passos indicados lá." Não repita os passos.
                 3.  **Se a resposta NÃO existir na página:** Forneça uma solução nova, em formato de passo a passo, extremamente simples e direta. Use linguagem fácil, sem jargões técnicos ou justificativas.
                 4.  **Seja direto:** Foque no "o que fazer", não no "porquê".
+                5.  **Aviso de Segurança:** Sempre instrua o usuário a **não mexer nos cabos** por conta própria e a chamar o Responsável de TI para qualquer manipulação física de equipamentos.
+                6.  **Último Recurso:** Se as instruções não resolverem ou o problema parecer complexo (ex: equipamento que não liga), instrua o usuário a **procurar o Responsável de TI da unidade** para assistência presencial.
 
                 ---
                 **CONTEÚDO DA PÁGINA DE AJUDA:**
@@ -479,8 +593,6 @@
             sendAiChatButton.disabled = true;
             const typingMessageElement = addMessage('<span class="blinking-cursor"></span>', 'ai');
 
-            // *** ALTERAÇÃO PRINCIPAL AQUI ***
-            // A URL agora aponta para a sua função segura na Vercel.
             const apiUrl = '/api/chat';
 
             const payload = {
@@ -495,7 +607,6 @@
             };
 
             try {
-                // A chamada fetch agora é para a sua própria API, não para a da Google.
                 const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
