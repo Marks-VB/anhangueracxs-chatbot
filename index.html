@@ -208,47 +208,44 @@
         .general-notice p { margin: 0; }
         .general-notice strong { color: var(--cor-primaria-inicio); }
 
-        /* --- Estilos do Assistente de IA Flutuante (FAB) --- */
-        .ai-fab-wrapper {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
+        /* --- Estilos da Área de Abertura do Chat --- */
+        .ai-open-chat-area {
             display: flex;
             flex-direction: column;
-            align-items: flex-end;
-            pointer-events: none;
-        }
-        
-        .ai-fab-wrapper.chat-open {
-            pointer-events: none;
-        }
-        
-        .ai-fab {
-            width: auto;
-            height: auto;
-            background: none;
-            box-shadow: none;
-            transition: transform 0.3s ease, opacity 0.3s;
-            pointer-events: auto;
+            align-items: center;
+            gap: 10px;
+            margin-top: 40px;
             cursor: pointer;
+            padding: 20px;
+            border-radius: 20px;
+            transition: background-color 0.3s, transform 0.3s, opacity 0.3s, height 0.3s, padding 0.3s, margin 0.3s;
             opacity: 1;
         }
 
-        .ai-fab-wrapper.chat-open .ai-fab {
+        .ai-open-chat-area:hover {
+            background-color: var(--cor-fundo-ia);
+            transform: translateY(-5px);
+        }
+
+        .ai-open-chat-area.chat-open {
             opacity: 0;
             pointer-events: none;
+            height: 0;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
         }
 
-        .ai-fab img {
-            width: 60px;
-            height: 60px;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.25));
-            transition: transform 0.3s ease;
+        .ai-prompt-icon {
+            width: 80px;
+            height: 80px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
         }
 
-        .ai-fab-wrapper:hover .ai-fab img {
-            transform: scale(1.1);
+        .ai-prompt-text {
+            font-size: 1.1em;
+            font-weight: 500;
+            color: var(--cor-texto-secundario);
         }
 
         /* --- Estilos da Janela de Chat --- */
@@ -462,11 +459,10 @@
                 </div>
             </details>
         </main>
-    </div>
 
-    <div id="ai-fab-wrapper" class="ai-fab-wrapper">
-        <div id="ai-fab" class="ai-fab">
-            <img src="logo.png" alt="Abrir chat do assistente">
+        <div id="ai-open-chat-area" class="ai-open-chat-area">
+            <img src="logo.png" alt="Ícone do assistente de IA" class="ai-prompt-icon">
+            <p class="ai-prompt-text">Como posso te ajudar?</p>
         </div>
     </div>
     
@@ -507,8 +503,7 @@
 
     document.addEventListener('DOMContentLoaded', () => {
 
-        const fabWrapper = document.getElementById('ai-fab-wrapper');
-        const fab = document.getElementById('ai-fab');
+        const openChatArea = document.getElementById('ai-open-chat-area');
         const aiChatWindow = document.getElementById('ai-chat-window');
         const closeAiChatButton = document.getElementById('close-ai-chat');
         const sendAiChatButton = document.getElementById('send-ai-chat');
@@ -535,16 +530,16 @@
 
 
         // --- LÓGICA DO CHAT ---
-        fab.addEventListener('click', () => {
+        openChatArea.addEventListener('click', () => {
             aiChatWindow.classList.add('show');
-            fabWrapper.classList.add('chat-open');
+            openChatArea.classList.add('chat-open');
             document.body.classList.add('chat-open-body'); // Bloqueia o scroll do body
         });
         
         closeAiChatButton.addEventListener('click', (event) => {
             event.stopPropagation();
             aiChatWindow.classList.remove('show');
-            fabWrapper.classList.remove('chat-open');
+            openChatArea.classList.remove('chat-open');
             document.body.classList.remove('chat-open-body'); // Libera o scroll do body
         });
 
@@ -726,7 +721,7 @@
                 
                 if (!aiChatWindow.classList.contains('show')) {
                     aiChatWindow.classList.add('show');
-                    fabWrapper.classList.add('chat-open');
+                    openChatArea.classList.add('chat-open');
                     document.body.classList.add('chat-open-body');
                 }
 
