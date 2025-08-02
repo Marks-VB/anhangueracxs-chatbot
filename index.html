@@ -274,15 +274,6 @@
             pointer-events: auto;
         }
 
-        body.keyboard-visible .ai-chat-window {
-            bottom: 0;
-            right: 0;
-            width: 100%;
-            height: 100%;
-            max-height: 100%;
-            border-radius: 0;
-        }
-
         .ai-chat-header {
             background: linear-gradient(135deg, var(--cor-primaria-inicio), var(--cor-primaria-fim));
             color: white;
@@ -329,6 +320,24 @@
             summary { padding: 15px; font-size: 1em; }
             
             .theme-switcher { top: 15px; right: 15px; }
+
+            /* AJUSTE: Chat em tela cheia no mobile para melhor UX */
+            .ai-chat-window {
+                width: 100%;
+                height: 100%;
+                max-width: 100%;
+                max-height: 100%;
+                bottom: 0;
+                right: 0;
+                border-radius: 0;
+                /* Animação de slide para cima */
+                transform: translateY(100%);
+            }
+
+            .ai-chat-window.show {
+                transform: translateY(0);
+                /* Remove o scale da animação original */
+            }
         }
     </style>
 </head>
@@ -522,12 +531,14 @@
         fab.addEventListener('click', () => {
             aiChatWindow.classList.add('show');
             fabWrapper.classList.add('chat-open');
+            document.body.classList.add('chat-open-body'); // Bloqueia o scroll do body
         });
         
         closeAiChatButton.addEventListener('click', (event) => {
             event.stopPropagation();
             aiChatWindow.classList.remove('show');
             fabWrapper.classList.remove('chat-open');
+            document.body.classList.remove('chat-open-body'); // Libera o scroll do body
         });
 
         sendAiChatButton.addEventListener('click', handleSendMessage);
@@ -536,20 +547,6 @@
                 handleSendMessage();
             }
         });
-
-        // --- LÓGICA DO TECLADO VIRTUAL ---
-        aiChatInput.addEventListener('focus', () => {
-            if (window.innerWidth < 480) { // Apenas em telas pequenas
-                document.body.classList.add('keyboard-visible');
-            }
-        });
-
-        aiChatInput.addEventListener('blur', () => {
-            if (window.innerWidth < 480) {
-                document.body.classList.remove('keyboard-visible');
-            }
-        });
-
 
         function handleSendMessage() {
             const question = aiChatInput.value.trim();
