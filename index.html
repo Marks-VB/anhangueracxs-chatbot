@@ -152,27 +152,91 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        @keyframes cardExpand {
+            from { 
+                transform: scale(1);
+                box-shadow: 0 2px 8px var(--cor-sombra);
+            }
+            to { 
+                transform: scale(1.02);
+                box-shadow: 0 8px 25px var(--cor-sombra);
+            }
+        }
+
+        @keyframes contentSlideDown {
+            from { 
+                opacity: 0; 
+                transform: translateY(-10px);
+                max-height: 0;
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0);
+                max-height: 500px;
+            }
+        }
+
         details { 
             background-color: var(--cor-fundo-elemento); 
             border-radius: 12px; 
             border: 1px solid var(--cor-borda-padrao); 
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             animation: slideUp 0.5s ease-out forwards;
             opacity: 0;
+            overflow: hidden;
         }
         details:nth-child(1) { animation-delay: 0.1s; }
         details:nth-child(2) { animation-delay: 0.2s; }
         details:nth-child(3) { animation-delay: 0.3s; }
         details:nth-child(4) { animation-delay: 0.4s; }
 
+        details:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--cor-sombra);
+        }
 
-        details[open] { box-shadow: 0 4px 15px var(--cor-sombra); border-color: var(--cor-primaria-inicio); }
-        summary { padding: 18px 20px; font-weight: 600; color: var(--cor-texto-principal); cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; font-size: 1.05em; }
+        details[open] { 
+            box-shadow: 0 8px 25px var(--cor-sombra); 
+            border-color: var(--cor-primaria-inicio);
+            animation: cardExpand 0.3s ease-out forwards;
+        }
+        summary { 
+            padding: 18px 20px; 
+            font-weight: 600; 
+            color: var(--cor-texto-principal); 
+            cursor: pointer; 
+            list-style: none; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            font-size: 1.05em;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
         summary::-webkit-details-marker { display: none; }
-        summary::after { content: '+'; font-size: 1.5em; font-weight: 400; color: var(--cor-primaria-inicio); transition: transform 0.3s ease; }
-        details[open] summary::after { transform: rotate(45deg); }
+        summary:hover {
+            background-color: rgba(242, 117, 0, 0.05);
+            padding-left: 25px;
+        }
+        summary::after { 
+            content: '+'; 
+            font-size: 1.5em; 
+            font-weight: 400; 
+            color: var(--cor-primaria-inicio); 
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: inline-block;
+        }
+        details[open] summary::after { 
+            transform: rotate(45deg) scale(1.1); 
+            color: var(--cor-primaria-fim);
+        }
         
-        .details-content { padding: 0 20px 20px 20px; color: var(--cor-texto-secundario); }
+        .details-content { 
+            padding: 0 20px 20px 20px; 
+            color: var(--cor-texto-secundario);
+            animation: contentSlideDown 0.4s ease-out forwards;
+            transform-origin: top;
+        }
         .details-content h4 { 
             margin-top: 20px; 
             margin-bottom: 10px; 
@@ -208,7 +272,7 @@
         .general-notice p { margin: 0; }
         .general-notice strong { color: var(--cor-primaria-inicio); }
 
-        /* --- Estilos da Área de Abertura do Chat --- */
+        /* --- Estilos da Área de Abertura do Chat (Desktop) --- */
         .ai-open-chat-area {
             display: flex;
             flex-direction: column;
@@ -240,36 +304,55 @@
             width: 80px;
             height: 80px;
             filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+            transition: width 0.3s, height 0.3s;
         }
 
         .ai-prompt-text {
             font-size: 1.1em;
             font-weight: 500;
             color: var(--cor-texto-secundario);
+            transition: display 0.3s;
         }
 
         /* --- Estilos da Janela de Chat --- */
         .ai-chat-window {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: calc(100% - 40px);
-            max-width: 400px;
-            height: 85vh;
-            max-height: 600px;
+            bottom: 0; /* Alinhado à base para mobile */
+            right: 0; /* Alinhado à direita para mobile */
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
             background-color: var(--cor-fundo-elemento);
-            border-radius: 20px;
+            border-radius: 0;
             box-shadow: 0 10px 40px var(--cor-sombra);
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            z-index: 999;
-            transform-origin: bottom right;
+            z-index: 1001; /* Acima do FAB */
             transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s, height 0.2s ease-out;
-            transform: translateY(20px) scale(0.95);
-            opacity: 0;
+            transform: translateY(100%);
+            opacity: 1; /* Inicia opaco para a animação de entrada */
             pointer-events: none;
         }
+
+        /* Estilos do Chat para Desktop */
+        @media screen and (min-width: 481px) {
+            .ai-chat-window {
+                bottom: 20px;
+                right: 20px;
+                width: calc(100% - 40px);
+                max-width: 400px;
+                height: 85vh;
+                max-height: 600px;
+                border-radius: 20px;
+                transform-origin: bottom right;
+                transform: translateY(20px) scale(0.95);
+                opacity: 0;
+            }
+        }
+
+
         .ai-chat-window.show {
             transform: translateY(0) scale(1);
             opacity: 1;
@@ -324,23 +407,177 @@
             
             .theme-switcher { top: 15px; right: 15px; }
 
-            /* AJUSTE: Chat em tela cheia no mobile para melhor UX */
+            /* FAB Moderno e Atrativo */
+            .ai-open-chat-area {
+                position: fixed;
+                bottom: 25px;
+                right: 25px;
+                width: 68px;
+                height: 68px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #ff6b35, #f7931e, #ff9500);
+                box-shadow: 
+                    0 8px 25px rgba(255, 107, 53, 0.4),
+                    0 4px 12px rgba(0, 0, 0, 0.15),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+                margin: 0;
+                padding: 0;
+                gap: 0;
+                transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                cursor: pointer;
+                overflow: hidden;
+                position: relative;
+            }
+
+            /* Efeito de pulse contínuo */
+            .ai-open-chat-area::before {
+                content: '';
+                position: absolute;
+                top: -2px;
+                left: -2px;
+                right: -2px;
+                bottom: -2px;
+                background: linear-gradient(135deg, #ff6b35, #f7931e);
+                border-radius: 50%;
+                z-index: -1;
+                animation: pulse 2s ease-in-out infinite;
+                opacity: 0.7;
+            }
+
+            /* Efeito de brilho interno */
+            .ai-open-chat-area::after {
+                content: '';
+                position: absolute;
+                top: 8px;
+                left: 8px;
+                right: 8px;
+                bottom: 8px;
+                background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+                border-radius: 50%;
+                pointer-events: none;
+            }
+
+            @keyframes pulse {
+                0%, 100% {
+                    transform: scale(1);
+                    opacity: 0.7;
+                }
+                50% {
+                    transform: scale(1.15);
+                    opacity: 0.3;
+                }
+            }
+
+            .ai-open-chat-area:hover {
+                transform: scale(1.08) translateY(-2px);
+                box-shadow: 
+                    0 12px 35px rgba(255, 107, 53, 0.6),
+                    0 6px 18px rgba(0, 0, 0, 0.2),
+                    inset 0 2px 0 rgba(255, 255, 255, 0.3);
+                background: linear-gradient(135deg, #ff7b45, #ff9500, #ffb347);
+            }
+
+            .ai-open-chat-area:active {
+                transform: scale(0.92) translateY(0px);
+                transition: all 0.15s cubic-bezier(0.4, 0, 1, 1);
+            }
+
+            .ai-open-chat-area.chat-open {
+                opacity: 0;
+                pointer-events: none;
+                transform: scale(0.8) translateY(20px);
+                transition: all 0.3s cubic-bezier(0.4, 0, 1, 1);
+            }
+
+            .ai-prompt-icon {
+                width: 32px;
+                height: 32px;
+                filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+                transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+                z-index: 1;
+            }
+
+            .ai-open-chat-area:hover .ai-prompt-icon {
+                transform: rotate(15deg) scale(1.1);
+                filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3)) brightness(1.1);
+            }
+
+            .ai-prompt-text {
+                display: none;
+            }
+
+            /* Melhor handling para o chat mobile */
             .ai-chat-window {
-                width: 100%;
-                height: 100vh; /* Usa 100vh para ocupar a tela inteira inicialmente */
-                height: -webkit-fill-available;
-                max-width: 100%;
-                max-height: 100vh;
+                position: fixed;
                 bottom: 0;
                 right: 0;
+                width: 100%;
+                height: 100vh;
+                height: 100dvh; /* Dynamic viewport height */
+                max-width: 100%;
+                max-height: 100%;
+                background-color: var(--cor-fundo-elemento);
                 border-radius: 0;
-                /* Animação de slide para cima */
+                box-shadow: 0 -5px 30px rgba(0, 0, 0, 0.15);
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+                z-index: 1001;
+                transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
                 transform: translateY(100%);
+                opacity: 1;
+                pointer-events: none;
             }
 
             .ai-chat-window.show {
                 transform: translateY(0);
-                /* Remove o scale da animação original */
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            /* Melhor área de input para mobile */
+            .ai-chat-input-area { 
+                display: flex; 
+                padding: 15px 15px calc(15px + env(safe-area-inset-bottom, 0px)); /* Safe area para iPhone */
+                border-top: 1px solid var(--cor-borda-padrao); 
+                gap: 10px; 
+                transition: border-color 0.3s; 
+                flex-shrink: 0;
+                background-color: var(--cor-fundo-elemento);
+                position: sticky;
+                bottom: 0;
+            }
+
+            #ai-chat-input { 
+                flex-grow: 1; 
+                padding: 14px 16px; /* Padding maior para mobile */
+                border: 1px solid var(--cor-borda-padrao); 
+                border-radius: 12px; /* Border radius maior */
+                font-family: 'Inter', sans-serif;
+                font-size: 16px; /* Evita zoom no iOS */
+                background-color: var(--cor-fundo-elemento);
+                color: var(--cor-texto-principal);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            #send-ai-chat { 
+                padding: 14px 20px;
+                border: none; 
+                background: linear-gradient(135deg, var(--cor-primaria-inicio), var(--cor-primaria-fim)); 
+                color: white; 
+                border-radius: 12px; 
+                font-weight: 600; 
+                cursor: pointer;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                min-width: 80px;
+            }
+
+            #send-ai-chat:active {
+                transform: scale(0.95);
             }
         }
     </style>
@@ -460,12 +697,13 @@
             </details>
         </main>
 
-        <div id="ai-open-chat-area" class="ai-open-chat-area">
-            <img src="logo.png" alt="Ícone do assistente de IA" class="ai-prompt-icon">
-            <p class="ai-prompt-text">Como posso te ajudar?</p>
-        </div>
     </div>
     
+    <div id="ai-open-chat-area" class="ai-open-chat-area">
+        <img src="logo.png" alt="Ícone do assistente de IA" class="ai-prompt-icon">
+        <p class="ai-prompt-text">Como posso te ajudar?</p>
+    </div>
+
     <div id="ai-chat-window" class="ai-chat-window">
         <div class="ai-chat-header">
             <span>Assistente de TI</span>
@@ -534,6 +772,17 @@
             aiChatWindow.classList.add('show');
             openChatArea.classList.add('chat-open');
             document.body.classList.add('chat-open-body'); // Bloqueia o scroll do body
+            
+            // Ajusta altura inicial para mobile
+            if (window.innerWidth <= 480) {
+                const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+                aiChatWindow.style.height = `${viewportHeight}px`;
+            }
+            
+            // Foca no input após a animação
+            setTimeout(() => {
+                aiChatInput.focus();
+            }, 400);
         });
         
         closeAiChatButton.addEventListener('click', (event) => {
@@ -541,6 +790,53 @@
             aiChatWindow.classList.remove('show');
             openChatArea.classList.remove('chat-open');
             document.body.classList.remove('chat-open-body'); // Libera o scroll do body
+            
+            // Remove altura customizada
+            aiChatWindow.style.height = '';
+            
+            // Remove foco do input
+            aiChatInput.blur();
+        });
+
+        // Adiciona funcionalidade de swipe down para fechar (mobile)
+        let startY = 0;
+        let currentY = 0;
+        let isDragging = false;
+
+        aiChatWindow.addEventListener('touchstart', (e) => {
+            if (e.target.closest('.ai-chat-messages') && aiChatMessages.scrollTop === 0) {
+                startY = e.touches[0].clientY;
+                isDragging = true;
+            }
+        });
+
+        aiChatWindow.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            
+            currentY = e.touches[0].clientY;
+            const diffY = currentY - startY;
+            
+            if (diffY > 0 && diffY < 100) {
+                aiChatWindow.style.transform = `translateY(${diffY}px)`;
+                aiChatWindow.style.opacity = 1 - (diffY / 200);
+            }
+        });
+
+        aiChatWindow.addEventListener('touchend', () => {
+            if (!isDragging) return;
+            
+            const diffY = currentY - startY;
+            
+            if (diffY > 50) {
+                // Fecha o chat
+                closeAiChatButton.click();
+            } else {
+                // Volta para posição original
+                aiChatWindow.style.transform = '';
+                aiChatWindow.style.opacity = '';
+            }
+            
+            isDragging = false;
         });
 
         sendAiChatButton.addEventListener('click', handleSendMessage);
@@ -690,14 +986,52 @@
             if (aiChatWindow.classList.contains('show')) {
                 // Em telas móveis, ajusta a altura do chat para a altura da área visível
                 if (window.innerWidth <= 480) {
-                    aiChatWindow.style.height = `${window.visualViewport.height}px`;
+                    const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+                    aiChatWindow.style.height = `${viewportHeight}px`;
+                    
+                    // Scroll para a última mensagem quando o teclado aparece
+                    setTimeout(() => {
+                        aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
+                    }, 100);
                 }
             }
         };
 
+        // Debounce para melhor performance
+        const debounce = (func, wait) => {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        };
+
         // Adiciona o listener para o evento de resize do visualViewport
         if (window.visualViewport) {
-            window.visualViewport.addEventListener('resize', handleViewportResize);
+            window.visualViewport.addEventListener('resize', debounce(handleViewportResize, 100));
+        }
+
+        // Listener adicional para orientação da tela
+        window.addEventListener('orientationchange', () => {
+            setTimeout(handleViewportResize, 500); // Delay para aguardar a mudança completa
+        });
+
+        // Melhoria no foco do input
+        aiChatInput.addEventListener('focus', () => {
+            setTimeout(() => {
+                aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
+            }, 300); // Delay para aguardar o teclado aparecer
+        });
+
+        // Previne zoom no iOS quando focando o input
+        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+            aiChatInput.addEventListener('focus', (e) => {
+                e.target.style.fontSize = '16px';
+            });
         }
 
 
