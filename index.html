@@ -64,11 +64,16 @@
         /* --- Estilos Globais e Reset --- */
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
+        html {
+            height: -webkit-fill-available;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--cor-fundo-body);
             color: var(--cor-texto-principal);
             min-height: 100vh;
+            min-height: -webkit-fill-available;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -263,7 +268,7 @@
             overflow: hidden;
             z-index: 999;
             transform-origin: bottom right;
-            transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s;
+            transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s, height 0.2s ease-out;
             transform: translateY(20px) scale(0.95);
             opacity: 0;
             pointer-events: none;
@@ -282,6 +287,7 @@
             justify-content: space-between;
             align-items: center;
             font-weight: 600;
+            flex-shrink: 0;
         }
         .ai-chat-header .close-button { background: none; border: none; color: white; font-size: 1.5em; cursor: pointer; }
         .ai-chat-messages { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
@@ -293,7 +299,7 @@
         .blinking-cursor { display: inline-block; width: 2px; height: 1em; background-color: var(--cor-texto-secundario); animation: blink 1s step-end infinite; margin-left: 4px; vertical-align: bottom; }
         @keyframes blink { from, to { background-color: transparent; } 50% { background-color: var(--cor-texto-secundario); } }
 
-        .ai-chat-input-area { display: flex; padding: 15px; border-top: 1px solid var(--cor-borda-padrao); gap: 10px; transition: border-color 0.3s; }
+        .ai-chat-input-area { display: flex; padding: 15px; border-top: 1px solid var(--cor-borda-padrao); gap: 10px; transition: border-color 0.3s; flex-shrink: 0; }
         #ai-chat-input { 
             flex-grow: 1; 
             padding: 12px; 
@@ -324,9 +330,10 @@
             /* AJUSTE: Chat em tela cheia no mobile para melhor UX */
             .ai-chat-window {
                 width: 100%;
-                height: 100%;
+                height: 100vh; /* Usa 100vh para ocupar a tela inteira inicialmente */
+                height: -webkit-fill-available;
                 max-width: 100%;
-                max-height: 100%;
+                max-height: 100vh;
                 bottom: 0;
                 right: 0;
                 border-radius: 0;
@@ -567,7 +574,7 @@
             messageElement.classList.add('ai-message', sender);
 
             if (sender === 'ai') {
-                messageElement.innerHTML = renderMarkdown(text);
+                messageElement.innerHTML = text; // Permite HTML para o cursor/status
             } else {
                 messageElement.textContent = text;
             }
@@ -618,7 +625,21 @@
         async function getAiResponse(systemInstruction) {
             aiChatInput.disabled = true;
             sendAiChatButton.disabled = true;
-            const typingMessageElement = addMessage('<span class="blinking-cursor"></span>', 'ai');
+
+            // --- LÓGICA DE STATUS DINÂMICO ---
+            const statusMessages = [
+                'Lendo sua pergunta...',
+                'Analisando o contexto...',
+                'Pensando...',
+                'Quase lá...'
+            ];
+            let statusIndex = 0;
+            const typingMessageElement = addMessage(statusMessages[0] + ' <span class="blinking-cursor"></span>', 'ai');
+            
+            const statusInterval = setInterval(() => {
+                statusIndex = (statusIndex + 1) % statusMessages.length;
+                typingMessageElement.innerHTML = statusMessages[statusIndex] + ' <span class="blinking-cursor"></span>';
+            }, 1800); // Atualiza o status a cada 1.8 segundos
 
             const apiUrl = '/api/chat';
 
@@ -640,6 +661,8 @@
                     body: JSON.stringify(payload)
                 });
 
+                clearInterval(statusInterval); // Para o ciclo de status
+
                 if (!response.ok) {
                     const errorBody = await response.json();
                     throw new Error(`API proxy error: ${response.status} - ${errorBody.error || 'Erro desconhecido'}`);
@@ -656,6 +679,7 @@
                 typingMessageElement.innerHTML = renderMarkdown(aiText);
 
             } catch (error) {
+                clearInterval(statusInterval); // Garante que parou também em caso de erro
                 console.error("Erro ao contactar a API da IA:", error);
                 typingMessageElement.innerHTML = renderMarkdown("**Ocorreu um erro.** Por favor, verifique a sua ligação à Internet e tente novamente.");
             } finally {
@@ -666,14 +690,21 @@
             }
         }
 
+        // --- LÓGICA DE AJUSTE PARA TECLADO VIRTUAL (VISUAL VIEWPORT API) ---
+        const handleViewportResize = () => {
+            if (aiChatWindow.classList.contains('show')) {
+                // Em telas móveis, ajusta a altura do chat para a altura da área visível
+                if (window.innerWidth <= 480) {
+                    aiChatWindow.style.height = `${window.visualViewport.height}px`;
+                }
+            }
+        };
+
+        // Adiciona o listener para o evento de resize do visualViewport
         if (window.visualViewport) {
-            window.visualViewport.addEventListener('resize', () => {
-                if (!aiChatWindow.classList.contains('show')) return;
-                const visualViewportHeight = window.visualViewport.height;
-                aiChatWindow.style.height = `${visualViewportHeight - 40}px`;
-                aiChatWindow.style.bottom = '20px';
-            });
+            window.visualViewport.addEventListener('resize', handleViewportResize);
         }
+
 
         contextualAiButtons.forEach(button => {
             button.addEventListener('click', () => {
@@ -696,6 +727,7 @@
                 if (!aiChatWindow.classList.contains('show')) {
                     aiChatWindow.classList.add('show');
                     fabWrapper.classList.add('chat-open');
+                    document.body.classList.add('chat-open-body');
                 }
 
                 addMessage(question, 'user');
