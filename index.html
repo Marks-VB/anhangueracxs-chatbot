@@ -103,11 +103,11 @@
         }
         .logo { width: 120px; height: auto; margin: 0 auto 15px auto; transition: transform 0.3s ease; }
         .logo:hover { transform: translateY(-5px); }
-        .logo img { width: 100%; height: 100%; object-fit: contain; }
+        .logo img { width: 100%; height: 100%; object-fit: contain; transition: filter 0.3s ease; }
         .logo-title { font-size: 2em; font-weight: 700; color: var(--cor-primaria-inicio); margin-bottom: 8px; }
         .logo-subtitle { font-size: 1.1em; color: var(--cor-texto-secundario); }
 
-        /* --- Seletor de Tema (Dark Mode) com Emojis --- */
+        /* --- Seletor de Tema (Dark Mode) com Ícones SVG --- */
         .theme-switcher {
             position: absolute;
             top: 25px;
@@ -121,17 +121,40 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            color: var(--cor-texto-secundario); /* Cor base dos ícones */
+            transition: color 0.3s;
         }
-        .theme-switcher .sun, .theme-switcher .moon {
-            font-size: 24px;
+        .theme-switcher svg {
+            width: 22px; /* Tamanho do ícone */
+            height: 22px;
             transition: transform 0.3s ease-out;
+            stroke: currentColor; /* Usa a cor definida no 'label' */
         }
-        .theme-switcher label:hover span {
-            transform: scale(1.2) rotate(15deg);
+        .theme-switcher label:hover {
+            color: var(--cor-primaria-inicio); /* Muda a cor no hover */
         }
-        .theme-switcher .sun { display: none; }
-        body.dark-mode .theme-switcher .sun { display: block; }
-        body.dark-mode .theme-switcher .moon { display: none; }
+        .theme-switcher label:hover svg {
+            transform: scale(1.15) rotate(15deg);
+        }
+        
+        /* Lógica para mostrar/esconder o ícone correto */
+        .theme-switcher .sun { display: none; } /* Sol escondido por padrão */
+        .theme-switcher .moon { display: block; } /* Lua visível por padrão */
+        
+        body.dark-mode .theme-switcher .sun { display: block; } /* Mostra o Sol no modo escuro */
+        body.dark-mode .theme-switcher .moon { display: none; } /* Esconde a Lua no modo escuro */
+        
+        body.dark-mode .theme-switcher label {
+             color: #f6e05e; /* Cor amarelada para o sol no modo escuro */
+        }
+        body.dark-mode .theme-switcher label:hover {
+             color: #fff; /* Cor do hover para o sol */
+        }
+
+        /* MODIFICAÇÃO: Adiciona sombreamento branco ao redor do logo no modo escuro */
+        body.dark-mode .logo img {
+            filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.4));
+        }
 
         /* --- Conteúdo de Ajuda (FAQ) --- */
         .help-container {
@@ -588,8 +611,14 @@
             <div class="theme-switcher">
                 <input type="checkbox" id="dark-mode-toggle">
                 <label for="dark-mode-toggle" title="Alternar tema">
-                    <span class="sun">☀️</span>
-                    <span class="moon">🌙</span>
+                    <!-- Ícone de Sol (visível no modo escuro) -->
+                    <span class="sun">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    </span>
+                    <!-- Ícone de Lua (visível no modo claro) -->
+                    <span class="moon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    </span>
                 </label>
             </div>
             <div class="logo">
@@ -707,7 +736,7 @@
     <div id="ai-chat-window" class="ai-chat-window">
         <div class="ai-chat-header">
             <span>Assistente de TI</span>
-            <button id="close-ai-chat" class="close-button">&times;</button>
+            <button id="close-ai-chat" class="close-button">×</button>
         </div>
         <div id="ai-chat-messages" class="ai-chat-messages">
             <div class="ai-message ai">Olá! Sou seu assistente de TI. Como posso ajudar?</div>
