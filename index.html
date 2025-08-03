@@ -914,7 +914,7 @@
                 const content = detail.querySelector('.details-content').textContent.trim();
                 return `Tópico: "${title}"\nConteúdo: ${content}`;
             }).join('\n\n---\n\n');
-            
+
             const instructionText = `Você é o Assistente de TI da Anhanguera Caxias do Sul. Seu objetivo é ajudar professores e funcionários com problemas técnicos básicos de forma rápida e clara.
         
         **PERSONALIDADE:** Seja amigável, paciente e use linguagem simples. Evite jargões técnicos desnecessários.
@@ -947,7 +947,7 @@
         **CONTEÚDO DISPONÍVEL NA PÁGINA:**
         ${pageContent}
         ---`;
-            
+
             return { parts: [{ text: instructionText }] };
         };
 
@@ -1061,15 +1061,22 @@
                 
                 const sectionContent = details.querySelector('.details-content').innerText.trim();
                 
-                const instructionText = `
-                    Você é um "Assistente de TI". O usuário pediu uma explicação mais simples sobre o tópico: "${summaryText}".
-                    O conteúdo original da seção é: "${sectionContent}".
-                    Sua tarefa é explicar o motivo da ordem dos equipamentos de forma muito curta e direta.
-                    Responda em uma ou duas frases. FOQUE APENAS nos equipamentos do texto (projetor, monitor, computador).
-                    NÃO mencione outros equipamentos.
-                `;
+                const instructionText = `Você é o Assistente de TI da Anhanguera Caxias do Sul. O usuário clicou no botão "${question}" na seção "${summaryText}".
+                            
+                **SUA TAREFA:** Fornecer uma explicação mais simples e direta sobre o conteúdo desta seção específica.
+                            
+                **FORMATO:**
+                - Máximo 2-3 frases
+                - Use linguagem bem simples e amigável
+                - Foque no essencial do problema
+                - Destaque palavras importantes com **negrito**
+                            
+                **CONTEÚDO DA SEÇÃO:**
+                ${sectionContent}
+                            
+                **INSTRUÇÃO:** Explique de forma mais simples e clara, mantendo o foco na segurança (não mexer em cabos) e orientando a chamar o TI se necessário.`;
+                            
                 const systemInstruction = { parts: [{ text: instructionText }] };
-                
                 openChat();
                 addMessage(question, 'user');
                 chatHistory = [{ role: "user", parts: [{ text: "Me explique de forma mais simples." }] }]; 
