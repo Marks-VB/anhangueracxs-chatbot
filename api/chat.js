@@ -19,8 +19,7 @@ export default async function handler(req, res) {
   }
 
   // 3. Define o URL real da API da Google
-  const googleApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
+  const googleApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
   try {
     // 4. Reencaminha o corpo do pedido (payload) do seu site para a API da Google
     const googleResponse = await fetch(googleApiUrl, {
