@@ -831,7 +831,7 @@
     <div id="ai-chat-window" class="ai-chat-window">
         <div class="ai-chat-header">
             <span>Assistente de TI</span>
-            <button id="close-ai-chat" class="close-button">&times;</button>
+            <button id="close-ai-chat" class="close-button">×</button>
         </div>
         <div id="ai-chat-messages" class="ai-chat-messages">
             <!-- Mensagem inicial da IA. -->
@@ -973,14 +973,16 @@
             type();
         }
 
-        // --- FUNÇÃO DE COMUNICAÇÃO COM A API DA IA (ATUALIZADA) ---
+        // =========================================================================
+        // AQUI ESTÁ A FUNÇÃO CORRIGIDA
+        // =========================================================================
         async function getAiResponse(systemInstruction) {
-            const apiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:streamGenerateContent?key=';
-            
+            // A URL DEVE ser o caminho para o seu arquivo de proxy na Vercel.
+            const apiUrl = '/api/chat'; 
+
             aiChatInput.disabled = true;
             sendAiChatButton.disabled = true;
             
-            // NOVO: Mensagens de status dinâmicas
             const statusMessages = [
                 'Lendo sua pergunta...',
                 'Analisando o contexto...',
@@ -994,7 +996,7 @@
                 if (typingMessageElement.innerHTML.includes('blinking-cursor')) {
                     typingMessageElement.innerHTML = statusMessages[statusIndex] + '<span class="blinking-cursor"></span>';
                 }
-            }, 2000); // Muda o status a cada 2 segundos
+            }, 2000);
 
             let fullResponseText = "";
             
@@ -1004,40 +1006,30 @@
                     contents: chatHistory,
                 };
 
+                // A requisição fetch vai para o seu proxy, sem chave de API aqui!
                 const response = await fetch(apiUrl, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
                     body: JSON.stringify(payload)
                 });
-
-                if (!response.ok) throw new Error(`Erro do servidor: ${response.status}`);
                 
-                // Coleta a resposta completa do stream
-                const reader = response.body.getReader();
-                const decoder = new TextDecoder();
-                while (true) {
-                    const { done, value } = await reader.read();
-                    if (done) break;
-                    
-                    const chunkText = decoder.decode(value);
-                    const lines = chunkText.split('\n');
-                    for (const line of lines) {
-                        if (line.trim().startsWith('data: ')) {
-                            const jsonStr = line.substring(6);
-                            try {
-                                const parsed = JSON.parse(jsonStr);
-                                fullResponseText += parsed.candidates[0]?.content?.parts[0]?.text || "";
-                            } catch (e) { console.warn("Erro no chunk JSON:", line); }
-                        }
-                    }
+                const data = await response.json();
+
+                if (!response.ok) {
+                    // O erro agora vem do nosso proxy
+                    throw new Error(data.error || 'Ocorreu um erro desconhecido no servidor.');
                 }
                 
-                // NOVO: Para o ciclo de status e inicia o efeito de digitação
+                // Extrai o texto da resposta que o proxy nos encaminhou do Google
+                fullResponseText = data.candidates[0]?.content?.parts[0]?.text || "";
+                
                 clearInterval(statusInterval);
 
                 if (fullResponseText.trim()) {
                     chatHistory.push({ role: "model", parts: [{ text: fullResponseText }] });
-                    typewriter(typingMessageElement, fullResponseText); // Inicia a digitação
+                    typewriter(typingMessageElement, fullResponseText);
                 } else {
                     typingMessageElement.innerHTML = "Não consegui encontrar uma resposta. Tente novamente.";
                     aiChatInput.disabled = false;
@@ -1046,8 +1038,8 @@
                 }
 
             } catch (error) {
-                clearInterval(statusInterval); // Para o status em caso de erro
-                console.error("Erro na API:", error);
+                clearInterval(statusInterval);
+                console.error("Erro ao chamar o proxy /api/chat:", error);
                 typingMessageElement.innerHTML = renderMarkdown(`**Ocorreu um erro:** ${error.message}.`);
                 aiChatInput.disabled = false;
                 sendAiChatButton.disabled = false;
