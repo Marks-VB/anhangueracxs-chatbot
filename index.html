@@ -1,23 +1,15 @@
 <!DOCTYPE html>
-<!-- Define o idioma da página como Português do Brasil, importante para acessibilidade e SEO. -->
 <html lang="pt-BR">
 <head>
-    <!-- Define o conjunto de caracteres como UTF-8, o padrão para a web, garantindo que caracteres especiais sejam exibidos corretamente. -->
     <meta charset="UTF-8">
-    <!-- Configura a viewport para que a página seja responsiva e se adapte a diferentes tamanhos de tela, como em celulares e tablets. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Título da página, exibido na aba do navegador. -->
     <title>Ajuda e Suporte Técnico com IA</title>
 
-    <!-- Define a cor da barra de endereço em navegadores móveis (Chrome, Firefox, etc.) para combinar com o tema do site. -->
     <meta name="theme-color" content="#f27500">
-    <!-- Link para o manifest.json, usado para Progressive Web Apps (PWA), permitindo que o site seja "instalado" na tela inicial. -->
     <link rel="manifest" href="manifest.json">
 
-    <!-- Define o ícone (favicon) da página. -->
     <link rel="icon" href="logo.png" type="image/png">
 
-    <!-- Importa a fonte 'Inter' do Google Fonts para um visual mais moderno. -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
@@ -705,46 +697,39 @@
     </style>
 </head>
 <body>
-    <!-- O contêiner principal que centraliza o conteúdo. -->
     <div class="container">
-        <!-- Cabeçalho da página com logo, título e botão de tema. -->
         <header class="header">
             <div class="theme-switcher">
                 <input type="checkbox" id="dark-mode-toggle">
                 <label for="dark-mode-toggle" title="Alternar tema">
-                    <!-- Ícones SVG para sol (light mode) e lua (dark mode). -->
                     <span class="sun"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
                     <span class="moon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
                 </label>
             </div>
             <div class="logo">
-                <!-- A imagem da logo. O 'onerror' define uma imagem de placeholder caso a original não carregue. -->
                 <img src="./images/logo.png" alt="Logo da Anhanguera" onerror="this.onerror=null;this.src='https://placehold.co/200x60/ffffff/000000?text=Anhanguera';">
             </div>
             <h1 class="logo-title">Central de Ajuda Inteligente</h1>
             <p class="logo-subtitle">Soluções rápidas para seus problemas técnicos.</p>
         </header>
 
-        <!-- Caixa de aviso geral, destacando informações importantes. -->
         <div class="general-notice">
             <p>🔌 <strong>Evite mexer nos cabos</strong> sem falar com o Responsável de TI antes.</p>
             <p>🖥️ Ao final do uso, <strong>não esqueça de desligar o projetor e o computador.</strong></p>
         </div>
 
-        <!-- Conteúdo principal com os tópicos de ajuda (FAQ). -->
         <main class="help-container" id="main-content">
-            <!-- Cada 'details' funciona como um acordeão (sanfona). -->
             <details>
                 <summary>Ordem correta para ligar os equipamentos</summary>
                 <div class="details-content">
                     <p>Para evitar problemas de detecção, siga esta ordem:</p>
                     <ol>
                         <li><strong>Projetor:</strong> Ligue o projetor primeiro e aguarde ele iniciar.</li>
-                        <li><strong>Computador:</strong> Com o projetor pronto, ligue o computador.</li>
+                        <li><strong>Monitor:</strong> Se o monitor do computador estiver desligado, ligue-o agora.</li>
+                        <li><strong>Computador:</strong> Com o projetor e monitor prontos, ligue o computador.</li>
                     </ol>
                     <p><strong>Para desligar,</strong> faça o inverso: primeiro o computador, depois o projetor.</p>
                     <p class="ti-notice">Se o problema persistir, por favor, acione o Responsável de TI.</p>
-                    <!-- Botão que abre o chat com uma pergunta pré-definida. -->
                     <button class="ai-button contextual-ai-button">✨ Me explique de forma mais simples</button>
                 </div>
             </details>
@@ -822,19 +807,16 @@
         </main>
     </div>
     
-    <!-- Botão flutuante (FAB) para abrir o chat. -->
     <div id="ai-open-chat-area" class="ai-open-chat-area">
         <img src="logo.png" alt="Ícone do assistente de IA" class="ai-prompt-icon">
     </div>
 
-    <!-- Janela do chat, inicialmente escondida. -->
     <div id="ai-chat-window" class="ai-chat-window">
         <div class="ai-chat-header">
             <span>Assistente de TI</span>
             <button id="close-ai-chat" class="close-button">×</button>
         </div>
         <div id="ai-chat-messages" class="ai-chat-messages">
-            <!-- Mensagem inicial da IA. -->
             <div class="ai-message ai">Olá! Sou seu assistente de TI. Como posso ajudar?</div>
         </div>
         <div class="ai-chat-input-area">
@@ -843,7 +825,6 @@
         </div>
     </div>
 
-    <!-- Rodapé da página. -->
     <footer class="footer">
         Desenvolvido com <span class="highlight">♥</span> pela <span class="highlight">Anhanguera</span> Caxias do Sul.
     </footer>
@@ -936,10 +917,11 @@
             
             const instructionText = `Você é um "Assistente de TI" da faculdade Anhanguera. Ajude usuários leigos com problemas técnicos.
                 **Regras:**
-                1.  **Se a resposta estiver na página:** Direcione o usuário para a seção correta de forma simples. Ex: "Para isso, abra a seção 'Projetor sem imagem' e siga os passos." Não repita os passos.
-                2.  **Se a resposta NÃO estiver na página:** Dê uma solução simples em passo a passo.
-                3.  **Segurança:** Sempre diga para **não mexer nos cabos** e chamar o TI para manipulação física.
-                4.  **Último Recurso:** Se nada funcionar, instrua o usuário a **procurar o Responsável de TI**.
+                1.  **Se a resposta estiver na página:** Direcione o usuário para a seção correta de forma simples e curta. Ex: "Para isso, abra a seção 'Projetor sem imagem' e siga os passos." Não repita os passos.
+                2.  **Se a resposta NÃO estiver na página:** Dê uma solução breve em passo a passo.
+                3.  **Seja sempre breve:** Responda em uma ou duas frases curtas sempre que possível.
+                4.  **Segurança:** Sempre diga para **não mexer nos cabos** e chamar o TI para manipulação física.
+                5.  **Último Recurso:** Se nada funcionar, instrua o usuário a **procurar o Responsável de TI**.
                 ---
                 **CONTEÚDO DA PÁGINA DE AJUDA:**
                 ${pageContent}
@@ -1047,7 +1029,7 @@
             }
         }
 
-        // --- LÓGICA DOS BOTÕES CONTEXTUAIS ---
+        // --- LÓGICA DOS BOTÕES CONTEXTUAIS (CORRIGIDA PARA SER BREVE E DIRETA) ---
         contextualAiButtons.forEach(button => {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -1055,11 +1037,20 @@
                 const summaryText = details.querySelector('summary').textContent.trim();
                 const question = button.textContent.replace('✨', '').trim();
                 
-                const systemInstruction = { parts: [{ text: `Você é um "Assistente de TI". O usuário clicou no botão "${question}" na seção "${summaryText}". Explique o que fazer de forma extremamente simples e direta, sem jargões.` }] };
+                const sectionContent = details.querySelector('.details-content').innerText.trim();
+                
+                const instructionText = `
+                    Você é um "Assistente de TI". O usuário pediu uma explicação mais simples sobre o tópico: "${summaryText}".
+                    O conteúdo original da seção é: "${sectionContent}".
+                    Sua tarefa é explicar o motivo da ordem dos equipamentos de forma muito curta e direta.
+                    Responda em uma ou duas frases. FOQUE APENAS nos equipamentos do texto (projetor, monitor, computador).
+                    NÃO mencione outros equipamentos.
+                `;
+                const systemInstruction = { parts: [{ text: instructionText }] };
                 
                 openChat();
                 addMessage(question, 'user');
-                chatHistory = [{ role: "user", parts: [{ text: question }] }];
+                chatHistory = [{ role: "user", parts: [{ text: "Me explique de forma mais simples." }] }]; 
                 getAiResponse(systemInstruction);
             });
         });
