@@ -1,15 +1,23 @@
 <!DOCTYPE html>
+<!-- Define o idioma da página como Português do Brasil, importante para acessibilidade e SEO. -->
 <html lang="pt-BR">
 <head>
+    <!-- Define o conjunto de caracteres como UTF-8, o padrão para a web, garantindo que caracteres especiais sejam exibidos corretamente. -->
     <meta charset="UTF-8">
+    <!-- Configura a viewport para que a página seja responsiva e se adapte a diferentes tamanhos de tela, como em celulares e tablets. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título da página, exibido na aba do navegador. -->
     <title>Ajuda e Suporte Técnico com IA</title>
 
+    <!-- Define a cor da barra de endereço em navegadores móveis (Chrome, Firefox, etc.) para combinar com o tema do site. -->
     <meta name="theme-color" content="#f27500">
+    <!-- Link para o manifest.json, usado para Progressive Web Apps (PWA), permitindo que o site seja "instalado" na tela inicial. -->
     <link rel="manifest" href="manifest.json">
 
+    <!-- Define o ícone (favicon) da página. -->
     <link rel="icon" href="logo.png" type="image/png">
 
+    <!-- Importa a fonte 'Inter' do Google Fonts para um visual mais moderno. -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
@@ -18,26 +26,28 @@
          * ========================================= */
 
         /* --- Variáveis de Cores (CSS Variables) --- */
+        /* O uso de variáveis CSS (:root) facilita a manutenção do tema e a implementação do modo escuro. */
         :root {
-            --cor-primaria-inicio: #f27500;
-            --cor-primaria-fim: #ff9201;
-            --cor-texto-principal: #2d3748;
-            --cor-texto-secundario: #4a5568;
-            --cor-fundo-body: #f8fafc;
-            --cor-fundo-container: rgba(255, 255, 255, 0.95);
-            --cor-fundo-elemento: #ffffff;
-            --cor-borda-padrao: #e2e8f0;
-            --cor-fundo-ia: #f0f4f8;
-            --cor-fundo-aviso: #fffbe6;
-            --cor-borda-aviso: #facc15;
-            --cor-texto-aviso: #713f12;
-            --cor-fundo-aviso-geral: #fff3e0;
-            --cor-borda-aviso-geral: #ff9800;
-            --cor-texto-aviso-geral: #e65100;
-            --cor-sombra: rgba(0, 0, 0, 0.1);
+            --cor-primaria-inicio: #f27500; /* Cor principal (início do gradiente) */
+            --cor-primaria-fim: #ff9201;    /* Cor principal (fim do gradiente) */
+            --cor-texto-principal: #2d3748; /* Cor para textos principais */
+            --cor-texto-secundario: #4a5568;/* Cor para textos de apoio */
+            --cor-fundo-body: #f8fafc;      /* Cor de fundo geral da página */
+            --cor-fundo-container: rgba(255, 255, 255, 0.95); /* Fundo dos contêineres com leve transparência */
+            --cor-fundo-elemento: #ffffff;  /* Fundo de elementos como os cards de ajuda */
+            --cor-borda-padrao: #e2e8f0;    /* Cor padrão para bordas */
+            --cor-fundo-ia: #f0f4f8;        /* Fundo para as mensagens da IA no chat */
+            --cor-fundo-aviso: #fffbe6;     /* Fundo para avisos contextuais */
+            --cor-borda-aviso: #facc15;     /* Borda para avisos contextuais */
+            --cor-texto-aviso: #713f12;     /* Texto para avisos contextuais */
+            --cor-fundo-aviso-geral: #fff3e0; /* Fundo para o aviso geral no topo */
+            --cor-borda-aviso-geral: #ff9800; /* Borda para o aviso geral */
+            --cor-texto-aviso-geral: #e65100; /* Texto para o aviso geral */
+            --cor-sombra: rgba(0, 0, 0, 0.1); /* Sombra suave para os elementos */
         }
 
         /* --- Variáveis para o Modo Escuro --- */
+        /* Quando o body tiver a classe .dark-mode, estas variáveis sobrescrevem as definidas no :root. */
         body.dark-mode {
             --cor-texto-principal: #e2e8f0;
             --cor-texto-secundario: #a0aec0;
@@ -56,29 +66,31 @@
         }
 
         /* --- Estilos Globais e Reset --- */
+        /* Um reset simples para garantir consistência entre navegadores. */
         * { 
-            box-sizing: border-box; 
+            box-sizing: border-box; /* Faz com que padding e border não aumentem o tamanho final do elemento. */
             margin: 0; 
             padding: 0; 
         }
 
         html { 
-            scroll-behavior: smooth; 
+            scroll-behavior: smooth; /* Animação suave ao rolar a página para âncoras. */
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--cor-fundo-body);
-            color: var(--cor-texto-principal);
-            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; /* Define uma pilha de fontes modernas e seguras. */
+            background-color: var(--cor-fundo-body); /* Usa a variável de cor de fundo. */
+            color: var(--cor-texto-principal); /* Usa a variável de cor de texto. */
+            min-height: 100vh; /* Garante que o corpo ocupe pelo menos toda a altura da tela. */
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
-            line-height: 1.6;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            line-height: 1.6; /* Melhora a legibilidade do texto. */
+            transition: background-color 0.3s ease, color 0.3s ease; /* Transição suave ao trocar de tema. */
         }
 
+        /* Classe adicionada ao body via JS para evitar a rolagem da página quando o chat está aberto em tela cheia (mobile). */
         body.chat-open-body { 
             overflow: hidden; 
         }
@@ -86,37 +98,37 @@
         /* --- Layout Principal --- */
         .container { 
             width: 100%; 
-            max-width: 800px; 
+            max-width: 800px; /* Limita a largura máxima para melhor legibilidade em telas grandes. */
             z-index: 1; 
-            margin-bottom: 80px; 
+            margin-bottom: 80px; /* Espaço para o rodapé não ficar colado. */
         }
 
         .header {
-            position: relative; 
+            position: relative; /* Necessário para posicionar o botão de tema. */
             text-align: center; 
             margin-bottom: 30px;
-            background: var(--cor-fundo-container); 
-            backdrop-filter: blur(10px);
+            background: var(--cor-fundo-container); /* Fundo com efeito de vidro. */
+            backdrop-filter: blur(10px); /* Efeito de desfoque no fundo, para o "glassmorphism". */
             border-radius: 20px; 
             padding: 30px;
-            box-shadow: 0 8px 32px var(--cor-sombra); 
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px var(--cor-sombra); /* Sombra para dar profundidade. */
+            border: 1px solid rgba(255, 255, 255, 0.2); /* Borda sutil para o efeito de vidro. */
         }
 
         .logo { 
             width: 120px; 
             margin: 0 auto 15px auto; 
-            transition: transform 0.3s ease; 
+            transition: transform 0.3s ease; /* Animação suave no hover. */
         }
 
         .logo:hover { 
-            transform: translateY(-5px); 
+            transform: translateY(-5px); /* Efeito de "levantar" ao passar o mouse. */
         }
 
         .logo img { 
             width: 100%; 
             height: 100%; 
-            object-fit: contain; 
+            object-fit: contain; /* Garante que a imagem caiba no espaço sem distorcer. */
             transition: filter 0.3s ease; 
         }
 
@@ -133,13 +145,13 @@
         }
 
         .theme-switcher { 
-            position: absolute; 
+            position: absolute; /* Posiciona o botão em relação ao header. */
             top: 25px; 
             right: 25px; 
         }
 
         .theme-switcher input { 
-            display: none; 
+            display: none; /* O checkbox real fica escondido, usamos o label para estilizá-lo. */
         }
 
         .theme-switcher label { 
@@ -156,7 +168,7 @@
         .theme-switcher svg { 
             width: 22px; 
             height: 22px; 
-            stroke: currentColor; 
+            stroke: currentColor; /* O ícone SVG herda a cor do label. */
             transition: transform 0.3s ease-out; 
         }
 
@@ -165,6 +177,7 @@
             transform: scale(1.1); 
         }
 
+        /* Lógica para mostrar/esconder os ícones de sol e lua. */
         .theme-switcher .sun { display: none; } 
         .theme-switcher .moon { display: block; }
 
@@ -172,6 +185,7 @@
         body.dark-mode .theme-switcher .moon { display: none; }
         body.dark-mode .theme-switcher label { color: #f6e05e; } 
         body.dark-mode .theme-switcher label:hover { color: #fff; }
+        /* Efeito de brilho na logo no modo escuro. */
         body.dark-mode .logo img { filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.4)); }
 
         /* --- Conteúdo de Ajuda (FAQ) --- */
@@ -184,9 +198,10 @@
             border: 1px solid rgba(255, 255, 255, 0.3); 
             display: flex; 
             flex-direction: column; 
-            gap: 15px;
+            gap: 15px; /* Espaçamento entre os cards de ajuda. */
         }
         
+        /* Animação para os cards aparecerem suavemente. */
         @keyframes slideUp { 
             from { 
                 opacity: 0; 
@@ -204,12 +219,13 @@
             border-radius: 12px;
             border: 1px solid var(--cor-borda-padrao);
             transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-            animation: slideUp 0.5s ease-out forwards;
-            opacity: 0; 
-            overflow: hidden;
-            will-change: transform; /* Otimização para animações */
+            animation: slideUp 0.5s ease-out forwards; /* Aplica a animação. 'forwards' mantém o estado final. */
+            opacity: 0; /* Começa invisível para a animação funcionar. */
+            overflow: hidden; /* Garante que o conteúdo não vaze durante a animação. */
+            will-change: transform; /* Otimização de performance para animações. */
         }
 
+        /* Adiciona um atraso diferente para cada card, criando um efeito cascata. */
         details:nth-child(1) { animation-delay: 0.1s; } 
         details:nth-child(2) { animation-delay: 0.2s; }
         details:nth-child(3) { animation-delay: 0.3s; } 
@@ -222,14 +238,14 @@
 
         /* CORREÇÃO: Animação mais suave para o estado aberto */
         details[open] { 
-            transform: translateY(-2px); /* Reduzido de scale(1.02) para evitar quebras */
+            transform: translateY(-2px); /* Efeito sutil ao abrir. */
             box-shadow: 0 8px 25px var(--cor-sombra); 
-            border-color: var(--cor-primaria-inicio);
+            border-color: var(--cor-primaria-inicio); /* Destaca a borda quando aberto. */
         }
 
-        /* CORREÇÃO: Evitar conflito entre hover e open */
+        /* CORREÇÃO: Evita conflito entre hover e open */
         details[open]:hover {
-            transform: translateY(-2px); /* Manter consistente com o estado open */
+            transform: translateY(-2px); /* Mantém a mesma transformação para evitar "pulos". */
         }
 
         summary { 
@@ -237,33 +253,35 @@
             font-weight: 600; 
             color: var(--cor-texto-principal); 
             cursor: pointer; 
-            list-style: none; 
+            list-style: none; /* Remove o marcador padrão do 'details'. */
             display: flex; 
             justify-content: space-between; 
             align-items: center;
             font-size: 1.05em; 
             position: relative;
-            user-select: none; /* Evitar seleção de texto acidental */
+            user-select: none; /* Evita que o texto do título seja selecionado ao clicar. */
         }
 
         summary::-webkit-details-marker { 
-            display: none; 
+            display: none; /* Garante a remoção do marcador em navegadores Webkit. */
         }
 
         summary:hover { 
-            background-color: rgba(242, 117, 0, 0.05); 
+            background-color: rgba(242, 117, 0, 0.05); /* Feedback visual ao passar o mouse. */
         }
 
-        /* CORREÇÃO: Transição mais suave do ícone + */
+        /* CORREÇÃO: Transição mais suave do ícone '+' */
+        /* Cria um ícone '+' usando CSS. */
         summary::after { 
             content: '+'; 
             font-size: 1.5em; 
             font-weight: 400; 
             color: var(--cor-primaria-inicio); 
-            transition: transform 0.3s ease, color 0.3s ease; /* Simplificado */
+            transition: transform 0.3s ease, color 0.3s ease;
             line-height: 1;
         }
 
+        /* Quando o 'details' está aberto, o '+' vira um 'x' (rotacionando 45 graus). */
         details[open] summary::after { 
             transform: rotate(45deg); 
             color: var(--cor-primaria-fim); 
@@ -274,11 +292,11 @@
             padding: 0 20px; 
             color: var(--cor-texto-secundario);
             overflow: hidden;
-            transition: padding 0.3s ease;
+            transition: padding 0.3s ease; /* Anima a abertura/fechamento do conteúdo. */
         }
 
         details[open] > .details-content {
-            padding: 0 20px 20px 20px;
+            padding: 0 20px 20px 20px; /* Adiciona padding inferior quando aberto. */
         }
 
         .details-content h4 { 
@@ -316,6 +334,7 @@
             transform: translateY(-1px);
         }
 
+        /* Estilo para a caixa de aviso dentro dos cards. */
         .ti-notice { 
             margin-top: 20px; 
             padding: 12px; 
@@ -326,6 +345,7 @@
             border-radius: 0 8px 8px 0; 
         }
         
+        /* Estilo para o aviso geral no topo da página. */
         .general-notice {
             background-color: var(--cor-fundo-aviso-geral); 
             border-left: 5px solid var(--cor-borda-aviso-geral);
@@ -347,24 +367,25 @@
             color: var(--cor-primaria-inicio); 
         }
 
-        /* --- Estilos do Chatbot (Floating Action Button) --- */
+        /* --- Estilos do Chatbot (Floating Action Button - FAB) --- */
         .ai-open-chat-area {
-            position: fixed; 
+            position: fixed; /* Mantém o botão fixo na tela durante a rolagem. */
             bottom: 25px; 
             right: 25px; 
             width: 68px; 
             height: 68px;
             border-radius: 50%; 
-            background: linear-gradient(135deg, #ff6b35, #f7931e, #ff9500);
+            background: linear-gradient(135deg, #ff6b35, #f7931e, #ff9500); /* Gradiente chamativo. */
             box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4), 0 4px 12px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            z-index: 1000;
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+            z-index: 1000; /* Garante que o botão fique acima de outros elementos. */
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Transição suave para abertura/fechamento. */
             cursor: pointer;
         }
-
+        
+        /* Animação de pulso para chamar a atenção do usuário. */
         .ai-open-chat-area::before {
             content: ''; 
             position: absolute; 
@@ -395,9 +416,10 @@
             box-shadow: 0 12px 35px rgba(255, 107, 53, 0.6), 0 6px 18px rgba(0, 0, 0, 0.2), inset 0 2px 0 rgba(255, 255, 255, 0.3);
         }
 
+        /* Esconde o botão de abrir quando o chat já está aberto. */
         .ai-open-chat-area.chat-open { 
             opacity: 0; 
-            pointer-events: none; 
+            pointer-events: none; /* Impede cliques no botão invisível. */
             transform: scale(0.8) translateY(20px); 
         }
 
@@ -418,37 +440,48 @@
             position: fixed; 
             bottom: 0; 
             right: 0; 
-            width: 100%; 
+            width: 100%; /* Ocupa a tela inteira em dispositivos móveis. */
             height: 100%;
             background-color: var(--cor-fundo-elemento); 
             box-shadow: 0 10px 40px var(--cor-sombra);
             display: flex; 
             flex-direction: column; 
             overflow: hidden; 
-            z-index: 1001;
+            z-index: 1001; /* Fica acima do FAB. */
             transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
-            transform: translateY(100%); 
-            pointer-events: none;
+            
+            /* CORREÇÃO: Inicia escondido (transformado e transparente) em todas as telas */
+            transform: translateY(100%); /* Começa fora da tela (embaixo). */
+            opacity: 0; /* Garante que comece invisível para evitar "flash" no mobile. */
+            pointer-events: none; /* Não interage enquanto escondido. */
         }
 
+        /* Em telas maiores, a janela de chat vira um pop-up no canto. */
         @media screen and (min-width: 481px) {
             .ai-chat-window {
+                /* Posicionamento no canto inferior direito */
                 bottom: 20px; 
                 right: 20px; 
-                max-width: 400px; 
+                
+                /* Tamanho do pop-up (não ocupa a tela toda) */
+                width: 400px; 
+                max-width: 90vw; /* Garante que não ultrapasse a tela em viewports menores */
                 height: 85vh;
                 max-height: 600px; 
+                
+                /* Estilo e animação */
                 border-radius: 20px; 
-                transform-origin: bottom right;
+                transform-origin: bottom right; /* Ponto de origem da animação de escala. */
                 transform: translateY(20px) scale(0.95); 
                 opacity: 0;
             }
         }
 
+        /* Classe 'show' é adicionada via JS para mostrar a janela. */
         .ai-chat-window.show { 
             transform: translateY(0) scale(1); 
             opacity: 1; 
-            pointer-events: auto; 
+            pointer-events: auto; /* Permite interação. */
         }
 
         .ai-chat-header {
@@ -459,7 +492,7 @@
             justify-content: space-between;
             align-items: center; 
             font-weight: 600; 
-            flex-shrink: 0;
+            flex-shrink: 0; /* Impede que o header encolha. */
         }
 
         .ai-chat-header .close-button { 
@@ -475,10 +508,11 @@
             transform: scale(1.1);
         }
 
+        /* Área onde as mensagens são exibidas. */
         .ai-chat-messages { 
-            flex-grow: 1; 
+            flex-grow: 1; /* Ocupa todo o espaço vertical disponível. */
             padding: 20px; 
-            overflow-y: auto; 
+            overflow-y: auto; /* Adiciona uma barra de rolagem se as mensagens excederem o espaço. */
             display: flex; 
             flex-direction: column; 
             gap: 12px; 
@@ -489,8 +523,8 @@
             border-radius: 18px; 
             max-width: 80%; 
             line-height: 1.4; 
-            word-wrap: break-word; 
-            animation: messageSlide 0.3s ease-out;
+            word-wrap: break-word; /* Quebra palavras longas para não estourar o layout. */
+            animation: messageSlide 0.3s ease-out; /* Animação de entrada da mensagem. */
         }
 
         @keyframes messageSlide {
@@ -504,6 +538,7 @@
             }
         }
 
+        /* Mensagens do usuário ficam à direita. */
         .ai-message.user { 
             background-color: var(--cor-primaria-inicio); 
             color: white; 
@@ -511,6 +546,7 @@
             align-self: flex-end; 
         }
 
+        /* Mensagens da IA ficam à esquerda. */
         .ai-message.ai { 
             background-color: var(--cor-fundo-ia); 
             color: var(--cor-texto-principal); 
@@ -518,6 +554,7 @@
             align-self: flex-start; 
         }
 
+        /* Cursor piscando para indicar que a IA está "digitando". */
         .blinking-cursor { 
             display: inline-block; 
             width: 2px; 
@@ -537,14 +574,15 @@
             } 
         }
 
+        /* Área de input do chat. */
         .ai-chat-input-area { 
             display: flex; 
             padding: 15px; 
             border-top: 1px solid var(--cor-borda-padrao); 
             gap: 10px;
-            flex-shrink: 0; 
+            flex-shrink: 0; /* Não encolhe. */
             background-color: var(--cor-fundo-elemento); 
-            position: sticky; 
+            position: sticky; /* Mantém a área de input visível ao rolar (em alguns contextos). */
             bottom: 0;
         }
 
@@ -562,7 +600,7 @@
         #ai-chat-input:focus { 
             outline: none; 
             border-color: var(--cor-primaria-inicio); 
-            box-shadow: 0 0 0 3px rgba(242, 117, 0, 0.1);
+            box-shadow: 0 0 0 3px rgba(242, 117, 0, 0.1); /* Efeito de "glow" ao focar. */
         }
 
         #send-ai-chat { 
@@ -588,6 +626,7 @@
             box-shadow: none;
         }
 
+        /* Estilos do rodapé. */
         .footer { 
             width: 100%; 
             text-align: center; 
@@ -601,13 +640,14 @@
             font-weight: bold; 
         }
         
+        /* Ajustes de responsividade para telas pequenas (mobile). */
         @media screen and (max-width: 480px) {
             body { 
                 padding: 10px; 
             }
 
             .container { 
-                padding-bottom: 80px; 
+                padding-bottom: 80px; /* Garante espaço para o FAB não cobrir conteúdo. */
             }
 
             .header, .help-container { 
@@ -632,6 +672,7 @@
                 right: 15px; 
             }
 
+            /* Ajuste para a 'notch' (área segura) de iPhones. */
             .ai-chat-input-area { 
                 padding: 15px 15px calc(15px + env(safe-area-inset-bottom, 0px)); 
             }
@@ -639,7 +680,7 @@
             #ai-chat-input { 
                 padding: 14px 16px; 
                 border-radius: 12px; 
-                font-size: 16px; 
+                font-size: 16px; /* Evita o zoom automático do iOS em inputs. */
             }
 
             #send-ai-chat { 
@@ -649,42 +690,50 @@
             }
         }
 
-        /* CORREÇÃO: Evitar quebras de layout durante animações */
+        /* CORREÇÃO: Otimizações de performance para animações. */
+        /* Evita que elementos pisquem ou fiquem serrilhados durante animações em alguns navegadores. */
         * {
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
-            -webkit-font-smoothing: antialiased;
+            -webkit-font-smoothing: antialiased; /* Melhora a renderização de fontes. */
         }
 
-        /* CORREÇÃO: Força aceleração de hardware para elementos animados */
+        /* CORREÇÃO: Força a aceleração de hardware (GPU) para elementos animados, tornando-os mais fluidos. */
         details, .ai-open-chat-area, .ai-chat-window {
             transform: translateZ(0);
         }
     </style>
 </head>
 <body>
+    <!-- O contêiner principal que centraliza o conteúdo. -->
     <div class="container">
+        <!-- Cabeçalho da página com logo, título e botão de tema. -->
         <header class="header">
             <div class="theme-switcher">
                 <input type="checkbox" id="dark-mode-toggle">
                 <label for="dark-mode-toggle" title="Alternar tema">
+                    <!-- Ícones SVG para sol (light mode) e lua (dark mode). -->
                     <span class="sun"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
                     <span class="moon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
                 </label>
             </div>
             <div class="logo">
+                <!-- A imagem da logo. O 'onerror' define uma imagem de placeholder caso a original não carregue. -->
                 <img src="./images/logo.png" alt="Logo da Anhanguera" onerror="this.onerror=null;this.src='https://placehold.co/200x60/ffffff/000000?text=Anhanguera';">
             </div>
             <h1 class="logo-title">Central de Ajuda Inteligente</h1>
             <p class="logo-subtitle">Soluções rápidas para seus problemas técnicos.</p>
         </header>
 
+        <!-- Caixa de aviso geral, destacando informações importantes. -->
         <div class="general-notice">
             <p>🔌 <strong>Evite mexer nos cabos</strong> sem falar com o Responsável de TI antes.</p>
             <p>🖥️ Ao final do uso, <strong>não esqueça de desligar o projetor e o computador.</strong></p>
         </div>
 
+        <!-- Conteúdo principal com os tópicos de ajuda (FAQ). -->
         <main class="help-container" id="main-content">
+            <!-- Cada 'details' funciona como um acordeão (sanfona). -->
             <details>
                 <summary>Ordem correta para ligar os equipamentos</summary>
                 <div class="details-content">
@@ -695,6 +744,7 @@
                     </ol>
                     <p><strong>Para desligar,</strong> faça o inverso: primeiro o computador, depois o projetor.</p>
                     <p class="ti-notice">Se o problema persistir, por favor, acione o Responsável de TI.</p>
+                    <!-- Botão que abre o chat com uma pergunta pré-definida. -->
                     <button class="ai-button contextual-ai-button">✨ Me explique de forma mais simples</button>
                 </div>
             </details>
@@ -772,16 +822,19 @@
         </main>
     </div>
     
+    <!-- Botão flutuante (FAB) para abrir o chat. -->
     <div id="ai-open-chat-area" class="ai-open-chat-area">
         <img src="logo.png" alt="Ícone do assistente de IA" class="ai-prompt-icon">
     </div>
 
+    <!-- Janela do chat, inicialmente escondida. -->
     <div id="ai-chat-window" class="ai-chat-window">
         <div class="ai-chat-header">
             <span>Assistente de TI</span>
             <button id="close-ai-chat" class="close-button">&times;</button>
         </div>
         <div id="ai-chat-messages" class="ai-chat-messages">
+            <!-- Mensagem inicial da IA. -->
             <div class="ai-message ai">Olá! Sou seu assistente de TI. Como posso ajudar?</div>
         </div>
         <div class="ai-chat-input-area">
@@ -790,6 +843,7 @@
         </div>
     </div>
 
+    <!-- Rodapé da página. -->
     <footer class="footer">
         Desenvolvido com <span class="highlight">♥</span> pela <span class="highlight">Anhanguera</span> Caxias do Sul.
     </footer>
@@ -800,6 +854,7 @@
      * ========================================= */
     document.addEventListener('DOMContentLoaded', () => {
 
+        // --- SERVICE WORKER (para PWA) ---
         if ('serviceWorker' in navigator) {
           window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js')
@@ -808,6 +863,7 @@
           });
         }
 
+        // --- SELEÇÃO DE ELEMENTOS DO DOM ---
         const openChatArea = document.getElementById('ai-open-chat-area');
         const aiChatWindow = document.getElementById('ai-chat-window');
         const closeAiChatButton = document.getElementById('close-ai-chat');
@@ -816,9 +872,9 @@
         const aiChatMessages = document.getElementById('ai-chat-messages');
         const contextualAiButtons = document.querySelectorAll('.contextual-ai-button');
         const darkModeToggle = document.getElementById('dark-mode-toggle');
-        let chatHistory = []; 
+        let chatHistory = [];
 
-        // --- MODO ESCURO ---
+        // --- LÓGICA DO MODO ESCURO (DARK MODE) ---
         darkModeToggle.addEventListener('change', () => {
             document.body.classList.toggle('dark-mode');
             localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
@@ -828,7 +884,7 @@
             darkModeToggle.checked = true;
         }
 
-        // --- LÓGICA DO CHAT ---
+        // --- LÓGICA DE ABERTURA/FECHAMENTO DO CHAT ---
         const openChat = () => {
             aiChatWindow.classList.add('show');
             openChatArea.classList.add('chat-open');
@@ -848,15 +904,18 @@
         const handleSendMessage = () => {
             const question = aiChatInput.value.trim();
             if (!question) return;
+            
             addMessage(question, 'user');
             aiChatInput.value = '';
             chatHistory.push({ role: "user", parts: [{ text: question }] });
+            
             const systemInstruction = getSystemInstruction();
             getAiResponse(systemInstruction);
         };
         sendAiChatButton.addEventListener('click', handleSendMessage);
         aiChatInput.addEventListener('keyup', (event) => { if (event.key === 'Enter') handleSendMessage(); });
 
+        // --- FUNÇÕES AUXILIARES DO CHAT ---
         const addMessage = (text, sender) => {
             const messageElement = document.createElement('div');
             messageElement.classList.add('ai-message', sender);
@@ -874,6 +933,7 @@
                 const content = detail.querySelector('.details-content').textContent.trim();
                 return `Tópico: "${title}"\nConteúdo: ${content}`;
             }).join('\n\n---\n\n');
+            
             const instructionText = `Você é um "Assistente de TI" da faculdade Anhanguera. Ajude usuários leigos com problemas técnicos.
                 **Regras:**
                 1.  **Se a resposta estiver na página:** Direcione o usuário para a seção correta de forma simples. Ex: "Para isso, abra a seção 'Projetor sem imagem' e siga os passos." Não repita os passos.
@@ -887,26 +947,78 @@
             return { parts: [{ text: instructionText }] };
         };
 
+        // --- NOVA FUNÇÃO DE EFEITO DE DIGITAÇÃO ---
+        function typewriter(element, text) {
+            let i = 0;
+            element.innerHTML = ""; // Limpa a mensagem de status (ex: "Pensando...")
+            const typingSpeed = 20; // Velocidade da digitação em milissegundos
+
+            function type() {
+                if (i < text.length) {
+                    // Adiciona um caractere de cada vez. textContent é mais seguro aqui.
+                    element.textContent += text.charAt(i);
+                    i++;
+                    aiChatMessages.scrollTop = aiChatMessages.scrollHeight; // Mantém o scroll no final
+                    setTimeout(type, typingSpeed);
+                } else {
+                    // Ao final, converte o texto completo para HTML (para negrito, etc.)
+                    element.innerHTML = renderMarkdown(text);
+                    aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
+                    // Reabilita os botões e o input
+                    aiChatInput.disabled = false;
+                    sendAiChatButton.disabled = false;
+                    aiChatInput.focus();
+                }
+            }
+            type();
+        }
+
+        // --- FUNÇÃO DE COMUNICAÇÃO COM A API DA IA (ATUALIZADA) ---
         async function getAiResponse(systemInstruction) {
-            const apiUrl = '/api/chat-stream';
+            const apiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:streamGenerateContent?key=';
+            
             aiChatInput.disabled = true;
             sendAiChatButton.disabled = true;
-            const typingMessageElement = addMessage('<span class="blinking-cursor"></span>', 'ai');
+            
+            // NOVO: Mensagens de status dinâmicas
+            const statusMessages = [
+                'Lendo sua pergunta...',
+                'Analisando o contexto...',
+                'Consultando a base de dados...',
+                'Preparando a resposta...'
+            ];
+            let statusIndex = 0;
+            const typingMessageElement = addMessage(statusMessages[0] + '<span class="blinking-cursor"></span>', 'ai');
+            const statusInterval = setInterval(() => {
+                statusIndex = (statusIndex + 1) % statusMessages.length;
+                if (typingMessageElement.innerHTML.includes('blinking-cursor')) {
+                    typingMessageElement.innerHTML = statusMessages[statusIndex] + '<span class="blinking-cursor"></span>';
+                }
+            }, 2000); // Muda o status a cada 2 segundos
+
             let fullResponseText = "";
             
             try {
+                const payload = {
+                    systemInstruction: systemInstruction,
+                    contents: chatHistory,
+                };
+
                 const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ systemInstruction, contents: chatHistory })
+                    body: JSON.stringify(payload)
                 });
+
                 if (!response.ok) throw new Error(`Erro do servidor: ${response.status}`);
                 
+                // Coleta a resposta completa do stream
                 const reader = response.body.getReader();
                 const decoder = new TextDecoder();
                 while (true) {
                     const { done, value } = await reader.read();
                     if (done) break;
+                    
                     const chunkText = decoder.decode(value);
                     const lines = chunkText.split('\n');
                     for (const line of lines) {
@@ -914,30 +1026,36 @@
                             const jsonStr = line.substring(6);
                             try {
                                 const parsed = JSON.parse(jsonStr);
-                                const textPart = parsed.candidates[0]?.content?.parts[0]?.text || "";
-                                fullResponseText += textPart;
-                                typingMessageElement.innerHTML = renderMarkdown(fullResponseText + ' <span class="blinking-cursor"></span>');
-                                aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
+                                fullResponseText += parsed.candidates[0]?.content?.parts[0]?.text || "";
                             } catch (e) { console.warn("Erro no chunk JSON:", line); }
                         }
                     }
                 }
-                typingMessageElement.innerHTML = renderMarkdown(fullResponseText);
+                
+                // NOVO: Para o ciclo de status e inicia o efeito de digitação
+                clearInterval(statusInterval);
+
                 if (fullResponseText.trim()) {
                     chatHistory.push({ role: "model", parts: [{ text: fullResponseText }] });
+                    typewriter(typingMessageElement, fullResponseText); // Inicia a digitação
+                } else {
+                    typingMessageElement.innerHTML = "Não consegui encontrar uma resposta. Tente novamente.";
+                    aiChatInput.disabled = false;
+                    sendAiChatButton.disabled = false;
+                    aiChatInput.focus();
                 }
+
             } catch (error) {
+                clearInterval(statusInterval); // Para o status em caso de erro
                 console.error("Erro na API:", error);
                 typingMessageElement.innerHTML = renderMarkdown(`**Ocorreu um erro:** ${error.message}.`);
-            } finally {
                 aiChatInput.disabled = false;
                 sendAiChatButton.disabled = false;
                 aiChatInput.focus();
-                aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
             }
         }
 
-        // --- BOTÕES CONTEXTUAIS ---
+        // --- LÓGICA DOS BOTÕES CONTEXTUAIS ---
         contextualAiButtons.forEach(button => {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
