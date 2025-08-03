@@ -453,6 +453,7 @@
                 transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
                 cursor: pointer;
                 overflow: hidden;
+                /* A linha "position: relative;" que causava o erro foi REMOVIDA daqui. */
             }
 
             /* Efeito de pulse contínuo */
@@ -942,14 +943,25 @@
         }
 
         async function getAiResponse(systemInstruction) {
-            // Chama o NOVO endpoint de streaming na Vercel
-            const apiUrl = '/api/chat-stream'; 
-
             aiChatInput.disabled = true;
             sendAiChatButton.disabled = true;
 
-            const typingMessageElement = addMessage('<span class="blinking-cursor"></span>', 'ai');
-            let fullResponseText = "";
+            // --- LÓGICA DE STATUS DINÂMICO ---
+            const statusMessages = [
+                'Lendo sua pergunta...',
+                'Analisando o contexto...',
+                'Pensando...',
+                'Quase lá...'
+            ];
+            let statusIndex = 0;
+            const typingMessageElement = addMessage(statusMessages[0] + ' <span class="blinking-cursor"></span>', 'ai');
+            
+            const statusInterval = setInterval(() => {
+                statusIndex = (statusIndex + 1) % statusMessages.length;
+                typingMessageElement.innerHTML = statusMessages[statusIndex] + ' <span class="blinking-cursor"></span>';
+            }, 1800); // Atualiza o status a cada 1.8 segundos
+
+            const apiUrl = '/api/chat';
 
             const payload = {
                 systemInstruction: systemInstruction,
@@ -969,51 +981,27 @@
                     body: JSON.stringify(payload)
                 });
 
+                clearInterval(statusInterval); // Para o ciclo de status
+
                 if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`Erro do servidor: ${response.status} - ${errorText}`);
+                    const errorBody = await response.json();
+                    throw new Error(`API proxy error: ${response.status} - ${errorBody.error || 'Erro desconhecido'}`);
                 }
 
-                // Processar a resposta como um stream
-                const reader = response.body.getReader();
-                const decoder = new TextDecoder();
-
-                while (true) {
-                    const { done, value } = await reader.read();
-                    if (done) break;
-
-                    const chunkText = decoder.decode(value);
-                    const lines = chunkText.split('\n');
-
-                    for (const line of lines) {
-                        if (line.trim().startsWith('data: ')) {
-                            const jsonStr = line.substring(6);
-                            try {
-                                const parsedChunk = JSON.parse(jsonStr);
-                                if (parsedChunk.candidates && parsedChunk.candidates[0].content && parsedChunk.candidates[0].content.parts[0]) {
-                                    const textPart = parsedChunk.candidates[0].content.parts[0].text;
-                                    fullResponseText += textPart;
-
-                                    // Atualiza o DOM em tempo real
-                                    typingMessageElement.innerHTML = renderMarkdown(fullResponseText + ' <span class="blinking-cursor"></span>');
-                                    aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
-                                }
-                            } catch (e) {
-                                console.warn("Erro ao processar chunk JSON, continuando...", line);
-                            }
-                        }
-                    }
+                const result = await response.json();
+                
+                let aiText = "Desculpe, não consegui processar a sua resposta. Tente novamente.";
+                if (result.candidates && result.candidates.length > 0 && result.candidates[0].content && result.candidates[0].content.parts) {
+                    aiText = result.candidates[0].content.parts[0].text;
                 }
-
-                // Finaliza a mensagem (remove o cursor) e atualiza o histórico
-                typingMessageElement.innerHTML = renderMarkdown(fullResponseText);
-                if(fullResponseText.trim().length > 0) {
-                    chatHistory.push({ role: "model", parts: [{ text: fullResponseText }] });
-                }
+                
+                chatHistory.push({ role: "model", parts: [{ text: aiText }] });
+                typingMessageElement.innerHTML = renderMarkdown(aiText);
 
             } catch (error) {
-                console.error("Erro na função getAiResponse:", error);
-                typingMessageElement.innerHTML = renderMarkdown(`**Ocorreu um erro:** ${error.message}.`);
+                clearInterval(statusInterval); // Garante que parou também em caso de erro
+                console.error("Erro ao contactar a API da IA:", error);
+                typingMessageElement.innerHTML = renderMarkdown("**Ocorreu um erro.** Por favor, verifique a sua ligação à Internet e tente novamente.");
             } finally {
                 aiChatInput.disabled = false;
                 sendAiChatButton.disabled = false;
