@@ -1,5 +1,5 @@
 // Nome do cache. Mude este valor se você atualizar os arquivos para forçar a atualização do cache.
-const CACHE_NAME = 'ajuda-ti-cache-v5'; // Versão incrementada para garantir a atualização
+const CACHE_NAME = 'ajuda-ti-cache-v6'; // Versão incrementada para forçar a atualização
 
 // Lista de arquivos essenciais para o funcionamento offline do app.
 const URLS_TO_CACHE = [
@@ -18,27 +18,36 @@ self.addEventListener('install', event => {
       .then(cache => {
         console.log('Cache aberto. Adicionando URLs ao cache.');
         // O addAll faz a requisição e armazena os arquivos.
-        // É importante que todos os caminhos estejam corretos, senão a instalação falha.
         return cache.addAll(URLS_TO_CACHE);
       })
   );
 });
 
-// Evento 'fetch': é acionado para cada requisição que a página faz.
+// Evento 'fetch': Adotando a estratégia "Network First" para garantir atualizações.
 self.addEventListener('fetch', event => {
-  // Ignoramos as requisições para a API da IA, pois elas precisam de conexão.
-  if (event.request.url.includes('generativelanguage.googleapis.com')) {
-    return;
+  const requestUrl = new URL(event.request.url);
+
+  // Ignora pedidos para a API do chat, que nunca devem ser cacheados.
+  if (requestUrl.pathname.startsWith('/api/chat')) {
+    return; // Deixa o pedido passar diretamente para a rede, sem cache.
   }
 
   event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Retorna do cache se encontrar, senão busca na rede.
-        return response || fetch(event.request);
-      })
+    // 1. Tenta obter a resposta da rede primeiro.
+    fetch(event.request).then(networkResponse => {
+      // 2. Se conseguir, armazena a nova resposta no cache.
+      return caches.open(CACHE_NAME).then(cache => {
+        cache.put(event.request, networkResponse.clone());
+        // 3. Retorna a resposta da rede para o navegador.
+        return networkResponse;
+      });
+    }).catch(() => {
+      // 4. Se a rede falhar (offline), tenta obter do cache.
+      return caches.match(event.request);
+    })
   );
 });
+
 
 // Evento 'activate': é acionado quando o service worker é ativado.
 // Limpa caches antigos para evitar conflitos de versão.
