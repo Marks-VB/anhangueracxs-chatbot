@@ -1,21 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <!-- =========================================
-     * CABEÇALHO DO DOCUMENTO (METADADOS)
-     * ========================================= -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajuda e Suporte Técnico com IA</title>
 
-    <!-- Metadados para PWA (Progressive Web App) e tema do navegador -->
     <meta name="theme-color" content="#f27500">
     <link rel="manifest" href="manifest.json">
 
-    <!-- Ícone da página (favicon) -->
     <link rel="icon" href="logo.png" type="image/png">
 
-    <!-- Importa a fonte 'Inter' do Google Fonts para um visual moderno -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
@@ -47,11 +41,11 @@
         body.dark-mode {
             --cor-texto-principal: #e2e8f0;
             --cor-texto-secundario: #a0aec0;
-            --cor-fundo-body: #18181b; /* Cinza Zinco 900 */
-            --cor-fundo-container: rgba(39, 39, 42, 0.85); /* Cinza Zinco 800 translúcido */
-            --cor-fundo-elemento: #27272a; /* Cinza Zinco 800 */
-            --cor-borda-padrao: #3f3f46; /* Cinza Zinco 700 */
-            --cor-fundo-ia: #3f3f46; /* Cinza Zinco 700 */
+            --cor-fundo-body: #18181b;
+            --cor-fundo-container: rgba(39, 39, 42, 0.85);
+            --cor-fundo-elemento: #27272a;
+            --cor-borda-padrao: #3f3f46;
+            --cor-fundo-ia: #3f3f46;
             --cor-fundo-aviso: #3f3f46;
             --cor-borda-aviso: #f6e05e;
             --cor-texto-aviso: #f7fafc;
@@ -62,10 +56,14 @@
         }
 
         /* --- Estilos Globais e Reset --- */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
 
-        html {
-            height: -webkit-fill-available;
+        html { 
+            scroll-behavior: smooth; 
         }
 
         body {
@@ -73,133 +71,167 @@
             background-color: var(--cor-fundo-body);
             color: var(--cor-texto-principal);
             min-height: 100vh;
-            min-height: -webkit-fill-available;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
             line-height: 1.6;
-            transition: background-color 0.3s, color 0.3s;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        body.chat-open-body {
-            overflow: hidden;
+        body.chat-open-body { 
+            overflow: hidden; 
         }
 
         /* --- Layout Principal --- */
-        .container { width: 100%; max-width: 800px; z-index: 1; }
+        .container { 
+            width: 100%; 
+            max-width: 800px; 
+            z-index: 1; 
+            margin-bottom: 80px; 
+        }
 
         .header {
-            position: relative;
-            text-align: center;
+            position: relative; 
+            text-align: center; 
             margin-bottom: 30px;
-            background: var(--cor-fundo-container);
+            background: var(--cor-fundo-container); 
             backdrop-filter: blur(10px);
-            border-radius: 20px;
+            border-radius: 20px; 
             padding: 30px;
-            box-shadow: 0 8px 32px var(--cor-sombra);
+            box-shadow: 0 8px 32px var(--cor-sombra); 
             border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: background-color 0.3s;
         }
-        .logo { width: 120px; height: auto; margin: 0 auto 15px auto; transition: transform 0.3s ease; }
-        .logo:hover { transform: translateY(-5px); }
-        .logo img { width: 100%; height: 100%; object-fit: contain; }
-        .logo-title { font-size: 2em; font-weight: 700; color: var(--cor-primaria-inicio); margin-bottom: 8px; }
-        .logo-subtitle { font-size: 1.1em; color: var(--cor-texto-secundario); }
 
-        /* --- Seletor de Tema (Dark Mode) com Emojis --- */
-        .theme-switcher {
-            position: absolute;
-            top: 25px;
-            right: 25px;
+        .logo { 
+            width: 120px; 
+            margin: 0 auto 15px auto; 
+            transition: transform 0.3s ease; 
         }
-        .theme-switcher input { display: none; }
-        .theme-switcher label {
-            cursor: pointer;
-            width: 28px;
-            height: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+
+        .logo:hover { 
+            transform: translateY(-5px); 
         }
-        .theme-switcher .sun, .theme-switcher .moon {
-            font-size: 24px;
-            transition: transform 0.3s ease-out;
+
+        .logo img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain; 
+            transition: filter 0.3s ease; 
         }
-        .theme-switcher label:hover span {
-            transform: scale(1.2) rotate(15deg);
+
+        .logo-title { 
+            font-size: 2em; 
+            font-weight: 700; 
+            color: var(--cor-primaria-inicio); 
+            margin-bottom: 8px; 
         }
-        .theme-switcher .sun { display: none; }
-        body.dark-mode .theme-switcher .sun { display: block; }
+
+        .logo-subtitle { 
+            font-size: 1.1em; 
+            color: var(--cor-texto-secundario); 
+        }
+
+        .theme-switcher { 
+            position: absolute; 
+            top: 25px; 
+            right: 25px; 
+        }
+
+        .theme-switcher input { 
+            display: none; 
+        }
+
+        .theme-switcher label { 
+            cursor: pointer; 
+            width: 28px; 
+            height: 28px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: var(--cor-texto-secundario); 
+            transition: color 0.3s ease, transform 0.3s ease; 
+        }
+
+        .theme-switcher svg { 
+            width: 22px; 
+            height: 22px; 
+            stroke: currentColor; 
+            transition: transform 0.3s ease-out; 
+        }
+
+        .theme-switcher label:hover { 
+            color: var(--cor-primaria-inicio); 
+            transform: scale(1.1); 
+        }
+
+        .theme-switcher .sun { display: none; } 
+        .theme-switcher .moon { display: block; }
+
+        body.dark-mode .theme-switcher .sun { display: block; } 
         body.dark-mode .theme-switcher .moon { display: none; }
+        body.dark-mode .theme-switcher label { color: #f6e05e; } 
+        body.dark-mode .theme-switcher label:hover { color: #fff; }
+        body.dark-mode .logo img { filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.4)); }
 
         /* --- Conteúdo de Ajuda (FAQ) --- */
         .help-container {
-            background: var(--cor-fundo-container);
+            background: var(--cor-fundo-container); 
             backdrop-filter: blur(15px);
-            padding: 20px;
-            border-radius: 20px;
+            padding: 20px; 
+            border-radius: 20px; 
             box-shadow: 0 10px 40px var(--cor-sombra);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            display: flex;
-            flex-direction: column;
+            border: 1px solid rgba(255, 255, 255, 0.3); 
+            display: flex; 
+            flex-direction: column; 
             gap: 15px;
-            transition: background-color 0.3s;
         }
         
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes cardExpand {
-            from { 
-                transform: scale(1);
-                box-shadow: 0 2px 8px var(--cor-sombra);
-            }
-            to { 
-                transform: scale(1.02);
-                box-shadow: 0 8px 25px var(--cor-sombra);
-            }
-        }
-
-        @keyframes contentSlideDown {
+        @keyframes slideUp { 
             from { 
                 opacity: 0; 
-                transform: translateY(-10px);
-                max-height: 0;
-            }
+                transform: translateY(20px); 
+            } 
             to { 
                 opacity: 1; 
-                transform: translateY(0);
-                max-height: 500px;
-            }
+                transform: translateY(0); 
+            } 
         }
 
+        /* ANIMAÇÃO CORRIGIDA DOS CARDS */
         details { 
             background-color: var(--cor-fundo-elemento); 
-            border-radius: 12px; 
-            border: 1px solid var(--cor-borda-padrao); 
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 12px;
+            border: 1px solid var(--cor-borda-padrao);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
             animation: slideUp 0.5s ease-out forwards;
-            opacity: 0;
+            opacity: 0; 
             overflow: hidden;
+            will-change: transform; /* Otimização para animações */
         }
-        details:nth-child(1) { animation-delay: 0.1s; }
+
+        details:nth-child(1) { animation-delay: 0.1s; } 
         details:nth-child(2) { animation-delay: 0.2s; }
-        details:nth-child(3) { animation-delay: 0.3s; }
+        details:nth-child(3) { animation-delay: 0.3s; } 
         details:nth-child(4) { animation-delay: 0.4s; }
 
         details:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
             box-shadow: 0 6px 20px var(--cor-sombra);
         }
 
+        /* CORREÇÃO: Animação mais suave para o estado aberto */
         details[open] { 
+            transform: translateY(-2px); /* Reduzido de scale(1.02) para evitar quebras */
             box-shadow: 0 8px 25px var(--cor-sombra); 
             border-color: var(--cor-primaria-inicio);
-            animation: cardExpand 0.3s ease-out forwards;
         }
+
+        /* CORREÇÃO: Evitar conflito entre hover e open */
+        details[open]:hover {
+            transform: translateY(-2px); /* Manter consistente com o estado open */
+        }
+
         summary { 
             padding: 18px 20px; 
             font-weight: 600; 
@@ -208,376 +240,425 @@
             list-style: none; 
             display: flex; 
             justify-content: space-between; 
-            align-items: center; 
-            font-size: 1.05em;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            align-items: center;
+            font-size: 1.05em; 
             position: relative;
+            user-select: none; /* Evitar seleção de texto acidental */
         }
-        summary::-webkit-details-marker { display: none; }
-        summary:hover {
-            background-color: rgba(242, 117, 0, 0.05);
-            padding-left: 25px;
+
+        summary::-webkit-details-marker { 
+            display: none; 
         }
+
+        summary:hover { 
+            background-color: rgba(242, 117, 0, 0.05); 
+        }
+
+        /* CORREÇÃO: Transição mais suave do ícone + */
         summary::after { 
             content: '+'; 
             font-size: 1.5em; 
             font-weight: 400; 
             color: var(--cor-primaria-inicio); 
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            display: inline-block;
+            transition: transform 0.3s ease, color 0.3s ease; /* Simplificado */
+            line-height: 1;
         }
+
         details[open] summary::after { 
-            transform: rotate(45deg) scale(1.1); 
-            color: var(--cor-primaria-fim);
+            transform: rotate(45deg); 
+            color: var(--cor-primaria-fim); 
         }
         
+        /* CORREÇÃO: Animação mais estável do conteúdo */
         .details-content { 
-            padding: 0 20px 20px 20px; 
+            padding: 0 20px; 
             color: var(--cor-texto-secundario);
-            animation: contentSlideDown 0.4s ease-out forwards;
-            transform-origin: top;
+            overflow: hidden;
+            transition: padding 0.3s ease;
         }
+
+        details[open] > .details-content {
+            padding: 0 20px 20px 20px;
+        }
+
         .details-content h4 { 
             margin-top: 20px; 
             margin-bottom: 10px; 
             color: var(--cor-texto-principal); 
             border-bottom: 1px solid var(--cor-borda-padrao); 
             padding-bottom: 5px;
-            display: flex;
-            align-items: center;
+            display: flex; 
+            align-items: center; 
             gap: 8px;
         }
-        .details-content h4 svg {
-            width: 18px;
-            height: 18px;
-            fill: var(--cor-texto-secundario);
+
+        .details-content h4 svg { 
+            width: 18px; 
+            height: 18px; 
+            fill: var(--cor-texto-secundario); 
         }
-        .contextual-ai-button { margin-top: 20px; padding: 8px 15px; font-size: 0.9em; background: var(--cor-fundo-ia); border: 1px solid var(--cor-borda-padrao); color: var(--cor-texto-principal); border-radius: 8px; cursor: pointer; }
-        .contextual-ai-button:hover:not(:disabled) { background: #e2e8f0; }
-        .ti-notice { margin-top: 20px; padding: 12px; background-color: var(--cor-fundo-aviso); border-left: 4px solid var(--cor-borda-aviso); color: var(--cor-texto-aviso); font-size: 0.95em; border-radius: 0 8px 8px 0; }
+
+        .contextual-ai-button { 
+            margin-top: 20px; 
+            padding: 8px 15px; 
+            font-size: 0.9em; 
+            background: var(--cor-fundo-ia); 
+            border: 1px solid var(--cor-borda-padrao); 
+            color: var(--cor-texto-principal); 
+            border-radius: 8px; 
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .contextual-ai-button:hover {
+            background: var(--cor-primaria-inicio);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .ti-notice { 
+            margin-top: 20px; 
+            padding: 12px; 
+            background-color: var(--cor-fundo-aviso); 
+            border-left: 4px solid var(--cor-borda-aviso); 
+            color: var(--cor-texto-aviso); 
+            font-size: 0.95em; 
+            border-radius: 0 8px 8px 0; 
+        }
         
-        /* Estilo para o novo aviso geral */
         .general-notice {
-            background-color: var(--cor-fundo-aviso-geral);
+            background-color: var(--cor-fundo-aviso-geral); 
             border-left: 5px solid var(--cor-borda-aviso-geral);
-            color: var(--cor-texto-aviso-geral);
-            padding: 15px 20px;
-            border-radius: 8px;
+            color: var(--cor-texto-aviso-geral); 
+            padding: 15px 20px; 
+            border-radius: 8px; 
             font-size: 1em;
-            line-height: 1.7;
-            animation: slideUp 0.5s ease-out forwards;
-            opacity: 0;
+            line-height: 1.7; 
+            animation: slideUp 0.5s ease-out forwards 0.5s; 
+            opacity: 0; 
             margin-bottom: 30px;
         }
-        .general-notice p { margin: 0; }
-        .general-notice strong { color: var(--cor-primaria-inicio); }
 
-        /* --- Estilos da Área de Abertura do Chat (Desktop) --- */
+        .general-notice p { 
+            margin: 0; 
+        }
+
+        .general-notice strong { 
+            color: var(--cor-primaria-inicio); 
+        }
+
+        /* --- Estilos do Chatbot (Floating Action Button) --- */
         .ai-open-chat-area {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            margin-top: 40px;
+            position: fixed; 
+            bottom: 25px; 
+            right: 25px; 
+            width: 68px; 
+            height: 68px;
+            border-radius: 50%; 
+            background: linear-gradient(135deg, #ff6b35, #f7931e, #ff9500);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4), 0 4px 12px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
             cursor: pointer;
-            padding: 20px;
-            border-radius: 20px;
-            transition: background-color 0.3s, transform 0.3s, opacity 0.3s, height 0.3s, padding 0.3s, margin 0.3s;
-            opacity: 1;
+        }
+
+        .ai-open-chat-area::before {
+            content: ''; 
+            position: absolute; 
+            top: -2px; 
+            left: -2px; 
+            right: -2px; 
+            bottom: -2px;
+            background: linear-gradient(135deg, #ff6b35, #f7931e); 
+            border-radius: 50%;
+            z-index: -1; 
+            animation: pulse 2s ease-in-out infinite; 
+            opacity: 0.7;
+        }
+
+        @keyframes pulse { 
+            0%, 100% { 
+                transform: scale(1); 
+                opacity: 0.7; 
+            } 
+            50% { 
+                transform: scale(1.15); 
+                opacity: 0.3; 
+            } 
         }
 
         .ai-open-chat-area:hover {
-            background-color: var(--cor-fundo-ia);
-            transform: translateY(-5px);
+            transform: scale(1.08) translateY(-2px);
+            box-shadow: 0 12px 35px rgba(255, 107, 53, 0.6), 0 6px 18px rgba(0, 0, 0, 0.2), inset 0 2px 0 rgba(255, 255, 255, 0.3);
         }
 
-        .ai-open-chat-area.chat-open {
-            opacity: 0;
-            pointer-events: none;
-            height: 0;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
+        .ai-open-chat-area.chat-open { 
+            opacity: 0; 
+            pointer-events: none; 
+            transform: scale(0.8) translateY(20px); 
         }
 
         .ai-prompt-icon {
-            width: 80px;
-            height: 80px;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
-            transition: width 0.3s, height 0.3s;
+            width: 32px; 
+            height: 32px; 
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); 
+            z-index: 1;
         }
 
-        .ai-prompt-text {
-            font-size: 1.1em;
-            font-weight: 500;
-            color: var(--cor-texto-secundario);
-            transition: display 0.3s;
+        .ai-open-chat-area:hover .ai-prompt-icon { 
+            transform: rotate(15deg) scale(1.1); 
         }
 
         /* --- Estilos da Janela de Chat --- */
         .ai-chat-window {
-            position: fixed;
-            bottom: 0; /* Alinhado à base para mobile */
-            right: 0; /* Alinhado à direita para mobile */
-            width: 100%;
+            position: fixed; 
+            bottom: 0; 
+            right: 0; 
+            width: 100%; 
             height: 100%;
-            max-width: 100%;
-            max-height: 100%;
-            background-color: var(--cor-fundo-elemento);
-            border-radius: 0;
+            background-color: var(--cor-fundo-elemento); 
             box-shadow: 0 10px 40px var(--cor-sombra);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            z-index: 1001; /* Acima do FAB */
-            transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s, height 0.2s ease-out;
-            transform: translateY(100%);
-            opacity: 1; /* Inicia opaco para a animação de entrada */
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden; 
+            z-index: 1001;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
+            transform: translateY(100%); 
             pointer-events: none;
         }
 
-        /* Estilos do Chat para Desktop */
         @media screen and (min-width: 481px) {
             .ai-chat-window {
-                bottom: 20px;
-                right: 20px;
-                width: calc(100% - 40px);
-                max-width: 400px;
+                bottom: 20px; 
+                right: 20px; 
+                max-width: 400px; 
                 height: 85vh;
-                max-height: 600px;
-                border-radius: 20px;
+                max-height: 600px; 
+                border-radius: 20px; 
                 transform-origin: bottom right;
-                transform: translateY(20px) scale(0.95);
+                transform: translateY(20px) scale(0.95); 
                 opacity: 0;
             }
         }
 
-
-        .ai-chat-window.show {
-            transform: translateY(0) scale(1);
-            opacity: 1;
-            pointer-events: auto;
+        .ai-chat-window.show { 
+            transform: translateY(0) scale(1); 
+            opacity: 1; 
+            pointer-events: auto; 
         }
 
         .ai-chat-header {
             background: linear-gradient(135deg, var(--cor-primaria-inicio), var(--cor-primaria-fim));
-            color: white;
-            padding: 15px 20px;
-            display: flex;
+            color: white; 
+            padding: 15px 20px; 
+            display: flex; 
             justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
+            align-items: center; 
+            font-weight: 600; 
             flex-shrink: 0;
         }
-        .ai-chat-header .close-button { background: none; border: none; color: white; font-size: 1.5em; cursor: pointer; }
-        .ai-chat-messages { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
-        
-        .ai-message { padding: 10px 15px; border-radius: 18px; max-width: 80%; line-height: 1.4; word-wrap: break-word; }
-        .ai-message.user { background-color: var(--cor-primaria-inicio); color: white; border-bottom-right-radius: 4px; align-self: flex-end; }
-        .ai-message.ai { background-color: var(--cor-fundo-ia); color: var(--cor-texto-principal); border-bottom-left-radius: 4px; align-self: flex-start; }
-        
-        .blinking-cursor { display: inline-block; width: 2px; height: 1em; background-color: var(--cor-texto-secundario); animation: blink 1s step-end infinite; margin-left: 4px; vertical-align: bottom; }
-        @keyframes blink { from, to { background-color: transparent; } 50% { background-color: var(--cor-texto-secundario); } }
 
-        .ai-chat-input-area { display: flex; padding: 15px; border-top: 1px solid var(--cor-borda-padrao); gap: 10px; transition: border-color 0.3s; flex-shrink: 0; }
+        .ai-chat-header .close-button { 
+            background: none; 
+            border: none; 
+            color: white; 
+            font-size: 1.5em; 
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .ai-chat-header .close-button:hover {
+            transform: scale(1.1);
+        }
+
+        .ai-chat-messages { 
+            flex-grow: 1; 
+            padding: 20px; 
+            overflow-y: auto; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 12px; 
+        }
+
+        .ai-message { 
+            padding: 10px 15px; 
+            border-radius: 18px; 
+            max-width: 80%; 
+            line-height: 1.4; 
+            word-wrap: break-word; 
+            animation: messageSlide 0.3s ease-out;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .ai-message.user { 
+            background-color: var(--cor-primaria-inicio); 
+            color: white; 
+            border-bottom-right-radius: 4px; 
+            align-self: flex-end; 
+        }
+
+        .ai-message.ai { 
+            background-color: var(--cor-fundo-ia); 
+            color: var(--cor-texto-principal); 
+            border-bottom-left-radius: 4px; 
+            align-self: flex-start; 
+        }
+
+        .blinking-cursor { 
+            display: inline-block; 
+            width: 2px; 
+            height: 1em; 
+            background-color: var(--cor-texto-secundario); 
+            animation: blink 1s step-end infinite; 
+            margin-left: 4px; 
+            vertical-align: bottom; 
+        }
+
+        @keyframes blink { 
+            from, to { 
+                background-color: transparent; 
+            } 
+            50% { 
+                background-color: var(--cor-texto-secundario); 
+            } 
+        }
+
+        .ai-chat-input-area { 
+            display: flex; 
+            padding: 15px; 
+            border-top: 1px solid var(--cor-borda-padrao); 
+            gap: 10px;
+            flex-shrink: 0; 
+            background-color: var(--cor-fundo-elemento); 
+            position: sticky; 
+            bottom: 0;
+        }
+
         #ai-chat-input { 
             flex-grow: 1; 
             padding: 12px; 
             border: 1px solid var(--cor-borda-padrao); 
             border-radius: 10px; 
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', sans-serif; 
             background-color: var(--cor-fundo-elemento);
-            color: var(--cor-texto-principal);
-            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+            color: var(--cor-texto-principal); 
+            transition: all 0.3s ease;
         }
-        #ai-chat-input:focus { outline: none; border-color: var(--cor-primaria-inicio); }
-        #send-ai-chat { padding: 12px 18px; border: none; background: linear-gradient(135deg, var(--cor-primaria-inicio), var(--cor-primaria-fim)); color: white; border-radius: 10px; font-weight: 600; cursor: pointer; }
-        #send-ai-chat:disabled { background: #ccc; cursor: not-allowed; }
 
-        .footer { width: 100%; text-align: center; padding: 30px 0 10px 0; font-size: 0.9em; color: var(--cor-texto-secundario); }
-        .footer .highlight { color: var(--cor-primaria-inicio); font-weight: bold; }
+        #ai-chat-input:focus { 
+            outline: none; 
+            border-color: var(--cor-primaria-inicio); 
+            box-shadow: 0 0 0 3px rgba(242, 117, 0, 0.1);
+        }
+
+        #send-ai-chat { 
+            padding: 12px 18px; 
+            border: none; 
+            background: linear-gradient(135deg, var(--cor-primaria-inicio), var(--cor-primaria-fim));
+            color: white; 
+            border-radius: 10px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: all 0.3s ease;
+        }
+
+        #send-ai-chat:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(242, 117, 0, 0.3);
+        }
+
+        #send-ai-chat:disabled { 
+            background: #ccc; 
+            cursor: not-allowed; 
+            transform: none;
+            box-shadow: none;
+        }
+
+        .footer { 
+            width: 100%; 
+            text-align: center; 
+            padding: 20px 0; 
+            font-size: 0.9em; 
+            color: var(--cor-texto-secundario); 
+        }
+
+        .footer .highlight { 
+            color: var(--cor-primaria-inicio); 
+            font-weight: bold; 
+        }
         
-        /* --- AJUSTES PARA DISPOSITIVOS MÓVEIS --- */
         @media screen and (max-width: 480px) {
-            body { padding: 10px; }
-            .header, .help-container { padding: 15px; }
-            .logo { width: 100px; }
-            .logo-title { font-size: 1.6em; }
-            summary { padding: 15px; font-size: 1em; }
-            
-            .theme-switcher { top: 15px; right: 15px; }
-
-            /* FAB Moderno e Atrativo */
-            .ai-open-chat-area {
-                position: fixed;
-                bottom: 25px;
-                right: 25px;
-                width: 68px;
-                height: 68px;
-                border-radius: 50%;
-                background: linear-gradient(135deg, #ff6b35, #f7931e, #ff9500);
-                box-shadow: 
-                    0 8px 25px rgba(255, 107, 53, 0.4),
-                    0 4px 12px rgba(0, 0, 0, 0.15),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 1000;
-                margin: 0;
-                padding: 0;
-                gap: 0;
-                transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-                cursor: pointer;
-                overflow: hidden;
+            body { 
+                padding: 10px; 
             }
 
-            /* Efeito de pulse contínuo */
-            .ai-open-chat-area::before {
-                content: '';
-                position: absolute;
-                top: -2px;
-                left: -2px;
-                right: -2px;
-                bottom: -2px;
-                background: linear-gradient(135deg, #ff6b35, #f7931e);
-                border-radius: 50%;
-                z-index: -1;
-                animation: pulse 2s ease-in-out infinite;
-                opacity: 0.7;
+            .container { 
+                padding-bottom: 80px; 
             }
 
-            /* Efeito de brilho interno */
-            .ai-open-chat-area::after {
-                content: '';
-                position: absolute;
-                top: 8px;
-                left: 8px;
-                right: 8px;
-                bottom: 8px;
-                background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
-                border-radius: 50%;
-                pointer-events: none;
+            .header, .help-container { 
+                padding: 15px; 
             }
 
-            @keyframes pulse {
-                0%, 100% {
-                    transform: scale(1);
-                    opacity: 0.7;
-                }
-                50% {
-                    transform: scale(1.15);
-                    opacity: 0.3;
-                }
+            .logo { 
+                width: 100px; 
+            } 
+
+            .logo-title { 
+                font-size: 1.6em; 
             }
 
-            .ai-open-chat-area:hover {
-                transform: scale(1.08) translateY(-2px);
-                box-shadow: 
-                    0 12px 35px rgba(255, 107, 53, 0.6),
-                    0 6px 18px rgba(0, 0, 0, 0.2),
-                    inset 0 2px 0 rgba(255, 255, 255, 0.3);
-                background: linear-gradient(135deg, #ff7b45, #ff9500, #ffb347);
+            summary { 
+                padding: 15px; 
+                font-size: 1em; 
             }
 
-            .ai-open-chat-area:active {
-                transform: scale(0.92) translateY(0px);
-                transition: all 0.15s cubic-bezier(0.4, 0, 1, 1);
+            .theme-switcher { 
+                top: 15px; 
+                right: 15px; 
             }
 
-            .ai-open-chat-area.chat-open {
-                opacity: 0;
-                pointer-events: none;
-                transform: scale(0.8) translateY(20px);
-                transition: all 0.3s cubic-bezier(0.4, 0, 1, 1);
-            }
-
-            .ai-prompt-icon {
-                width: 32px;
-                height: 32px;
-                filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-                transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-                z-index: 1;
-            }
-
-            .ai-open-chat-area:hover .ai-prompt-icon {
-                transform: rotate(15deg) scale(1.1);
-                filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3)) brightness(1.1);
-            }
-
-            .ai-prompt-text {
-                display: none;
-            }
-
-            /* Melhor handling para o chat mobile */
-            .ai-chat-window {
-                position: fixed;
-                bottom: 0;
-                right: 0;
-                width: 100%;
-                height: 100vh;
-                height: 100dvh; /* Dynamic viewport height */
-                max-width: 100%;
-                max-height: 100%;
-                background-color: var(--cor-fundo-elemento);
-                border-radius: 0;
-                box-shadow: 0 -5px 30px rgba(0, 0, 0, 0.15);
-                display: flex;
-                flex-direction: column;
-                overflow: hidden;
-                z-index: 1001;
-                transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
-                transform: translateY(100%);
-                opacity: 1;
-                pointer-events: none;
-            }
-
-            .ai-chat-window.show {
-                transform: translateY(0);
-                opacity: 1;
-                pointer-events: auto;
-            }
-
-            /* Melhor área de input para mobile */
             .ai-chat-input-area { 
-                display: flex; 
-                padding: 15px 15px calc(15px + env(safe-area-inset-bottom, 0px)); /* Safe area para iPhone */
-                border-top: 1px solid var(--cor-borda-padrao); 
-                gap: 10px; 
-                transition: border-color 0.3s; 
-                flex-shrink: 0;
-                background-color: var(--cor-fundo-elemento);
-                position: sticky;
-                bottom: 0;
+                padding: 15px 15px calc(15px + env(safe-area-inset-bottom, 0px)); 
             }
 
             #ai-chat-input { 
-                flex-grow: 1; 
-                padding: 14px 16px; /* Padding maior para mobile */
-                border: 1px solid var(--cor-borda-padrao); 
-                border-radius: 12px; /* Border radius maior */
-                font-family: 'Inter', sans-serif;
-                font-size: 16px; /* Evita zoom no iOS */
-                background-color: var(--cor-fundo-elemento);
-                color: var(--cor-texto-principal);
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                padding: 14px 16px; 
+                border-radius: 12px; 
+                font-size: 16px; 
             }
 
             #send-ai-chat { 
-                padding: 14px 20px;
-                border: none; 
-                background: linear-gradient(135deg, var(--cor-primaria-inicio), var(--cor-primaria-fim)); 
-                color: white; 
+                padding: 14px 20px; 
                 border-radius: 12px; 
-                font-weight: 600; 
-                cursor: pointer;
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                min-width: 80px;
+                min-width: 80px; 
             }
+        }
 
-            #send-ai-chat:active {
-                transform: scale(0.95);
-            }
+        /* CORREÇÃO: Evitar quebras de layout durante animações */
+        * {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* CORREÇÃO: Força aceleração de hardware para elementos animados */
+        details, .ai-open-chat-area, .ai-chat-window {
+            transform: translateZ(0);
         }
     </style>
 </head>
@@ -587,8 +668,8 @@
             <div class="theme-switcher">
                 <input type="checkbox" id="dark-mode-toggle">
                 <label for="dark-mode-toggle" title="Alternar tema">
-                    <span class="sun">☀️</span>
-                    <span class="moon">🌙</span>
+                    <span class="sun"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
+                    <span class="moon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
                 </label>
             </div>
             <div class="logo">
@@ -603,7 +684,6 @@
             <p>🖥️ Ao final do uso, <strong>não esqueça de desligar o projetor e o computador.</strong></p>
         </div>
 
-        <!-- === CORREÇÃO: CONTEÚDO DOS CARDS REINSERIDO ABAIXO === -->
         <main class="help-container" id="main-content">
             <details>
                 <summary>Ordem correta para ligar os equipamentos</summary>
@@ -645,9 +725,7 @@
                         <li><strong>Atalho do Windows:</strong> Pressione as teclas <strong>Windows + P</strong>.</li>
                         <li><strong>Escolha "Duplicar":</strong> No menu que aparecer, clique na opção <strong>"Duplicar"</strong>.</li>
                     </ol>
-                    
                     <hr style="margin: 20px 0;">
-
                     <h4>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px"><path fill="#8bc34a" d="M24,4C12.954,4,4,12.954,4,24s8.954,20,20,20s20-8.954,20-20S35.046,4,24,4z M24,38	c-2.211,0-4-1.789-4-4s1.789-4,4-4s4,1.789,4,4S26.211,38,24,38z M26,32h-4V12h4V32z"/></svg>
                         Linux Mint
@@ -658,7 +736,6 @@
                         <li>Na janela de configuração de monitores, ative a opção <strong>"Espelhar monitores"</strong>.</li>
                         <li>Clique em <strong>"Aplicar"</strong> para confirmar.</li>
                     </ol>
-
                     <p class="ti-notice">Se o problema persistir, por favor, acione o Responsável de TI.</p>
                     <button class="ai-button contextual-ai-button">✨ E se isso não funcionar?</button>
                 </div>
@@ -677,9 +754,7 @@
                         <li><strong>Saída de Som do Windows:</strong> Clique no ícone de som na barra de tarefas e certifique-se de que a saída correta está selecionada (geralmente "HDMI").</li>
                         <li><strong>Volume do Sistema e da Mídia:</strong> Verifique se o volume do Windows não está no mudo. Aumente também o volume no próprio vídeo ou mídia.</li>
                     </ol>
-
                     <hr style="margin: 20px 0;">
-
                     <h4>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px"><path fill="#8bc34a" d="M24,4C12.954,4,4,12.954,4,24s8.954,20,20,20s20-8.954,20-20S35.046,4,24,4z M24,38	c-2.211,0-4-1.789-4-4s1.789-4,4-4s4,1.789,4,4S26.211,38,24,38z M26,32h-4V12h4V32z"/></svg>
                         Linux Mint
@@ -690,18 +765,15 @@
                         <li>Na aba <strong>"Saída"</strong>, certifique-se de que o dispositivo correto está selecionado (geralmente algo como "HDMI / DisplayPort").</li>
                         <li>Verifique se o volume de saída não está no mudo.</li>
                     </ol>
-
                     <p class="ti-notice">Se o problema persistir, por favor, acione o Responsável de TI.</p>
                     <button class="ai-button contextual-ai-button">✨ E se isso não funcionar?</button>
                 </div>
             </details>
         </main>
-
     </div>
     
     <div id="ai-open-chat-area" class="ai-open-chat-area">
         <img src="logo.png" alt="Ícone do assistente de IA" class="ai-prompt-icon">
-        <p class="ai-prompt-text">Como posso te ajudar?</p>
     </div>
 
     <div id="ai-chat-window" class="ai-chat-window">
@@ -726,20 +798,15 @@
     /* =========================================
      * SCRIPT JAVASCRIPT
      * ========================================= */
-
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-          .then(registration => {
-            console.log('Service Worker registrado com sucesso:', registration);
-          })
-          .catch(error => {
-            console.log('Falha ao registrar o Service Worker:', error);
-          });
-      });
-    }
-
     document.addEventListener('DOMContentLoaded', () => {
+
+        if ('serviceWorker' in navigator) {
+          window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+              .then(registration => console.log('Service Worker registrado com sucesso:', registration))
+              .catch(error => console.log('Falha ao registrar o Service Worker:', error));
+          });
+        }
 
         const openChatArea = document.getElementById('ai-open-chat-area');
         const aiChatWindow = document.getElementById('ai-chat-window');
@@ -751,235 +818,116 @@
         const darkModeToggle = document.getElementById('dark-mode-toggle');
         let chatHistory = []; 
 
-        // --- LÓGICA DO MODO ESCURO ---
+        // --- MODO ESCURO ---
         darkModeToggle.addEventListener('change', () => {
             document.body.classList.toggle('dark-mode');
-            if (document.body.classList.contains('dark-mode')) {
-                localStorage.setItem('theme', 'dark');
-            } else {
-                localStorage.setItem('theme', 'light');
-            }
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
         });
-
         if (localStorage.getItem('theme') === 'dark') {
             document.body.classList.add('dark-mode');
             darkModeToggle.checked = true;
         }
 
-
         // --- LÓGICA DO CHAT ---
-        openChatArea.addEventListener('click', () => {
+        const openChat = () => {
             aiChatWindow.classList.add('show');
             openChatArea.classList.add('chat-open');
-            document.body.classList.add('chat-open-body'); // Bloqueia o scroll do body
-            
-            // Ajusta altura inicial para mobile
-            if (window.innerWidth <= 480) {
-                const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-                aiChatWindow.style.height = `${viewportHeight}px`;
-            }
-            
-            // Foca no input após a animação
-            setTimeout(() => {
-                aiChatInput.focus();
-            }, 400);
-        });
-        
-        closeAiChatButton.addEventListener('click', (event) => {
-            event.stopPropagation();
+            document.body.classList.add('chat-open-body');
+            setTimeout(() => aiChatInput.focus(), 400);
+        };
+        const closeChat = () => {
             aiChatWindow.classList.remove('show');
             openChatArea.classList.remove('chat-open');
-            document.body.classList.remove('chat-open-body'); // Libera o scroll do body
-            
-            // Remove altura customizada
-            aiChatWindow.style.height = '';
-            
-            // Remove foco do input
+            document.body.classList.remove('chat-open-body');
             aiChatInput.blur();
-        });
+        };
+        openChatArea.addEventListener('click', openChat);
+        closeAiChatButton.addEventListener('click', closeChat);
 
-        // Adiciona funcionalidade de swipe down para fechar (mobile)
-        let startY = 0;
-        let currentY = 0;
-        let isDragging = false;
-
-        aiChatWindow.addEventListener('touchstart', (e) => {
-            if (e.target.closest('.ai-chat-messages') && aiChatMessages.scrollTop === 0) {
-                startY = e.touches[0].clientY;
-                isDragging = true;
-            }
-        });
-
-        aiChatWindow.addEventListener('touchmove', (e) => {
-            if (!isDragging) return;
-            
-            currentY = e.touches[0].clientY;
-            const diffY = currentY - startY;
-            
-            if (diffY > 0 && diffY < 100) {
-                aiChatWindow.style.transform = `translateY(${diffY}px)`;
-                aiChatWindow.style.opacity = 1 - (diffY / 200);
-            }
-        });
-
-        aiChatWindow.addEventListener('touchend', () => {
-            if (!isDragging) return;
-            
-            const diffY = currentY - startY;
-            
-            if (diffY > 50) {
-                // Fecha o chat
-                closeAiChatButton.click();
-            } else {
-                // Volta para posição original
-                aiChatWindow.style.transform = '';
-                aiChatWindow.style.opacity = '';
-            }
-            
-            isDragging = false;
-        });
-
-        sendAiChatButton.addEventListener('click', handleSendMessage);
-        aiChatInput.addEventListener('keyup', (event) => {
-            if (event.key === 'Enter') {
-                handleSendMessage();
-            }
-        });
-
-        function handleSendMessage() {
+        // --- LÓGICA DE ENVIO DE MENSAGEM ---
+        const handleSendMessage = () => {
             const question = aiChatInput.value.trim();
             if (!question) return;
-
             addMessage(question, 'user');
             aiChatInput.value = '';
-            
             chatHistory.push({ role: "user", parts: [{ text: question }] });
-            
             const systemInstruction = getSystemInstruction();
-
             getAiResponse(systemInstruction);
-        }
-        
-        function addMessage(text, sender) {
+        };
+        sendAiChatButton.addEventListener('click', handleSendMessage);
+        aiChatInput.addEventListener('keyup', (event) => { if (event.key === 'Enter') handleSendMessage(); });
+
+        const addMessage = (text, sender) => {
             const messageElement = document.createElement('div');
             messageElement.classList.add('ai-message', sender);
-
-            if (sender === 'ai') {
-                messageElement.innerHTML = text; // Permite HTML para o cursor/status
-            } else {
-                messageElement.textContent = text;
-            }
-
+            messageElement.innerHTML = (sender === 'ai') ? renderMarkdown(text) : text;
             aiChatMessages.appendChild(messageElement);
             aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
             return messageElement;
-        }
+        };
+        
+        const renderMarkdown = (text) => text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/\n/g, '<br>');
 
-        function renderMarkdown(text) {
-            let html = text
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/(\n|^)- (.*)/g, '$1<li>$2</li>')
-                .replace(/(\<\/li\>)+/g, '</li>')
-                .replace(/<li>/g, '<ul><li>')
-                .replace(/<\/li>(?!<\/ul>)/g, '</li></ul>')
-                .replace(/\n/g, '<br>');
-            return html;
-        }
-
-        function getSystemInstruction() {
+        const getSystemInstruction = () => {
             const pageContent = Array.from(document.querySelectorAll('details')).map(detail => {
                 const title = detail.querySelector('summary').textContent.trim();
                 const content = detail.querySelector('.details-content').textContent.trim();
                 return `Tópico: "${title}"\nConteúdo: ${content}`;
             }).join('\n\n---\n\n');
-
-            const instructionText = `
-                Você é um "Assistente de TI" da faculdade Anhanguera. Sua tarefa é ajudar usuários leigos, sem conhecimento técnico.
-
-                **Regras Importantes:**
-                1.  **Primeiro, verifique o conteúdo da página:** Analise o "CONTEÚDO DA PÁGINA DE AJUDA" abaixo para ver se a resposta para a pergunta do usuário já existe.
-                2.  **Se a resposta existir na página:** Direcione o usuário para a solução existente de forma simples. Exemplo: "Claro! Para resolver isso, por favor, abra a seção 'TÍTULO DA SEÇÃO' e siga os passos indicados lá." Não repita os passos.
-                3.  **Se a resposta NÃO existir na página:** Forneça uma solução nova, em formato de passo a passo, extremamente simples e direta. Use linguagem fácil, sem jargões técnicos ou justificativas.
-                4.  **Seja direto:** Foque no "o que fazer", não no "porquê".
-                5.  **Aviso de Segurança:** Sempre instrua o usuário a **não mexer nos cabos** por conta própria e a chamar o Responsável de TI para qualquer manipulação física de equipamentos.
-                6.  **Último Recurso:** Se as instruções não resolverem ou o problema parecer complexo (ex: equipamento que não liga), instrua o usuário a **procurar o Responsável de TI da unidade** para assistência presencial.
-
+            const instructionText = `Você é um "Assistente de TI" da faculdade Anhanguera. Ajude usuários leigos com problemas técnicos.
+                **Regras:**
+                1.  **Se a resposta estiver na página:** Direcione o usuário para a seção correta de forma simples. Ex: "Para isso, abra a seção 'Projetor sem imagem' e siga os passos." Não repita os passos.
+                2.  **Se a resposta NÃO estiver na página:** Dê uma solução simples em passo a passo.
+                3.  **Segurança:** Sempre diga para **não mexer nos cabos** e chamar o TI para manipulação física.
+                4.  **Último Recurso:** Se nada funcionar, instrua o usuário a **procurar o Responsável de TI**.
                 ---
                 **CONTEÚDO DA PÁGINA DE AJUDA:**
                 ${pageContent}
-                ---
-            `;
+                ---`;
             return { parts: [{ text: instructionText }] };
-        }
+        };
 
         async function getAiResponse(systemInstruction) {
-            // Chama o NOVO endpoint de streaming na Vercel
-            const apiUrl = '/api/chat-stream'; 
-
+            const apiUrl = '/api/chat-stream';
             aiChatInput.disabled = true;
             sendAiChatButton.disabled = true;
-
             const typingMessageElement = addMessage('<span class="blinking-cursor"></span>', 'ai');
             let fullResponseText = "";
-
-            const payload = {
-                systemInstruction: systemInstruction,
-                contents: chatHistory,
-                // As safetySettings agora estão no backend (api/chat-stream.js)
-            };
-
+            
             try {
                 const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({ systemInstruction, contents: chatHistory })
                 });
-
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`Erro do servidor: ${response.status} - ${errorText}`);
-                }
-
-                // Processar a resposta como um stream
+                if (!response.ok) throw new Error(`Erro do servidor: ${response.status}`);
+                
                 const reader = response.body.getReader();
                 const decoder = new TextDecoder();
-
                 while (true) {
                     const { done, value } = await reader.read();
                     if (done) break;
-
                     const chunkText = decoder.decode(value);
                     const lines = chunkText.split('\n');
-
                     for (const line of lines) {
                         if (line.trim().startsWith('data: ')) {
                             const jsonStr = line.substring(6);
                             try {
-                                const parsedChunk = JSON.parse(jsonStr);
-                                if (parsedChunk.candidates && parsedChunk.candidates[0].content && parsedChunk.candidates[0].content.parts[0]) {
-                                    const textPart = parsedChunk.candidates[0].content.parts[0].text;
-                                    fullResponseText += textPart;
-
-                                    // Atualiza o DOM em tempo real
-                                    typingMessageElement.innerHTML = renderMarkdown(fullResponseText + ' <span class="blinking-cursor"></span>');
-                                    aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
-                                }
-                            } catch (e) {
-                                console.warn("Erro ao processar chunk JSON, continuando...", line);
-                            }
+                                const parsed = JSON.parse(jsonStr);
+                                const textPart = parsed.candidates[0]?.content?.parts[0]?.text || "";
+                                fullResponseText += textPart;
+                                typingMessageElement.innerHTML = renderMarkdown(fullResponseText + ' <span class="blinking-cursor"></span>');
+                                aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
+                            } catch (e) { console.warn("Erro no chunk JSON:", line); }
                         }
                     }
                 }
-
-                // Finaliza a mensagem (remove o cursor) e atualiza o histórico
                 typingMessageElement.innerHTML = renderMarkdown(fullResponseText);
-                if(fullResponseText.trim().length > 0) {
+                if (fullResponseText.trim()) {
                     chatHistory.push({ role: "model", parts: [{ text: fullResponseText }] });
                 }
-
             } catch (error) {
-                console.error("Erro na função getAiResponse:", error);
+                console.error("Erro na API:", error);
                 typingMessageElement.innerHTML = renderMarkdown(`**Ocorreu um erro:** ${error.message}.`);
             } finally {
                 aiChatInput.disabled = false;
@@ -989,88 +937,19 @@
             }
         }
 
-        // --- LÓGICA DE AJUSTE PARA TECLADO VIRTUAL (VISUAL VIEWPORT API) ---
-        const handleViewportResize = () => {
-            if (aiChatWindow.classList.contains('show')) {
-                // Em telas móveis, ajusta a altura do chat para a altura da área visível
-                if (window.innerWidth <= 480) {
-                    const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-                    aiChatWindow.style.height = `${viewportHeight}px`;
-                    
-                    // Scroll para a última mensagem quando o teclado aparece
-                    setTimeout(() => {
-                        aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
-                    }, 100);
-                }
-            }
-        };
-
-        // Debounce para melhor performance
-        const debounce = (func, wait) => {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
-        };
-
-        // Adiciona o listener para o evento de resize do visualViewport
-        if (window.visualViewport) {
-            window.visualViewport.addEventListener('resize', debounce(handleViewportResize, 100));
-        }
-
-        // Listener adicional para orientação da tela
-        window.addEventListener('orientationchange', () => {
-            setTimeout(handleViewportResize, 500); // Delay para aguardar a mudança completa
-        });
-
-        // Melhoria no foco do input
-        aiChatInput.addEventListener('focus', () => {
-            setTimeout(() => {
-                aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
-            }, 300); // Delay para aguardar o teclado aparecer
-        });
-
-        // Previne zoom no iOS quando focando o input
-        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-            aiChatInput.addEventListener('focus', (e) => {
-                e.target.style.fontSize = '16px';
-            });
-        }
-
-
+        // --- BOTÕES CONTEXTUAIS ---
         contextualAiButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const detailsContent = button.parentElement;
-                const summaryText = detailsContent.parentElement.querySelector('summary').textContent.trim();
-                const topicContent = detailsContent.textContent.trim();
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const details = button.closest('details');
+                const summaryText = details.querySelector('summary').textContent.trim();
+                const question = button.textContent.replace('✨', '').trim();
                 
-                let question = button.textContent.replace('✨', '').trim();
+                const systemInstruction = { parts: [{ text: `Você é um "Assistente de TI". O usuário clicou no botão "${question}" na seção "${summaryText}". Explique o que fazer de forma extremamente simples e direta, sem jargões.` }] };
                 
-                let systemInstructionText = `
-                    Você é um "Assistente de TI". Um usuário leigo clicou no botão "${question}" dentro da seção "${summaryText}". 
-                    
-                    O conteúdo original da seção é: "${topicContent}".
-
-                    Sua tarefa é explicar o que fazer de forma extremamente simples, em passos diretos, sem usar jargões técnicos ou justificativas. Foque apenas na ação que o usuário deve tomar.
-                `;
-                
-                const systemInstruction = { parts: [{ text: systemInstructionText }] };
-                
-                if (!aiChatWindow.classList.contains('show')) {
-                    aiChatWindow.classList.add('show');
-                    openChatArea.classList.add('chat-open');
-                    document.body.classList.add('chat-open-body');
-                }
-
+                openChat();
                 addMessage(question, 'user');
-                
                 chatHistory = [{ role: "user", parts: [{ text: question }] }];
-                
                 getAiResponse(systemInstruction);
             });
         });
