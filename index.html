@@ -632,6 +632,7 @@
             <p>🖥️ Ao final do uso, <strong>não esqueça de desligar o projetor e o computador.</strong></p>
         </div>
 
+        <!-- === CORREÇÃO: CONTEÚDO DOS CARDS REINSERIDO ABAIXO === -->
         <main class="help-container" id="main-content">
             <details>
                 <summary>Ordem correta para ligar os equipamentos</summary>
@@ -954,12 +955,7 @@
             const payload = {
                 systemInstruction: systemInstruction,
                 contents: chatHistory,
-                safetySettings: [
-                    { "category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE" },
-                    { "category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_MEDIUM_AND_ABOVE" },
-                    { "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_MEDIUM_AND_ABOVE" },
-                    { "category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE" }
-                ]
+                // As safetySettings agora estão no backend (api/chat-stream.js)
             };
 
             try {
