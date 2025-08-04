@@ -1,33 +1,21 @@
 <!DOCTYPE html>
-<!-- Define o idioma da página como Português do Brasil -->
 <html lang="pt-BR">
 <head>
-    <!-- =========================================
-     * CABEÇALHO DO DOCUMENTO (METADADOS)
-     * ========================================= -->
-
-    <!-- Define o conjunto de caracteres para UTF-8, que suporta acentos e símbolos -->
     <meta charset="UTF-8">
     
-    <!-- META TAGS PARA CONTROLE DE CACHE: Forçam o navegador a buscar a versão mais recente da página -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     
-    <!-- Viewport: Garante que a página seja renderizada corretamente em dispositivos móveis -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Título da página que aparece na aba do navegador -->
     <title>Ajuda e Suporte Técnico com IA</title>
 
-    <!-- Metadados para PWA (Progressive Web App) e tema do navegador -->
     <meta name="theme-color" content="#f27500">
     <link rel="manifest" href="manifest.json">
 
-    <!-- Ícone da página (favicon) -->
     <link rel="icon" href="logo.png" type="image/png">
 
-    <!-- Importa a fonte 'Inter' do Google Fonts para um visual moderno -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
@@ -341,7 +329,6 @@
     </style>
 </head>
 <body>
-    <!-- O CONTEÚDO HTML DO BODY PERMANECE IGUAL. -->
     <div class="container">
         <header class="header">
             <div class="theme-switcher">
@@ -493,6 +480,19 @@
      * SCRIPT JAVASCRIPT (COM CORREÇÕES)
      * ========================================= */
     document.addEventListener('DOMContentLoaded', () => {
+
+        // --- CÓDIGO PARA REDIMENSIONAR A JANELA DO PWA NA PROPORÇÃO 9:16 ---
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+        if (isStandalone) {
+            // Define a altura da janela para 90% da altura da tela para uma boa visualização
+            const alturaJanela = window.screen.height * 0.9; 
+            // Calcula a largura para manter a proporção de 9:16
+            const larguraJanela = (alturaJanela * 9) / 16;
+            
+            window.resizeTo(larguraJanela, alturaJanela);
+        }
+        // --- FIM DO BLOCO DE CÓDIGO ---
+
         if ('serviceWorker' in navigator) {
           window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js')
