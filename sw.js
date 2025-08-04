@@ -1,5 +1,5 @@
 // Nome do cache. Mude este valor se você atualizar os arquivos para forçar a atualização do cache.
-const CACHE_NAME = 'ajuda-ti-cache-v7'; // Versão incrementada para forçar a atualização
+const CACHE_NAME = 'ajuda-ti-cache-v8'; // Versão incrementada para forçar a atualização
 
 // Lista de arquivos essenciais para o funcionamento offline do app.
 const URLS_TO_CACHE = [

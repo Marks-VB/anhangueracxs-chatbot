@@ -18,7 +18,6 @@
          * ========================================= */
 
         /* --- Variáveis de Cores (CSS Variables) --- */
-        /* O uso de variáveis CSS (:root) facilita a manutenção do tema e a implementação do modo escuro. */
         :root {
             --cor-primaria-inicio: #f27500; /* Cor principal (início do gradiente) */
             --cor-primaria-fim: #ff9201;    /* Cor principal (fim do gradiente) */
@@ -39,7 +38,6 @@
         }
 
         /* --- Variáveis para o Modo Escuro --- */
-        /* Quando o body tiver a classe .dark-mode, estas variáveis sobrescrevem as definidas no :root. */
         body.dark-mode {
             --cor-texto-principal: #e2e8f0;
             --cor-texto-secundario: #a0aec0;
@@ -58,31 +56,29 @@
         }
 
         /* --- Estilos Globais e Reset --- */
-        /* Um reset simples para garantir consistência entre navegadores. */
         * { 
-            box-sizing: border-box; /* Faz com que padding e border não aumentem o tamanho final do elemento. */
+            box-sizing: border-box; 
             margin: 0; 
             padding: 0; 
         }
 
         html { 
-            scroll-behavior: smooth; /* Animação suave ao rolar a página para âncoras. */
+            scroll-behavior: smooth; 
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; /* Define uma pilha de fontes modernas e seguras. */
-            background-color: var(--cor-fundo-body); /* Usa a variável de cor de fundo. */
-            color: var(--cor-texto-principal); /* Usa a variável de cor de texto. */
-            min-height: 100vh; /* Garante que o corpo ocupe pelo menos toda a altura da tela. */
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--cor-fundo-body);
+            color: var(--cor-texto-principal);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
-            line-height: 1.6; /* Melhora a legibilidade do texto. */
-            transition: background-color 0.3s ease, color 0.3s ease; /* Transição suave ao trocar de tema. */
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* Classe adicionada ao body via JS para evitar a rolagem da página quando o chat está aberto em tela cheia (mobile). */
         body.chat-open-body { 
             overflow: hidden; 
         }
@@ -90,37 +86,37 @@
         /* --- Layout Principal --- */
         .container { 
             width: 100%; 
-            max-width: 800px; /* Limita a largura máxima para melhor legibilidade em telas grandes. */
+            max-width: 800px;
             z-index: 1; 
-            margin-bottom: 80px; /* Espaço para o rodapé não ficar colado. */
+            margin-bottom: 80px;
         }
 
         .header {
-            position: relative; /* Necessário para posicionar o botão de tema. */
+            position: relative;
             text-align: center; 
             margin-bottom: 30px;
-            background: var(--cor-fundo-container); /* Fundo com efeito de vidro. */
-            backdrop-filter: blur(10px); /* Efeito de desfoque no fundo, para o "glassmorphism". */
+            background: var(--cor-fundo-container);
+            backdrop-filter: blur(10px);
             border-radius: 20px; 
             padding: 30px;
-            box-shadow: 0 8px 32px var(--cor-sombra); /* Sombra para dar profundidade. */
-            border: 1px solid rgba(255, 255, 255, 0.2); /* Borda sutil para o efeito de vidro. */
+            box-shadow: 0 8px 32px var(--cor-sombra);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .logo { 
             width: 120px; 
             margin: 0 auto 15px auto; 
-            transition: transform 0.3s ease; /* Animação suave no hover. */
+            transition: transform 0.3s ease;
         }
 
         .logo:hover { 
-            transform: translateY(-5px); /* Efeito de "levantar" ao passar o mouse. */
+            transform: translateY(-5px);
         }
 
         .logo img { 
             width: 100%; 
             height: 100%; 
-            object-fit: contain; /* Garante que a imagem caiba no espaço sem distorcer. */
+            object-fit: contain;
             transition: filter 0.3s ease; 
         }
 
@@ -137,13 +133,13 @@
         }
 
         .theme-switcher { 
-            position: absolute; /* Posiciona o botão em relação ao header. */
+            position: absolute;
             top: 25px; 
             right: 25px; 
         }
 
         .theme-switcher input { 
-            display: none; /* O checkbox real fica escondido, usamos o label para estilizá-lo. */
+            display: none;
         }
 
         .theme-switcher label { 
@@ -160,7 +156,7 @@
         .theme-switcher svg { 
             width: 22px; 
             height: 22px; 
-            stroke: currentColor; /* O ícone SVG herda a cor do label. */
+            stroke: currentColor;
             transition: transform 0.3s ease-out; 
         }
 
@@ -169,7 +165,6 @@
             transform: scale(1.1); 
         }
 
-        /* Lógica para mostrar/esconder os ícones de sol e lua. */
         .theme-switcher .sun { display: none; } 
         .theme-switcher .moon { display: block; }
 
@@ -177,7 +172,6 @@
         body.dark-mode .theme-switcher .moon { display: none; }
         body.dark-mode .theme-switcher label { color: #f6e05e; } 
         body.dark-mode .theme-switcher label:hover { color: #fff; }
-        /* Efeito de brilho na logo no modo escuro. */
         body.dark-mode .logo img { filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.4)); }
 
         /* --- Conteúdo de Ajuda (FAQ) --- */
@@ -190,10 +184,9 @@
             border: 1px solid rgba(255, 255, 255, 0.3); 
             display: flex; 
             flex-direction: column; 
-            gap: 15px; /* Espaçamento entre os cards de ajuda. */
+            gap: 15px;
         }
         
-        /* Animação para os cards aparecerem suavemente. */
         @keyframes slideUp { 
             from { 
                 opacity: 0; 
@@ -205,19 +198,17 @@
             } 
         }
 
-        /* ANIMAÇÃO CORRIGIDA DOS CARDS */
         details { 
             background-color: var(--cor-fundo-elemento); 
             border-radius: 12px;
             border: 1px solid var(--cor-borda-padrao);
             transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-            animation: slideUp 0.5s ease-out forwards; /* Aplica a animação. 'forwards' mantém o estado final. */
-            opacity: 0; /* Começa invisível para a animação funcionar. */
-            overflow: hidden; /* Garante que o conteúdo não vaze durante a animação. */
-            will-change: transform; /* Otimização de performance para animações. */
+            animation: slideUp 0.5s ease-out forwards;
+            opacity: 0;
+            overflow: hidden;
+            will-change: transform;
         }
 
-        /* Adiciona um atraso diferente para cada card, criando um efeito cascata. */
         details:nth-child(1) { animation-delay: 0.1s; } 
         details:nth-child(2) { animation-delay: 0.2s; }
         details:nth-child(3) { animation-delay: 0.3s; } 
@@ -228,16 +219,14 @@
             box-shadow: 0 6px 20px var(--cor-sombra);
         }
 
-        /* CORREÇÃO: Animação mais suave para o estado aberto */
         details[open] { 
-            transform: translateY(-2px); /* Efeito sutil ao abrir. */
+            transform: translateY(-2px);
             box-shadow: 0 8px 25px var(--cor-sombra); 
-            border-color: var(--cor-primaria-inicio); /* Destaca a borda quando aberto. */
+            border-color: var(--cor-primaria-inicio);
         }
 
-        /* CORREÇÃO: Evita conflito entre hover e open */
         details[open]:hover {
-            transform: translateY(-2px); /* Mantém a mesma transformação para evitar "pulos". */
+            transform: translateY(-2px);
         }
 
         summary { 
@@ -245,25 +234,23 @@
             font-weight: 600; 
             color: var(--cor-texto-principal); 
             cursor: pointer; 
-            list-style: none; /* Remove o marcador padrão do 'details'. */
+            list-style: none;
             display: flex; 
             justify-content: space-between; 
             align-items: center;
             font-size: 1.05em; 
             position: relative;
-            user-select: none; /* Evita que o texto do título seja selecionado ao clicar. */
+            user-select: none;
         }
 
         summary::-webkit-details-marker { 
-            display: none; /* Garante a remoção do marcador em navegadores Webkit. */
+            display: none;
         }
 
         summary:hover { 
-            background-color: rgba(242, 117, 0, 0.05); /* Feedback visual ao passar o mouse. */
+            background-color: rgba(242, 117, 0, 0.05);
         }
 
-        /* CORREÇÃO: Transição mais suave do ícone '+' */
-        /* Cria um ícone '+' usando CSS. */
         summary::after { 
             content: '+'; 
             font-size: 1.5em; 
@@ -273,22 +260,20 @@
             line-height: 1;
         }
 
-        /* Quando o 'details' está aberto, o '+' vira um 'x' (rotacionando 45 graus). */
         details[open] summary::after { 
             transform: rotate(45deg); 
             color: var(--cor-primaria-fim); 
         }
         
-        /* CORREÇÃO: Animação mais estável do conteúdo */
         .details-content { 
             padding: 0 20px; 
             color: var(--cor-texto-secundario);
             overflow: hidden;
-            transition: padding 0.3s ease; /* Anima a abertura/fechamento do conteúdo. */
+            transition: padding 0.3s ease;
         }
 
         details[open] > .details-content {
-            padding: 0 20px 20px 20px; /* Adiciona padding inferior quando aberto. */
+            padding: 0 20px 20px 20px;
         }
 
         .details-content h4 { 
@@ -326,7 +311,6 @@
             transform: translateY(-1px);
         }
 
-        /* Estilo para a caixa de aviso dentro dos cards. */
         .ti-notice { 
             margin-top: 20px; 
             padding: 12px; 
@@ -337,7 +321,6 @@
             border-radius: 0 8px 8px 0; 
         }
         
-        /* Estilo para o aviso geral no topo da página. */
         .general-notice {
             background-color: var(--cor-fundo-aviso-geral); 
             border-left: 5px solid var(--cor-borda-aviso-geral);
@@ -361,23 +344,22 @@
 
         /* --- Estilos do Chatbot (Floating Action Button - FAB) --- */
         .ai-open-chat-area {
-            position: fixed; /* Mantém o botão fixo na tela durante a rolagem. */
+            position: fixed;
             bottom: 25px; 
             right: 25px; 
             width: 68px; 
             height: 68px;
             border-radius: 50%; 
-            background: linear-gradient(135deg, #ff6b35, #f7931e, #ff9500); /* Gradiente chamativo. */
+            background: linear-gradient(135deg, #ff6b35, #f7931e, #ff9500);
             box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4), 0 4px 12px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            z-index: 1000; /* Garante que o botão fique acima de outros elementos. */
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Transição suave para abertura/fechamento. */
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             cursor: pointer;
         }
         
-        /* Animação de pulso para chamar a atenção do usuário. */
         .ai-open-chat-area::before {
             content: ''; 
             position: absolute; 
@@ -408,10 +390,9 @@
             box-shadow: 0 12px 35px rgba(255, 107, 53, 0.6), 0 6px 18px rgba(0, 0, 0, 0.2), inset 0 2px 0 rgba(255, 255, 255, 0.3);
         }
 
-        /* Esconde o botão de abrir quando o chat já está aberto. */
         .ai-open-chat-area.chat-open { 
             opacity: 0; 
-            pointer-events: none; /* Impede cliques no botão invisível. */
+            pointer-events: none;
             transform: scale(0.8) translateY(20px); 
         }
 
@@ -432,48 +413,40 @@
             position: fixed; 
             bottom: 0; 
             right: 0; 
-            width: 100%; /* Ocupa a tela inteira em dispositivos móveis. */
+            width: 100%;
             height: 100%;
             background-color: var(--cor-fundo-elemento); 
             box-shadow: 0 10px 40px var(--cor-sombra);
             display: flex; 
             flex-direction: column; 
             overflow: hidden; 
-            z-index: 1001; /* Fica acima do FAB. */
+            z-index: 1001;
             transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
-            
-            /* CORREÇÃO: Inicia escondido (transformado e transparente) em todas as telas */
-            transform: translateY(100%); /* Começa fora da tela (embaixo). */
-            opacity: 0; /* Garante que comece invisível para evitar "flash" no mobile. */
-            pointer-events: none; /* Não interage enquanto escondido. */
+            transform: translateY(100%);
+            opacity: 0;
+            pointer-events: none;
         }
 
-        /* Em telas maiores, a janela de chat vira um pop-up no canto. */
         @media screen and (min-width: 481px) {
             .ai-chat-window {
-                /* Posicionamento no canto inferior direito */
+                top: auto; /* Garante que a regra do mobile não afete o desktop */
                 bottom: 20px; 
                 right: 20px; 
-                
-                /* Tamanho do pop-up (não ocupa a tela toda) */
                 width: 400px; 
-                max-width: 90vw; /* Garante que não ultrapasse a tela em viewports menores */
+                max-width: 90vw;
                 height: 85vh;
                 max-height: 600px; 
-                
-                /* Estilo e animação */
                 border-radius: 20px; 
-                transform-origin: bottom right; /* Ponto de origem da animação de escala. */
+                transform-origin: bottom right;
                 transform: translateY(20px) scale(0.95); 
                 opacity: 0;
             }
         }
 
-        /* Classe 'show' é adicionada via JS para mostrar a janela. */
         .ai-chat-window.show { 
             transform: translateY(0) scale(1); 
             opacity: 1; 
-            pointer-events: auto; /* Permite interação. */
+            pointer-events: auto;
         }
 
         .ai-chat-header {
@@ -484,7 +457,7 @@
             justify-content: space-between;
             align-items: center; 
             font-weight: 600; 
-            flex-shrink: 0; /* Impede que o header encolha. */
+            flex-shrink: 0;
         }
 
         .ai-chat-header .close-button { 
@@ -500,11 +473,10 @@
             transform: scale(1.1);
         }
 
-        /* Área onde as mensagens são exibidas. */
         .ai-chat-messages { 
-            flex-grow: 1; /* Ocupa todo o espaço vertical disponível. */
+            flex-grow: 1;
             padding: 20px; 
-            overflow-y: auto; /* Adiciona uma barra de rolagem se as mensagens excederem o espaço. */
+            overflow-y: auto;
             display: flex; 
             flex-direction: column; 
             gap: 12px; 
@@ -515,8 +487,8 @@
             border-radius: 18px; 
             max-width: 80%; 
             line-height: 1.4; 
-            word-wrap: break-word; /* Quebra palavras longas para não estourar o layout. */
-            animation: messageSlide 0.3s ease-out; /* Animação de entrada da mensagem. */
+            word-wrap: break-word;
+            animation: messageSlide 0.3s ease-out;
         }
 
         @keyframes messageSlide {
@@ -530,7 +502,6 @@
             }
         }
 
-        /* Mensagens do usuário ficam à direita. */
         .ai-message.user { 
             background-color: var(--cor-primaria-inicio); 
             color: white; 
@@ -538,7 +509,6 @@
             align-self: flex-end; 
         }
 
-        /* Mensagens da IA ficam à esquerda. */
         .ai-message.ai { 
             background-color: var(--cor-fundo-ia); 
             color: var(--cor-texto-principal); 
@@ -546,7 +516,6 @@
             align-self: flex-start; 
         }
 
-        /* Cursor piscando para indicar que a IA está "digitando". */
         .blinking-cursor { 
             display: inline-block; 
             width: 2px; 
@@ -566,15 +535,14 @@
             } 
         }
 
-        /* Área de input do chat. */
         .ai-chat-input-area { 
             display: flex; 
             padding: 15px; 
             border-top: 1px solid var(--cor-borda-padrao); 
             gap: 10px;
-            flex-shrink: 0; /* Não encolhe. */
+            flex-shrink: 0;
             background-color: var(--cor-fundo-elemento); 
-            position: sticky; /* Mantém a área de input visível ao rolar (em alguns contextos). */
+            position: sticky;
             bottom: 0;
         }
 
@@ -592,7 +560,7 @@
         #ai-chat-input:focus { 
             outline: none; 
             border-color: var(--cor-primaria-inicio); 
-            box-shadow: 0 0 0 3px rgba(242, 117, 0, 0.1); /* Efeito de "glow" ao focar. */
+            box-shadow: 0 0 0 3px rgba(242, 117, 0, 0.1);
         }
 
         #send-ai-chat { 
@@ -618,7 +586,6 @@
             box-shadow: none;
         }
 
-        /* Estilos do rodapé. */
         .footer { 
             width: 100%; 
             text-align: center; 
@@ -632,14 +599,18 @@
             font-weight: bold; 
         }
         
-        /* Ajustes de responsividade para telas pequenas (mobile). */
         @media screen and (max-width: 480px) {
             body { 
                 padding: 10px; 
             }
 
+            /* MELHORIA DE RESPONSIVIDADE: Fixa o chat no topo da tela em mobile */
+            .ai-chat-window {
+                top: 0;
+            }
+
             .container { 
-                padding-bottom: 80px; /* Garante espaço para o FAB não cobrir conteúdo. */
+                padding-bottom: 80px;
             }
 
             .header, .help-container { 
@@ -664,7 +635,6 @@
                 right: 15px; 
             }
 
-            /* Ajuste para a 'notch' (área segura) de iPhones. */
             .ai-chat-input-area { 
                 padding: 15px 15px calc(15px + env(safe-area-inset-bottom, 0px)); 
             }
@@ -672,7 +642,7 @@
             #ai-chat-input { 
                 padding: 14px 16px; 
                 border-radius: 12px; 
-                font-size: 16px; /* Evita o zoom automático do iOS em inputs. */
+                font-size: 16px;
             }
 
             #send-ai-chat { 
@@ -682,15 +652,12 @@
             }
         }
 
-        /* CORREÇÃO: Otimizações de performance para animações. */
-        /* Evita que elementos pisquem ou fiquem serrilhados durante animações em alguns navegadores. */
         * {
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
-            -webkit-font-smoothing: antialiased; /* Melhora a renderização de fontes. */
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* CORREÇÃO: Força a aceleração de hardware (GPU) para elementos animados, tornando-os mais fluidos. */
         details, .ai-open-chat-area, .ai-chat-window {
             transform: translateZ(0);
         }
@@ -813,11 +780,11 @@
 
     <div id="ai-chat-window" class="ai-chat-window">
         <div class="ai-chat-header">
-            <span>Assistente de TI</span>
+            <span>Assistente Virtual de TI</span>
             <button id="close-ai-chat" class="close-button">×</button>
         </div>
         <div id="ai-chat-messages" class="ai-chat-messages">
-            <div class="ai-message ai">Olá! Sou seu assistente de TI. Como posso ajudar?</div>
+            <div class="ai-message ai">Olá! Sou seu Assistente Virtual de TI. Como posso ajudar?</div>
         </div>
         <div class="ai-chat-input-area">
             <input type="text" id="ai-chat-input" placeholder="Digite sua pergunta...">
@@ -915,7 +882,7 @@
                 return `Tópico: "${title}"\nConteúdo: ${content}`;
             }).join('\n\n---\n\n');
 
-            const instructionText = `Você é o Assistente de TI da Anhanguera Caxias do Sul. Seu objetivo é ajudar professores e funcionários com problemas técnicos básicos de forma rápida e clara.
+            const instructionText = `Você é o Assistente Virtual de TI da Anhanguera Caxias do Sul. Seu objetivo é ajudar professores e funcionários com problemas técnicos básicos de forma rápida e clara.
         
         **PERSONALIDADE:** Seja amigável, paciente e use linguagem simples. Evite jargões técnicos desnecessários.
         
@@ -1061,7 +1028,7 @@
                 
                 const sectionContent = details.querySelector('.details-content').innerText.trim();
                 
-                const instructionText = `Você é o Assistente de TI da Anhanguera Caxias do Sul. O usuário clicou no botão "${question}" na seção "${summaryText}".
+                const instructionText = `Você é o Assistente Virtual de TI da Anhanguera Caxias do Sul. O usuário clicou no botão "${question}" na seção "${summaryText}".
                             
                 **SUA TAREFA:** Fornecer uma explicação mais simples e direta sobre o conteúdo desta seção específica.
                             
