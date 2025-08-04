@@ -484,8 +484,8 @@
         // --- CÓDIGO PARA REDIMENSIONAR A JANELA DO PWA NA PROPORÇÃO 9:16 ---
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
         if (isStandalone) {
-            // Define a altura da janela para 90% da altura da tela para uma boa visualização
-            const alturaJanela = window.screen.height * 0.9; 
+            // Define a altura da janela para 80% da altura da tela para uma boa visualização
+            const alturaJanela = window.screen.height * 0.8; 
             // Calcula a largura para manter a proporção de 9:16
             const larguraJanela = (alturaJanela * 9) / 16;
             
