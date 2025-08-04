@@ -59,12 +59,13 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; }
+        html { scroll-behavior: smooth; height: -webkit-fill-available; }
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--cor-fundo-body);
             color: var(--cor-texto-principal);
             min-height: 100vh;
+            min-height: -webkit-fill-available;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -169,10 +170,12 @@
         .ai-open-chat-area.chat-open { opacity: 0; pointer-events: none; transform: scale(0.8) translateY(20px); }
         .ai-prompt-icon { width: 32px; height: 32px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 1; }
         .ai-open-chat-area:hover .ai-prompt-icon { transform: rotate(15deg) scale(1.1); }
+        
+        /* MELHORIA: Layout do chat com Flexbox para melhor responsividade */
         .ai-chat-window {
-            position: fixed; bottom: 0; right: 0; width: 100%; height: 100%;
+            position: fixed; bottom: 0; right: 0; width: 100%; height: 100%; height: 100dvh; /* Altura dinâmica */
             background-color: var(--cor-fundo-elemento); box-shadow: 0 10px 40px var(--cor-sombra);
-            display: flex; flex-direction: column; overflow: hidden; z-index: 1001;
+            display: flex; flex-direction: column; z-index: 1001;
             transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
             transform: translateY(100%); opacity: 0; pointer-events: none;
         }
@@ -191,80 +194,56 @@
         }
         .ai-chat-header .close-button { background: none; border: none; color: white; font-size: 1.5em; cursor: pointer; transition: transform 0.2s ease; }
         .ai-chat-header .close-button:hover { transform: scale(1.1); }
-        .ai-chat-messages { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+        .ai-chat-messages { flex: 1 1 auto; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
         .ai-message {
             padding: 10px 15px; border-radius: 18px; max-width: 80%;
             line-height: 1.4; word-wrap: break-word; animation: messageSlide 0.3s ease-out;
         }
-        /* NOVO: Estilo para imagens nas mensagens */
-        .ai-message img {
-            max-width: 100%;
-            border-radius: 10px;
-            margin-top: 8px;
-            cursor: pointer;
-        }
+        .ai-message img { max-width: 100%; border-radius: 10px; margin-top: 8px; cursor: pointer; }
         @keyframes messageSlide { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .ai-message.user { background-color: var(--cor-primaria-inicio); color: white; border-bottom-right-radius: 4px; align-self: flex-end; }
         .ai-message.ai { background-color: var(--cor-fundo-ia); color: var(--cor-texto-principal); border-bottom-left-radius: 4px; align-self: flex-start; }
         .blinking-cursor { display: inline-block; width: 2px; height: 1em; background-color: var(--cor-texto-secundario); animation: blink 1s step-end infinite; margin-left: 4px; vertical-align: bottom; }
         @keyframes blink { from, to { background-color: transparent; } 50% { background-color: var(--cor-texto-secundario); } }
         
-        /* ATUALIZADO: Área de input com botão de anexo */
         .ai-chat-input-area {
-            display: flex; align-items: center; padding: 15px;
+            display: flex; align-items: center; padding: 10px 15px;
             border-top: 1px solid var(--cor-borda-padrao); gap: 10px; flex-shrink: 0;
-            background-color: var(--cor-fundo-elemento); position: sticky; bottom: 0;
+            background-color: var(--cor-fundo-elemento);
+            padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px)); /* Espaço para notch */
         }
-        /* NOVO: Botão de anexo */
         #attach-file-button {
             background: none; border: none; padding: 8px; cursor: pointer;
-            color: var(--cor-texto-secundario); transition: color 0.3s ease;
+            color: var(--cor-texto-secundario); transition: color 0.3s ease; flex-shrink: 0;
         }
         #attach-file-button:hover { color: var(--cor-primaria-inicio); }
-        #attach-file-button svg { width: 24px; height: 24px; stroke: currentColor; }
+        #attach-file-button svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2; }
         
         #ai-chat-input {
             flex-grow: 1; padding: 12px; border: 1px solid var(--cor-borda-padrao);
-            border-radius: 10px; font-family: 'Inter', sans-serif;
+            border-radius: 20px; font-family: 'Inter', sans-serif; font-size: 16px;
             background-color: var(--cor-fundo-elemento); color: var(--cor-texto-principal);
             transition: all 0.3s ease;
         }
         #ai-chat-input:focus { outline: none; border-color: var(--cor-primaria-inicio); box-shadow: 0 0 0 3px rgba(242, 117, 0, 0.1); }
+        
         #send-ai-chat {
-            padding: 12px 18px; border: none; background: linear-gradient(135deg, var(--cor-primaria-inicio), var(--cor-primaria-fim));
-            color: white; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;
+            background: var(--cor-primaria-inicio); color: white; border: none;
+            border-radius: 50%; width: 44px; height: 44px; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.3s ease;
         }
-        #send-ai-chat:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(242, 117, 0, 0.3); }
+        #send-ai-chat svg { width: 22px; height: 22px; transform: translateX(1px); }
+        #send-ai-chat:hover:not(:disabled) { background: var(--cor-primaria-fim); transform: scale(1.1); }
         #send-ai-chat:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
         
-        /* NOVO: Estilo para a pré-visualização da imagem */
-        #image-preview-container {
-            position: relative;
-            margin-right: 10px;
-        }
-        #image-preview {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            object-fit: cover;
-            border: 1px solid var(--cor-borda-padrao);
-        }
+        #image-preview-container { position: relative; margin-right: 10px; flex-shrink: 0; }
+        #image-preview { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; border: 1px solid var(--cor-borda-padrao); }
         #remove-image-button {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background-color: var(--cor-texto-principal);
-            color: var(--cor-fundo-elemento);
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            line-height: 1;
+            position: absolute; top: -5px; right: -5px; width: 20px; height: 20px; border-radius: 50%;
+            background-color: var(--cor-texto-principal); color: var(--cor-fundo-elemento);
+            border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            font-size: 12px; line-height: 1;
         }
 
         .footer { width: 100%; text-align: center; padding: 20px 0; font-size: 0.9em; color: var(--cor-texto-secundario); }
@@ -272,15 +251,12 @@
         
         @media screen and (max-width: 480px) {
             body { padding: 10px; }
-            .ai-chat-window { top: 0; }
             .container { padding-bottom: 80px; }
             .header, .help-container { padding: 15px; }
             .logo { width: 100px; } .logo-title { font-size: 1.6em; }
             summary { padding: 15px; font-size: 1em; }
             .theme-switcher { top: 15px; right: 15px; }
-            .ai-chat-input-area { padding: 10px 10px calc(10px + env(safe-area-inset-bottom, 0px)); }
-            #ai-chat-input { padding: 14px 16px; border-radius: 12px; font-size: 16px; }
-            #send-ai-chat { padding: 14px 20px; border-radius: 12px; min-width: 80px; }
+            #ai-chat-input { padding: 12px 16px; }
         }
         * { backface-visibility: hidden; -webkit-backface-visibility: hidden; -webkit-font-smoothing: antialiased; }
         details, .ai-open-chat-area, .ai-chat-window { transform: translateZ(0); }
@@ -411,22 +387,24 @@
             <div class="ai-message ai">Olá! Sou seu Assistente Virtual de TI. Como posso ajudar? Se precisar, pode me enviar uma foto do problema.</div>
         </div>
         <div class="ai-chat-input-area">
-             <!-- NOVO: Input de arquivo escondido -->
             <input type="file" id="file-input" accept="image/*" capture="environment" style="display: none;">
             
-             <!-- NOVO: Botão para anexar arquivo -->
+            <!-- ÍCONE ATUALIZADO: Câmera -->
             <button id="attach-file-button" title="Anexar imagem">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg>
             </button>
 
-            <!-- NOVO: Container da pré-visualização -->
             <div id="image-preview-container" style="display: none;">
                 <img id="image-preview" src="" alt="Pré-visualização da imagem">
                 <button id="remove-image-button">×</button>
             </div>
 
             <input type="text" id="ai-chat-input" placeholder="Digite sua pergunta...">
-            <button id="send-ai-chat">Enviar</button>
+            
+            <!-- ÍCONE ATUALIZADO: Enviar -->
+            <button id="send-ai-chat" title="Enviar mensagem">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
         </div>
     </div>
 
@@ -436,7 +414,6 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // --- SERVICE WORKER ---
         if ('serviceWorker' in navigator) {
           window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js')
@@ -445,7 +422,6 @@
           });
         }
 
-        // --- SELEÇÃO DE ELEMENTOS DO DOM ---
         const openChatArea = document.getElementById('ai-open-chat-area');
         const aiChatWindow = document.getElementById('ai-chat-window');
         const closeAiChatButton = document.getElementById('close-ai-chat');
@@ -454,8 +430,6 @@
         const aiChatMessages = document.getElementById('ai-chat-messages');
         const contextualAiButtons = document.querySelectorAll('.contextual-ai-button');
         const darkModeToggle = document.getElementById('dark-mode-toggle');
-        
-        // --- NOVOS ELEMENTOS PARA ENVIO DE IMAGEM ---
         const attachFileButton = document.getElementById('attach-file-button');
         const fileInput = document.getElementById('file-input');
         const imagePreviewContainer = document.getElementById('image-preview-container');
@@ -463,12 +437,8 @@
         const removeImageButton = document.getElementById('remove-image-button');
 
         let chatHistory = [];
-        let currentImage = {
-            base64: null,
-            mimeType: null,
-        };
+        let currentImage = { base64: null, mimeType: null };
 
-        // --- LÓGICA DO MODO ESCURO ---
         darkModeToggle.addEventListener('change', () => {
             document.body.classList.toggle('dark-mode');
             localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
@@ -478,7 +448,6 @@
             darkModeToggle.checked = true;
         }
 
-        // --- LÓGICA DE ABERTURA/FECHAMENTO DO CHAT ---
         const openChat = () => {
             aiChatWindow.classList.add('show');
             openChatArea.classList.add('chat-open');
@@ -494,10 +463,7 @@
         openChatArea.addEventListener('click', openChat);
         closeAiChatButton.addEventListener('click', closeChat);
 
-        // --- NOVA LÓGICA PARA ANEXAR IMAGENS ---
-        attachFileButton.addEventListener('click', () => {
-            fileInput.click(); // Abre o seletor de arquivos
-        });
+        attachFileButton.addEventListener('click', () => fileInput.click());
 
         fileInput.addEventListener('change', (event) => {
             const file = event.target.files[0];
@@ -511,7 +477,7 @@
                 };
                 reader.readAsDataURL(file);
             }
-            fileInput.value = ''; // Limpa o input para permitir selecionar o mesmo arquivo novamente
+            fileInput.value = '';
         });
 
         removeImageButton.addEventListener('click', () => {
@@ -521,32 +487,25 @@
             imagePreviewContainer.style.display = 'none';
         });
 
-
-        // --- LÓGICA DE ENVIO DE MENSAGEM (ATUALIZADA) ---
         const handleSendMessage = () => {
             const question = aiChatInput.value.trim();
-            // Permite enviar apenas imagem, apenas texto, ou ambos
             if (!question && !currentImage.base64) return;
             
             addMessage(question, 'user', currentImage.base64);
             
-            // Constrói as partes da mensagem para a API
             const userParts = [];
-            if (question) {
-                userParts.push({ text: question });
-            }
+            if (question) userParts.push({ text: question });
             if (currentImage.base64) {
                  userParts.push({
                     inlineData: {
                         mimeType: currentImage.mimeType,
-                        data: currentImage.base64.split(',')[1] // Remove o prefixo do base64
+                        data: currentImage.base64.split(',')[1]
                     }
                 });
             }
 
             chatHistory.push({ role: "user", parts: userParts });
             
-            // Limpa os inputs após o envio
             aiChatInput.value = '';
             removeImageButton.click(); 
 
@@ -556,18 +515,13 @@
         sendAiChatButton.addEventListener('click', handleSendMessage);
         aiChatInput.addEventListener('keyup', (event) => { if (event.key === 'Enter') handleSendMessage(); });
 
-        // --- FUNÇÕES AUXILIARES DO CHAT (ATUALIZADAS) ---
         const addMessage = (text, sender, imageUrl = null) => {
             const messageElement = document.createElement('div');
             messageElement.classList.add('ai-message', sender);
             
             let content = '';
-            if (imageUrl) {
-                content += `<img src="${imageUrl}" alt="Imagem enviada pelo usuário">`;
-            }
-            if (text) {
-                content += (sender === 'ai') ? renderMarkdown(text) : `<p>${text}</p>`;
-            }
+            if (imageUrl) content += `<img src="${imageUrl}" alt="Imagem enviada pelo usuário">`;
+            if (text) content += (sender === 'ai') ? renderMarkdown(text) : `<p>${text}</p>`;
             messageElement.innerHTML = content;
 
             aiChatMessages.appendChild(messageElement);
@@ -577,7 +531,6 @@
         
         const renderMarkdown = (text) => text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/\n/g, '<br>');
 
-        // ATUALIZADO: Instrução do sistema para a IA multimodal
         const getSystemInstruction = () => {
             const pageContent = Array.from(document.querySelectorAll('details')).map(detail => {
                 const title = detail.querySelector('summary').textContent.trim();
@@ -633,7 +586,7 @@
 
             aiChatInput.disabled = true;
             sendAiChatButton.disabled = true;
-            attachFileButton.disabled = true; // Desabilita o anexo durante a resposta
+            attachFileButton.disabled = true;
             
             const statusMessages = [ 'Analisando...', 'Consultando a base de dados...', 'Preparando a resposta...' ];
             let statusIndex = 0;
@@ -711,6 +664,17 @@
                 getAiResponse(systemInstruction);
             });
         });
+
+        // --- MELHORIA: Lógica para ajustar a altura do chat com o teclado virtual ---
+        if (window.visualViewport) {
+            const handleViewportResize = () => {
+                // Aplica a altura do visualViewport à janela do chat, garantindo que o input fique visível
+                aiChatWindow.style.height = `${window.visualViewport.height}px`;
+                // Rola para a última mensagem para garantir que o input esteja visível
+                aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
+            };
+            window.visualViewport.addEventListener('resize', handleViewportResize);
+        }
     });
     </script>
 </body>
