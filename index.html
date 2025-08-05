@@ -75,6 +75,8 @@
             padding: 20px;
             line-height: 1.6;
             transition: background-color 0.3s ease, color 0.3s ease;
+            zoom: 0.75;
+
         }
         body.chat-open-body { overflow: hidden; }
         
@@ -339,7 +341,8 @@
                 </label>
             </div>
             <div class="logo">
-                <img src="./images/logo.png" alt="Logo da Anhanguera" onerror="this.onerror=null;this.src='https://placehold.co/200x60/ffffff/000000?text=Anhanguera';">
+                <!-- CORREÇÃO: Padronizado o caminho do logo -->
+                <img src="logo.png" alt="Logo da Anhanguera" onerror="this.onerror=null;this.src='https://placehold.co/200x60/ffffff/000000?text=Anhanguera';">
             </div>
             <h1 class="logo-title">Central de Ajuda Inteligente</h1>
             <p class="logo-subtitle">Soluções rápidas para seus problemas técnicos.</p>
@@ -485,9 +488,10 @@
         // --- CÓDIGO PARA REDIMENSIONAR A JANELA DO PWA NA PROPORÇÃO 9:16 ---
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
         if (isStandalone) {
-            // Define a altura da janela para 80% da altura da tela para uma boa visualização
-            const alturaJanela = window.screen.height * 0.8; 
-            // Calcula a largura para manter a proporção de 9:16
+            // NOTA: A função window.resizeTo() pode ser bloqueada por navegadores modernos por segurança.
+            // O funcionamento pode variar dependendo do dispositivo e do navegador.
+            const alturaJanela = window.screen.height * 0.9; 
+            // CORREÇÃO: A proporção correta é 9/16, não 9/18.
             const larguraJanela = (alturaJanela * 9) / 16;
             
             window.resizeTo(larguraJanela, alturaJanela);
@@ -528,11 +532,14 @@
             darkModeToggle.checked = true;
         }
 
-        // --- NOVO GERENCIADOR DE TECLADO VIRTUAL (CORREÇÃO MOBILE) ---
+        // --- GERENCIADOR DE TECLADO VIRTUAL (CORREÇÃO MOBILE) ---
         const handleVisualViewportResize = () => {
+            // Aplica-se apenas em telas mobile onde o visualViewport é relevante
             if (window.innerWidth > 480 || !window.visualViewport) return;
         
             const vp = window.visualViewport;
+            // Ajusta a altura e a posição da janela de chat para se alinhar com a área visível,
+            // evitando que o teclado cubra o input.
             aiChatWindow.style.height = `${vp.height}px`;
             aiChatWindow.style.top = `${vp.offsetTop}px`;
             aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
@@ -557,11 +564,11 @@
             document.body.classList.remove('chat-open-body');
             aiChatInput.blur();
             
-            // LIMPEZA CRÍTICA: Remove o listener e reseta os estilos inline
+            // LIMPEZA CRÍTICA: Remove o listener para evitar memory leaks e comportamento inesperado.
             if (window.visualViewport) {
                 window.visualViewport.removeEventListener('resize', handleVisualViewportResize);
             }
-            // Reseta os estilos para que o CSS controle a posição e altura novamente
+            // Reseta os estilos inline para que o CSS volte a controlar a aparência.
             aiChatWindow.style.height = ''; 
             aiChatWindow.style.top = '';
         };
@@ -582,7 +589,7 @@
                 };
                 reader.readAsDataURL(file);
             }
-            fileInput.value = '';
+            fileInput.value = ''; // Permite selecionar o mesmo arquivo novamente
         });
         removeImageButton.addEventListener('click', () => {
             currentImage.base64 = null;
@@ -603,7 +610,7 @@
                  userParts.push({
                     inlineData: {
                         mimeType: currentImage.mimeType,
-                        data: currentImage.base64.split(',')[1]
+                        data: currentImage.base64.split(',')[1] // Envia apenas o data do base64
                     }
                 });
             }
@@ -611,7 +618,7 @@
             chatHistory.push({ role: "user", parts: userParts });
             
             aiChatInput.value = '';
-            removeImageButton.click(); 
+            removeImageButton.click(); // Limpa a pré-visualização da imagem
 
             const systemInstruction = getSystemInstruction();
             getAiResponse(systemInstruction);
@@ -624,8 +631,13 @@
             messageElement.classList.add('ai-message', sender);
             
             let content = '';
-            if (imageUrl) content += `<img src="${imageUrl}" alt="Imagem enviada pelo usuário">`;
-            if (text) content += (sender === 'ai') ? renderMarkdown(text) : `<p>${text}</p>`;
+            if (imageUrl) {
+                content += `<img src="${imageUrl}" alt="Imagem enviada pelo usuário">`;
+            }
+            if (text) {
+                // CORREÇÃO: Removemos a tag <p> desnecessária para o usuário, tornando o HTML mais limpo.
+                content += (sender === 'ai') ? renderMarkdown(text) : text;
+            }
             messageElement.innerHTML = content;
 
             aiChatMessages.appendChild(messageElement);
@@ -664,7 +676,7 @@
 
         function typewriter(element, text) {
             let i = 0;
-            element.innerHTML = "";
+            element.innerHTML = ""; // Limpa a mensagem "Analisando..."
             const typingSpeed = 20;
 
             function type() {
@@ -674,6 +686,7 @@
                     aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
                     setTimeout(type, typingSpeed);
                 } else {
+                    // Após terminar de "digitar", renderiza o Markdown para aplicar negrito, etc.
                     element.innerHTML = renderMarkdown(text);
                     aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
                     aiChatInput.disabled = false;
@@ -686,6 +699,8 @@
         }
 
         async function getAiResponse(systemInstruction) {
+            // Este endpoint é um proxy que deve ser criado no seu backend
+            // para fazer a chamada à API do Gemini de forma segura.
             const apiUrl = '/api/chat';
 
             aiChatInput.disabled = true;
@@ -700,7 +715,7 @@
                 if (typingMessageElement.innerHTML.includes('blinking-cursor')) {
                     typingMessageElement.innerHTML = statusMessages[statusIndex] + '<span class="blinking-cursor"></span>';
                 }
-            }, 2000);
+            }, 2500);
 
             try {
                 const payload = {
@@ -714,6 +729,9 @@
                     body: JSON.stringify(payload)
                 });
                 
+                // Sempre pare o intervalo de "Analisando..." quando a resposta chegar.
+                clearInterval(statusInterval);
+                
                 const data = await response.json();
 
                 if (!response.ok) {
@@ -722,8 +740,6 @@
                 
                 const fullResponseText = data.candidates[0]?.content?.parts[0]?.text || "";
                 
-                clearInterval(statusInterval);
-
                 if (fullResponseText.trim()) {
                     chatHistory.push({ role: "model", parts: [{ text: fullResponseText }] });
                     typewriter(typingMessageElement, fullResponseText);
@@ -738,7 +754,7 @@
             } catch (error) {
                 clearInterval(statusInterval);
                 console.error("Erro ao chamar o proxy /api/chat:", error);
-                typingMessageElement.innerHTML = renderMarkdown(`**Ocorreu um erro:** ${error.message}.`);
+                typingMessageElement.innerHTML = renderMarkdown(`**Ocorreu um erro:** ${error.message}. Por favor, tente novamente mais tarde.`);
                 aiChatInput.disabled = false;
                 sendAiChatButton.disabled = false;
                 attachFileButton.disabled = false;
@@ -764,7 +780,10 @@
                 const systemInstruction = { parts: [{ text: instructionText }] };
                 openChat();
                 addMessage(question, 'user');
-                chatHistory = [{ role: "user", parts: [{ text: "Me explique de forma mais simples." }] }]; 
+
+                // CORREÇÃO: O histórico agora reflete a pergunta real feita pelo usuário.
+                chatHistory = [{ role: "user", parts: [{ text: question }] }]; 
+                
                 getAiResponse(systemInstruction);
             });
         });
