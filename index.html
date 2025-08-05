@@ -75,8 +75,6 @@
             padding: 20px;
             line-height: 1.6;
             transition: background-color 0.3s ease, color 0.3s ease;
-            zoom: 0.8;
-
         }
         body.chat-open-body { overflow: hidden; }
         
@@ -199,7 +197,7 @@
             display: flex;
             flex-direction: column;
             z-index: 1001;
-            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease, top 0.2s ease, height 0.2s ease; /* Transição suave para altura/posição */
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease, top 0.2s ease, height 0.2s ease;
             transform: translateY(100%);
             opacity: 0;
             pointer-events: none;
@@ -328,10 +326,21 @@
         }
         * { backface-visibility: hidden; -webkit-backface-visibility: hidden; -webkit-font-smoothing: antialiased; }
         details, .ai-open-chat-area, .ai-chat-window { transform: translateZ(0); }
+        
+        /* =========================================
+         * AJUSTES ESPECÍFICOS PARA DESKTOP
+         * ========================================= */
+        @media screen and (min-width: 769px) {
+            body {
+                /* Aplica o zoom solicitado apenas para telas de desktop (computadores) */
+                zoom: 0.8;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- O CONTEÚDO HTML DO BODY PERMANECE O MESMO -->
         <header class="header">
             <div class="theme-switcher">
                 <input type="checkbox" id="dark-mode-toggle">
@@ -341,7 +350,6 @@
                 </label>
             </div>
             <div class="logo">
-                <!-- CORREÇÃO: Padronizado o caminho do logo -->
                 <img src="logo.png" alt="Logo da Anhanguera" onerror="this.onerror=null;this.src='https://placehold.co/200x60/ffffff/000000?text=Anhanguera';">
             </div>
             <h1 class="logo-title">Central de Ajuda Inteligente</h1>
@@ -481,22 +489,33 @@
 
     <script>
     /* =========================================
-     * SCRIPT JAVASCRIPT (COM CORREÇÕES)
+     * SCRIPT JAVASCRIPT
      * ========================================= */
     document.addEventListener('DOMContentLoaded', () => {
 
-        // --- CÓDIGO PARA REDIMENSIONAR A JANELA DO PWA NA PROPORÇÃO 9:16 ---
+        // --- CÓDIGO DE REDIMENSIONAMENTO PARA PWA EM DESKTOP ---
+        // Este bloco só será executado se:
+        // 1. O app estiver instalado no modo "standalone".
+        // 2. A tela for de um dispositivo desktop (largura mínima de 769px).
+        // Em celulares, este código será ignorado.
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-        if (isStandalone) {
-            // NOTA: A função window.resizeTo() pode ser bloqueada por navegadores modernos por segurança.
-            // O funcionamento pode variar dependendo do dispositivo e do navegador.
+        const isDesktop = window.matchMedia('(min-width: 769px)').matches;
+
+        if (isStandalone && isDesktop) {
+            // Define a altura da janela para 90% da altura da tela.
             const alturaJanela = window.screen.height * 0.9; 
-            // CORREÇÃO: A proporção correta é 9/16, não 9/18.
-            const larguraJanela = (alturaJanela * 9) / 16;
+            // Calcula a largura para manter a proporção de 9:18 (ou 1:2) solicitada.
+            const larguraJanela = alturaJanela * (9 / 18);
             
-            window.resizeTo(larguraJanela, alturaJanela);
+            // Tenta redimensionar a janela. OBS: Pode ser bloqueado pelo navegador.
+            try {
+                window.resizeTo(larguraJanela, alturaJanela);
+            } catch (e) {
+                console.warn("O redimensionamento da janela foi bloqueado pelo navegador.", e);
+            }
         }
         // --- FIM DO BLOCO DE CÓDIGO ---
+
 
         if ('serviceWorker' in navigator) {
           window.addEventListener('load', () => {
@@ -532,14 +551,10 @@
             darkModeToggle.checked = true;
         }
 
-        // --- GERENCIADOR DE TECLADO VIRTUAL (CORREÇÃO MOBILE) ---
         const handleVisualViewportResize = () => {
-            // Aplica-se apenas em telas mobile onde o visualViewport é relevante
             if (window.innerWidth > 480 || !window.visualViewport) return;
         
             const vp = window.visualViewport;
-            // Ajusta a altura e a posição da janela de chat para se alinhar com a área visível,
-            // evitando que o teclado cubra o input.
             aiChatWindow.style.height = `${vp.height}px`;
             aiChatWindow.style.top = `${vp.offsetTop}px`;
             aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
@@ -564,11 +579,9 @@
             document.body.classList.remove('chat-open-body');
             aiChatInput.blur();
             
-            // LIMPEZA CRÍTICA: Remove o listener para evitar memory leaks e comportamento inesperado.
             if (window.visualViewport) {
                 window.visualViewport.removeEventListener('resize', handleVisualViewportResize);
             }
-            // Reseta os estilos inline para que o CSS volte a controlar a aparência.
             aiChatWindow.style.height = ''; 
             aiChatWindow.style.top = '';
         };
@@ -589,7 +602,7 @@
                 };
                 reader.readAsDataURL(file);
             }
-            fileInput.value = ''; // Permite selecionar o mesmo arquivo novamente
+            fileInput.value = '';
         });
         removeImageButton.addEventListener('click', () => {
             currentImage.base64 = null;
@@ -610,7 +623,7 @@
                  userParts.push({
                     inlineData: {
                         mimeType: currentImage.mimeType,
-                        data: currentImage.base64.split(',')[1] // Envia apenas o data do base64
+                        data: currentImage.base64.split(',')[1]
                     }
                 });
             }
@@ -618,7 +631,7 @@
             chatHistory.push({ role: "user", parts: userParts });
             
             aiChatInput.value = '';
-            removeImageButton.click(); // Limpa a pré-visualização da imagem
+            removeImageButton.click(); 
 
             const systemInstruction = getSystemInstruction();
             getAiResponse(systemInstruction);
@@ -631,13 +644,9 @@
             messageElement.classList.add('ai-message', sender);
             
             let content = '';
-            if (imageUrl) {
-                content += `<img src="${imageUrl}" alt="Imagem enviada pelo usuário">`;
-            }
-            if (text) {
-                // CORREÇÃO: Removemos a tag <p> desnecessária para o usuário, tornando o HTML mais limpo.
-                content += (sender === 'ai') ? renderMarkdown(text) : text;
-            }
+            if (imageUrl) content += `<img src="${imageUrl}" alt="Imagem enviada pelo usuário">`;
+            if (text) content += (sender === 'ai') ? renderMarkdown(text) : text;
+            
             messageElement.innerHTML = content;
 
             aiChatMessages.appendChild(messageElement);
@@ -676,7 +685,7 @@
 
         function typewriter(element, text) {
             let i = 0;
-            element.innerHTML = ""; // Limpa a mensagem "Analisando..."
+            element.innerHTML = "";
             const typingSpeed = 20;
 
             function type() {
@@ -686,7 +695,6 @@
                     aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
                     setTimeout(type, typingSpeed);
                 } else {
-                    // Após terminar de "digitar", renderiza o Markdown para aplicar negrito, etc.
                     element.innerHTML = renderMarkdown(text);
                     aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
                     aiChatInput.disabled = false;
@@ -699,8 +707,6 @@
         }
 
         async function getAiResponse(systemInstruction) {
-            // Este endpoint é um proxy que deve ser criado no seu backend
-            // para fazer a chamada à API do Gemini de forma segura.
             const apiUrl = '/api/chat';
 
             aiChatInput.disabled = true;
@@ -729,9 +735,7 @@
                     body: JSON.stringify(payload)
                 });
                 
-                // Sempre pare o intervalo de "Analisando..." quando a resposta chegar.
                 clearInterval(statusInterval);
-                
                 const data = await response.json();
 
                 if (!response.ok) {
@@ -780,10 +784,7 @@
                 const systemInstruction = { parts: [{ text: instructionText }] };
                 openChat();
                 addMessage(question, 'user');
-
-                // CORREÇÃO: O histórico agora reflete a pergunta real feita pelo usuário.
                 chatHistory = [{ role: "user", parts: [{ text: question }] }]; 
-                
                 getAiResponse(systemInstruction);
             });
         });
